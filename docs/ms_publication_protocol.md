@@ -268,15 +268,122 @@ and nothing in this document is being quietly restated in different arithmetic.
 Tests pin that reduction for target complementarity, safety union, and Bliss
 folding.
 
-This screen has **not** been migrated onto that module; doing so, and re-running
-MS at k = 3, is recorded as the next structural task. Until then the two screens
-share their contracts and not their scorer, and their absolute scores are not
-comparable — different weights, different signature, different panel.
+The MS panel has since been run through that module at k = 1, 2, 3 (§12); this
+pairwise screen has not been replaced. The two screens share their contracts and
+not their scorer, and their absolute scores are not comparable — different weights,
+different signature, different panel.
 
 The standing procedure both follow, and the checklist for the third disease, is
 in the [disease campaign protocol](disease_campaign_protocol.md).
 
-## 12. Key references
+## 12. MS at k = 1, 2, 3 on the registry scorer
+
+The migration recorded as the next structural task in §11 is done in one respect:
+`experiments/ms/run_combination_screen.py` runs the MS panel through
+`combination_scoring`, the same scorer Parkinson's and Alzheimer's use, at all
+three orders. It **does not replace** the pairwise v3 screen above, whose
+`ms_scoring` results stand as published. The two share contracts and not
+arithmetic, and their absolute scores are not comparable.
+
+```bash
+python -m experiments.ms.run_combination_screen --top 25 --seed 7
+python -m experiments.ms.run_combination_screen --quick     # about 5 minutes
+```
+
+Outputs land in `experiments/ms/results/`: `ms_kary_combination_screen.json` and
+`ms_kary_combinations_full.csv` (31,837 rows). The full run scores **64 eligible
+agents** (the 10 preclinical ones fall below the default `phase_2` floor):
+64 monotherapies, 2,016 pairs, 29,757 triples. Unlike the other two diseases it
+took about two hours of wall-clock time, because the triple space is large; the
+runner prints nothing until it finishes, so a long silence is not a hang.
+
+| order | n | median reversal | max reversal | % beating best monotherapy | max gain | % sub-additive |
+|---|---|---|---|---|---|---|
+| 1 | 64 | 0.0270 | 0.0558 | — | — | 0% |
+| 2 | 1,793 | 0.0539 | 0.1054 | 45.0% | +0.0496 | 40.4% |
+| 3 | 29,757 | 0.0800 | 0.1495 | 93.4% | +0.0937 | 77.2% |
+
+Best reversal at each order: **methylprednisolone** alone (5.58%);
+methylprednisolone + opicinumab (10.54%); methylprednisolone + ocrelizumab +
+opicinumab (**14.95%**). As a share of the panel's ceiling (93 of 112 genes
+targeted; `python -m tools.reversal_ceiling`) the best triple captures 17.5% of the
+full-reversal ceiling and 21.4% of the pooled-panel ceiling. Read
+[the calibration write-up](efficacy_calibration.md) before quoting any of these as
+efficacy.
+
+**Readings.**
+
+- **The percentages beating the best monotherapy are much higher than in the other
+  two diseases** (45.0% of pairs and 93.4% of triples, against 26.4% / 58.5% in
+  Parkinson's and 12.7% / 55.8% in Alzheimer's). Part of that is the panel: 64
+  agents including many weak ones, and a best single agent that is a broad steroid
+  acting on many genes at once rather than a targeted DMT. Read it as a property of
+  this panel, not as evidence that MS combinations work better.
+- **Redundancy is the highest of the three** (40.4% of pairs and 77.2% of triples
+  sub-additive), as expected from a panel with many agents converging on the same
+  immune transcripts.
+- **Third agents earn their place about as often as in Alzheimer's**: 9,984 of
+  29,757 triples (33.6%) have a negative gain over their best pair, with a median
+  gain of +0.0332 (Alzheimer's 33.0%; Parkinson's 60.3%).
+- **223 of 2,016 pairs (11.1%) were excluded as redundant**; no triple was, for the
+  usual reason that the order ladder catches redundancy one order down.
+
+**The strata reproduce the v3 result under the new scorer.** Top and bottom at
+order 2:
+
+| axis stratum | n | median | 95% CI | q |
+|---|---|---|---|---|
+| cns_innate + remyelination | 79 | 1.207 | [1.135, 1.303] | ~0 |
+| immunomodulation + remyelination | 299 | 1.150 | [1.081, 1.234] | ~0 |
+| cns_innate + neuroprotection | 160 | 1.147 | [1.091, 1.229] | ~0 |
+| … | | | | |
+| metabolic_repair + metabolic_repair | 81 | 1.026 | [0.934, 1.137] | 1 |
+| **immunomodulation + immunomodulation** | 754 | **0.959** | [0.911, 0.992] | 1 |
+
+`cns_innate + remyelination` is first and `immunomodulation + immunomodulation` is
+last, exactly as §6 reports for the pairwise screen. At order 3 the six
+top-ranked strata all contain remyelination and the bottom is
+`immunomodulation` ×3 (1.067). Remyelination has no approved agent, and the design
+campaign's independent gap analysis reports it at 1.00 unmet, so **MS keeps the
+convergence between the screen and the gap analysis that Alzheimer's broke**.
+
+**Robustness.** Bootstrap top-25 Jaccard is 0.229 at order 2 and 0.132 at order 3,
+so named combinations are not stable and the strata are the unit of inference, as
+throughout. Weight sensitivity is again high (Spearman 0.974 / 0.975 mean).
+
+**Controls.**
+
+| Control | Members | Result |
+|---|---|---|
+| Positive redundancy | Natalizumab + Natalizumab-biosimilar | **Excluded as expected** |
+| Safety penalty | Daclizumab (1,225), Cyclophosphamide (1,901), Mitoxantrone (4,530) | **None near the top**, at any order |
+| Negative efficacy | High-dose biotin (**6**), Evobrutinib (**22**), Opicinumab (28), Ustekinumab (90) | **Two of four in the top 25**, a third just outside |
+
+Ranks are the best position in the pooled primary ranking of orders 2 and 3, as
+the runner defines them. Unlike Alzheimer's, the safety-penalty control also holds up when read per order:
+the three rank 61st to 64th of 64 as monotherapies, and the best-ranked pair
+containing any of them is 354th to 624th of 1,793, and the best triple 1,217th to
+4,470th of 29,757, nowhere near the top 25. I have not isolated why the scorer
+handles these agents better than it handled tacrine; one candidate is that several
+heavily-weighted domains (infection, malignancy) are burdened at once, so a weighted
+mean does not dilute them the way a single hepatic term was diluted.
+
+The negative-efficacy result is the known limitation, reported not filtered.
+High-dose biotin and evobrutinib failed their trials and reach the top 25;
+opicinumab (28th pooled) also reaches the *reversal* leaders, appearing in both the
+best-reversal pair and the best-reversal triple. Mechanistic coherence is not
+evidence of clinical benefit.
+
+**Cautions specific to this run.**
+
+- The signature and panel are the v3 ones and carry the limitations in §9.
+- The screen ran with the same seed and default draws as the other two diseases, so
+  the three sets of numbers are comparable in method even though the panels are not.
+- The k-ary scorer scores agents by registry vocabulary (five axes, seven risk
+  domains) rather than the `ms_scoring` constants, so a difference from the v3 pair
+  results is expected and does not indicate an error.
+
+## 13. Key references
 
 - Dalla Costa G, et al. *Expert Rev Clin Pharmacol* (2024), PMID: 39376160.
 - Olejnik P, et al. *Pharmacol Rep* (2024), PMID: 39177889.

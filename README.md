@@ -66,7 +66,7 @@ quantum-bio-recovery-engine/
 │ ├── quantum/ # Quantum optimizer for the drug-selection Hamiltonian
 │ └── provenance.py # Input digests, environment capture, run artifacts
 ├── experiments/
-│ ├── ms/ # Multiple sclerosis: pairwise combination screen
+│ ├── ms/ # Multiple sclerosis: pairwise screen and k = 1/2/3 screen
 │ ├── parkinsons/ # Parkinson's: monotherapy + pair + triple screen
 │ ├── alzheimers/ # Alzheimer's: monotherapy + pair + triple screen
 │ ├── design/ # De novo design campaigns (disease-agnostic)
@@ -158,6 +158,23 @@ See [the MS publication protocol](docs/ms_publication_protocol.md) for data
 provenance, every scoring assumption, the control design, and the validation work
 required for a manuscript. This is a hypothesis generator, not a clinical
 combination recommendation.
+
+### MS at k = 1, 2, 3
+
+The same k-ary scorer has also been run over the MS panel (64 eligible agents;
+64 singles, 2,016 pairs, 29,757 triples), alongside — not replacing — the pairwise
+v3 screen above.
+
+```bash
+python -m experiments.ms.run_combination_screen --top 25 --seed 7   # about two hours
+```
+
+The best triple reverses **14.95%** of the MS signature (best pair 10.54%, best
+single 5.58%), 17.5% of the full-reversal ceiling and 21.4% of the pooled-panel
+ceiling. The mechanism strata reproduce the v3 ordering (`cns_innate +
+remyelination` first, `immunomodulation + immunomodulation` last) and, unlike
+Alzheimer's, agree with the design campaign's gap analysis. See [§12 of the MS
+protocol](docs/ms_publication_protocol.md#12-ms-at-k--1-2-3-on-the-registry-scorer).
 
 ### Parkinson's monotherapy, pair, and triple screen
 
@@ -346,7 +363,7 @@ Three, so the disease-agnostic claim is checkable rather than asserted:
 | Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated |
 | Known structures | 42 agents | 26 agents | 23 agents |
 | Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) |
-| Combination screen | pairs | monotherapy + pairs + triples | monotherapy + pairs + triples |
+| Combination screen | pairs (v3), plus monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples |
 
 No two of them share a **therapeutic axis**, and any two overlap only on generic
 organ toxicity (cardiac, hepatic, gastrointestinal). Nothing in Parkinson's care

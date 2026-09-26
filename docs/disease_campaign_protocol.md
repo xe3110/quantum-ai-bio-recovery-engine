@@ -13,7 +13,7 @@ read the same registry entry. Neither names a disease anywhere in its logic.
 
 | Disease | Registry entry | Combination screen | Design campaign |
 |---|---|---|---|
-| Multiple sclerosis | `data/diseases/multiple_sclerosis.json` | [protocol](ms_publication_protocol.md) — pairs only, `ms_scoring` | [protocol](denovo_design_protocol.md) |
+| Multiple sclerosis | `data/diseases/multiple_sclerosis.json` | [protocol](ms_publication_protocol.md) — pairs (`ms_scoring`) and, since 2026-09-26, k = 1, 2, 3 (`combination_scoring`, [§12](ms_publication_protocol.md#12-ms-at-k--1-2-3-on-the-registry-scorer)) | [protocol](denovo_design_protocol.md) |
 | Parkinson's disease | `data/diseases/parkinsons.json` | [protocol](parkinsons_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md) |
 | Alzheimer's disease | `data/diseases/alzheimers.json` | [protocol](alzheimers_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#alzheimers-disease) |
 
@@ -237,7 +237,7 @@ A ranked list is not a result on its own.
 
 In every campaign run so far, **individual combination ranks are not stable**
 under the curated target-effect uncertainty (top-K Jaccard 0.2 in Parkinson's;
-0.19 at order 2 and 0.09 at order 3 in Alzheimer's), while **stratum medians are
+0.19 at order 2 and 0.09 at order 3 in Alzheimer's; 0.23 and 0.13 in MS), while **stratum medians are
 far steadier**. The runner prints an explicit warning whenever that
 Jaccard falls below 0.5.
 

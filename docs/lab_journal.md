@@ -8,7 +8,7 @@
 
 **Start Date:** 2026-01-16 (Foundation Phase, Days 1-9)
 
-**Last updated:** 2026-09-26 (Phase 7)
+**Last updated:** 2026-09-26 (Phase 7, addendum)
 
 ---
 
@@ -1482,7 +1482,7 @@ disease are the two a small molecule reaches worst.
 | Druggability | 93 targets | 90 targets | **97 targets** |
 | Known structures | 42 agents | 26 agents | **23 agents** |
 | Gene aliases needed | — | `GBA` → `GBA1` | **none** (97 of 97 present) |
-| Combination screen | pairs | k = 1, 2, 3 | **k = 1, 2, 3** |
+| Combination screen | pairs (v3); k = 1, 2, 3 added later the same day, see the addendum | k = 1, 2, 3 | **k = 1, 2, 3** |
 
 ### What the disease forced into the inputs
 
@@ -1661,3 +1661,86 @@ amyloid antibodies stay low-but-nonzero on CNS exposure.
    hand-transcribed structures against primary sources.
 8. A non-CNS disease, still, to exercise the peripheral branch of the delivery
    constraint.
+
+### Addendum (2026-09-26, later the same day): what a percentage means, MS at k = 3, and calibration
+
+Three follow-ups came from one question — "what is the efficacy rate?" — and the
+honest answer to it changed how the results are stated.
+
+**Reversal as a percentage of a ceiling.** `signed_reversal` (the share of the
+signature's weight moved the right way) has no natural scale: it shrinks when the
+signature gains untargeted genes and cannot exceed what the panel covers. Added
+[tools/reversal_ceiling.py](../tools/reversal_ceiling.py), which divides the best
+reversal at each order by a **full-reversal ceiling** (every targeted gene fully
+reversed) and a **pooled-panel ceiling** (all agents at once, therapeutic effects
+only, Bliss-combined). Best triples capture 16.1% / 25.7% of those ceilings in
+Alzheimer's, 19.6% / 33.2% in Parkinson's, and 17.5% / 21.4% in MS. Both ceilings
+are generous, because each panel was curated from its own signature's genes.
+
+**MS at k = 3.** Closed the Phase 6 next step "re-run MS at k = 3" by adding
+`experiments/ms/run_combination_screen.py`, the MS instance of the k-ary runner
+(64 eligible agents at phase 2 or above; 64 singles, 2,016 pairs, 29,757 triples).
+The best triple is methylprednisolone + ocrelizumab + opicinumab at **14.95%**
+reversal (best pair 10.54%, best single 5.58%). The full run took about two
+hours of wall-clock time, and its output was empty the whole time because Python
+buffers stdout when redirected; I misread that silence as "prints once per stage"
+and gave a wrong estimate before I checked CPU time against elapsed time.
+
+Results: 45.0% of pairs and 93.4% of triples beat the best monotherapy (higher than
+either other disease, partly because the best single is a broad steroid and the
+panel has many weak agents), 40.4% and 77.2% sub-additive (highest of the three),
+and 33.6% of triples have a negative gain over their best pair (median +0.0332).
+223 of 2,016 pairs were excluded as redundant. **The strata reproduce the v3
+result under the new scorer**: `cns_innate + remyelination` first,
+`immunomodulation + immunomodulation` last, and at order 3 the top six strata all
+contain remyelination. So MS keeps the convergence between the screen and the
+design campaign's gap analysis (remyelination, 1.00 unmet) that Alzheimer's broke.
+Bootstrap top-25 Jaccard is 0.229 / 0.132, again unstable, with Spearman 0.97 under
+weight jitter.
+
+Controls: natalizumab and its biosimilar are excluded as expected. The safety
+controls (daclizumab, cyclophosphamide, mitoxantrone) rank 61st to 64th of 64 as
+monotherapies and nowhere near the top 25 in combination, so unlike tacrine in
+Alzheimer's they do not slip through; I do not know why, and only have a candidate
+explanation (several heavily-weighted domains burdened at once). Two of four
+negative controls reach the top 25 (high-dose biotin 6th, evobrutinib 22nd),
+opicinumab is 28th, and opicinumab also appears in both the best-reversal pair and
+triple. Full detail in [the MS protocol, §12](ms_publication_protocol.md).
+
+I made the same class of mistake building the MS runner that I made for
+Alzheimer's: I copied the Alzheimer's runner rather than the Parkinson's one and
+had to strip its prose (ARIA monitoring, "elderly patient", cholinesterase
+inhibitors) from the MS caveats. The refactor named in step 7 of the campaign
+protocol, reading controls from the panel metadata, would remove the copy step.
+
+**Calibration against published efficacy.** I wanted to know whether the score
+tracks real efficacy, so I gathered effect sizes from two fetched meta-analyses (11 MS drugs) and
+tested it; see [the calibration write-up](efficacy_calibration.md). The five
+antibodies (relapse-rate ratio 0.28 to 0.34) all outscore the six other
+disease-modifying drugs on signature reversal (AUC 1.00, p ≈ 0.002), and the
+composite `priority_score` ranks them the *wrong* way round (AUC 0.30). The
+separation comes from the curated effect *magnitudes*, not from how many genes
+each drug touches, and I wrote those magnitudes knowing which drugs are
+potent, so I cannot separate the model recovering biology from the
+curation echoing what was put in. Two tiers cannot support a curve, and a linear
+fit would predict a relapse reduction above 100% for a triple. **No score-to-effect
+mapping is supported, and no predicted efficacy percentage exists for any
+combination or designed molecule.**
+
+Also a source-quality lesson: a web-search summary gave me confident-looking
+relapse-reduction figures for the interferons, glatiramer and teriflunomide that I
+could not trace to a fetched page, and one of its statements muddled two trials. I
+left those drugs out rather than use them. Alzheimer's and Parkinson's were not
+calibrated at all (no sourced effect sizes gathered), which is work not done.
+
+**Reflection.** The reversal percentages looked like efficacy rates and were
+repeatedly read as one, by me included, when I wrote "about a quarter of what the
+panel could reach". That is a normalisation for comparing diseases, and it is easy
+to hear as a clinical claim. The calibration was the check that could have shown
+the score was uninformative; it did not, but it also showed the composite is not an
+efficacy predictor and that the one positive result may be circular.
+
+**Next steps (additional).** Gather a common-scale effect table for at least
+15–20 agents per disease. Re-derive `target_effects` blind to efficacy so the
+calibration test can be independent. Add a bounded, held-out-validated link between
+reversal and effect before any percentage is attached to a combination.
