@@ -330,6 +330,33 @@ and bootstrap.
 7. Release code, frozen inputs, seed, full rankings including excluded
    combinations, and the control analysis.
 
+## Where quantum computing is and is not used
+
+**Not used: the combination screen.** The k = 1, 2, 3 screen (35 monotherapies, 595 pairs, 4,734 triples) is classical.
+
+*Why.* (1) The screen enumerates every combination exhaustively, so the answer is exact
+and there is no search problem for a quantum heuristic to help with; the full run takes about nine minutes, mostly the order-3 permutation null and bootstrap.
+(2) The expensive part is statistical scoring (the permutation null, bootstrap stability,
+weight sensitivity), which is classical and has no quantum counterpart here. (3) The
+drug-selection problem can be written as a QUBO (the project does this, see below), but at
+this size exact enumeration is faster and gives the true optimum, so there is nothing for
+a quantum solver to improve on. Quantum optimisation could matter for much larger
+selections (many agents, high order); none of the panels here is in that regime.
+
+**Used, as a benchmark only: the design campaign's fragment selection.** The 10-variable arm-selection QUBO gives +0.0830 on all three solvers; the depth sweep is d1 +0.0732, then +0.0830 at depths 2 to 5, so QAOA needed depth 2 or more.
+Enumeration finishes in about 0.07 s; the QAOA depth sweep takes 5 to 6 s. The arm sets
+carried into molecule assembly come from **enumeration**, not from QAOA, and QAOA's output
+is not used downstream.
+
+*Why only a benchmark.* At 10 binary variables there are 1,024 states, which exhaustive
+search covers instantly, so no quantum advantage can be demonstrated or is expected. The
+benchmark checks that the Hamiltonian formulation is faithful and transfers to a quantum
+algorithm, and that is all it shows.
+
+**Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
+simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
+stochastic search. None of the findings in this document depends on quantum computing.
+
 ## 10. Key references
 
 - Menche J, et al. *Science* (2015), disease-module separation, PMID: 25700523.

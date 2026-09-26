@@ -383,6 +383,38 @@ evidence of clinical benefit.
   domains) rather than the `ms_scoring` constants, so a difference from the v3 pair
   results is expected and does not indicate an error.
 
+## Where quantum computing is and is not used
+
+**Not used: the combination screen.** Both the original pairwise v3 screen and the k = 1, 2, 3 screen (64 monotherapies, 2,016 pairs, 29,757 triples) are classical.
+
+*Why.* (1) The screen enumerates every combination exhaustively, so the answer is exact
+and there is no search problem for a quantum heuristic to help with; the full k = 3 run took about two hours of wall-clock time, all of it classical scoring.
+(2) The expensive part is statistical scoring (the permutation null, bootstrap stability,
+weight sensitivity), which is classical and has no quantum counterpart here. (3) The
+drug-selection problem can be written as a QUBO (the project does this, see below), but at
+this size exact enumeration is faster and gives the true optimum, so there is nothing for
+a quantum solver to improve on. Quantum optimisation could matter for much larger
+selections (many agents, high order); none of the panels here is in that regime.
+
+**Used, as a benchmark only: the design campaign's fragment selection.** The 10-variable arm-selection QUBO gives +0.0443 on enumeration, the exact eigensolver and QAOA; the depth sweep is d1 +0.0443, d2 +0.0443, **d3 +0.0355**, d4 +0.0443, d5 +0.0443, so depth 3 fell short.
+Enumeration finishes in about 0.07 s; the QAOA depth sweep takes 5 to 6 s. The arm sets
+carried into molecule assembly come from **enumeration**, not from QAOA, and QAOA's output
+is not used downstream.
+
+*Why only a benchmark.* At 10 binary variables there are 1,024 states, which exhaustive
+search covers instantly, so no quantum advantage can be demonstrated or is expected. The
+benchmark checks that the Hamiltonian formulation is faithful and transfers to a quantum
+algorithm, and that is all it shows.
+
+**Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
+simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
+stochastic search. None of the findings in this document depends on quantum computing. The
+foundation-phase Hamiltonian formulation (Day 8) was likewise solved with an exact minimum
+eigensolver running classically (NumPy), and the Day 9 scaling benchmark compared exact,
+greedy and random *classical* solvers, finding the greedy solver trapped in a local optimum
+from about 12 candidates. That is the argument for stronger optimisers at scale, not a result
+obtained with a quantum one.
+
 ## 13. Key references
 
 - Dalla Costa G, et al. *Expert Rev Clin Pharmacol* (2024), PMID: 39376160.

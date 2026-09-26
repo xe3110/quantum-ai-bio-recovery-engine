@@ -1,0 +1,5 @@
+{
+  "disease": "guillain_barre",
+  "description": "Core complement, Fc receptor and peripheral myelin network in Guillain-Barre syndrome",
+  "targets": ["C1QA", "C3", "C5", "C5AR1", "FCGRT", "FCGR3A", "IGHG1", "TNF", "MMP9", "MPZ", "SARM1", "SCN9A"]
+}

@@ -3,8 +3,8 @@
 A disease-agnostic pipeline that derives a **Target Product Profile** from a
 disease model, formulates **pharmacophore selection as a QUBO**, solves it
 exactly and on QAOA, and **assembles novel molecular structures** against the
-resulting specification. Registered and exercised end to end for four diseases:
-multiple sclerosis, Parkinson's, Alzheimer's, and epilepsy.
+resulting specification. Registered and exercised end to end for five diseases:
+multiple sclerosis, Parkinson's, Alzheimer's, epilepsy, and Guillain-Barré syndrome.
 
 It is **not** a drug-discovery result. There is no binding-affinity model
 anywhere in this pipeline. Nothing has been docked, simulated, synthesised, or
@@ -49,18 +49,18 @@ plateaus in progressive disease, so a molecule designed for progressive MS has
 to reach CNS parenchyma. The flag turns the CNS multi-parameter score from a
 preference into a gate.
 
-### Four diseases, and why each one after the first matters
+### Five diseases, and why each one after the first matters
 
 An abstraction exercised by one instance is a claim, not a design. The
-registry holds four:
+registry holds five:
 
-| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy |
-| --- | --- | --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways |
-| Panel | 74 agents | 35 agents | 36 agents | 37 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes |
-| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support | cholinergic_symptomatic, amyloid_modification, tau_modification, synaptic_excitotoxicity_protection, microglial_immune_modulation, metabolic_vascular_rescue | sodium_channel_stabilisation, gabaergic_potentiation, glutamate_attenuation, vesicle_release_modulation, calcium_channel_modulation, potassium_channel_opening, epileptogenesis_modification, neuromodulatory_adjunct |
-| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic | aria, bradycardia_syncope, cognitive_worsening, falls_sedation, infusion_hypersensitivity, cardiac, hepatic, gastrointestinal | sedation_cognitive, dermatologic_hypersensitivity, teratogenicity, hepatic, hematologic, behavioural_mood, cardiac, seizure_aggravation, retinal_toxicity |
+| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy | Guillain-Barré |
+| --- | --- | --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways | 78 genes, 12 pathways |
+| Panel | 74 agents | 35 agents | 36 agents | 37 agents | 16 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes | STRING v12, 226 nodes |
+| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support | cholinergic_symptomatic, amyloid_modification, tau_modification, synaptic_excitotoxicity_protection, microglial_immune_modulation, metabolic_vascular_rescue | sodium_channel_stabilisation, gabaergic_potentiation, glutamate_attenuation, vesicle_release_modulation, calcium_channel_modulation, potassium_channel_opening, epileptogenesis_modification, neuromodulatory_adjunct | complement_inhibition, antibody_clearance, fc_receptor_modulation, cytokine_immune_modulation, conduction_restoration, neuropathic_pain_relief, nerve_repair_promotion |
+| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic | aria, bradycardia_syncope, cognitive_worsening, falls_sedation, infusion_hypersensitivity, cardiac, hepatic, gastrointestinal | sedation_cognitive, dermatologic_hypersensitivity, teratogenicity, hepatic, hematologic, behavioural_mood, cardiac, seizure_aggravation, retinal_toxicity | thromboembolic_events, renal_injury, meningococcal_infection, immune_haemolysis, treatment_related_fluctuation, respiratory_depression, cardiac, hepatic |
 
 No two of them share a **therapeutic axis**, and any two overlap only on
 generic toxicity -- cardiac, hepatic, gastrointestinal, and teratogenicity (which
@@ -578,6 +578,73 @@ first run. The nearest real drug is levetiracetam at Tanimoto 0.39; the nearest
 *entry* is the library's own SV2A fragment at 0.40, which is what the design was
 assembled from.
 
+### Guillain-Barré syndrome
+
+```
+c1(ccn(n1)CCC(=O)NO)CNc2ccncc2
+C12H15N5O2   MW 261.3   cLogP 0.79   TPSA 92.1   CNS-MPO 5.12/6 (reported, not a gate)
+arms: kv1_aminopyridine (approved_drug) + mmp_hydroxamate (published_chemotype)
+axes reported: cns_innate + conduction_restoration + neuroprotection
+mean engagement confidence 0.48, weakest claim CLDN5
+nearest known compound: the library's 4-aminopyridine fragment, Tanimoto 0.23
+```
+
+A **Kv1 potassium-channel blocker fused to an MMP9-inhibiting hydroxamic acid**:
+conduction restoration on one arm, blood-nerve-barrier protection on the other.
+Predicted effects: MMP9 −0.85, KCNA1 −0.75, CLDN5 +0.45, ICAM1 −0.30, VCAM1 −0.30.
+Signature reversal is 4.04% (reversal efficiency 0.53), about half of the best
+agent in the panel (tanruprubart, 8.06%).
+
+This is the first design campaign on the **peripheral** branch of the delivery logic.
+With `requires_cns_exposure` off, the profile's property window is the general oral
+envelope (MW 250–500, TPSA 40–130, no CNS floor), and the run needed no code change.
+The CNS multi-parameter score is still computed and reported (5.12/6) but is not
+applied as a gate, and all four designs would have passed it anyway.
+
+Run under RDKit and qiskit, `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+- 14-requirement profile led by `MMP9` (0.818), `C5AR1` (0.743), `CSF1R`, `NOS2`,
+  `S1PR1`. **Seven of the fourteen targets were unreachable** (`C5AR1`, `SCN9A`,
+  `SCN10A`, `TRPV1`, `KCNA1`, `C1S`, `P2RX3`); six pharmacophores were added (82
+  fragments, 54 pharmacophores) and the gap went to zero, with the other four
+  diseases' lists unchanged.
+- **The disease's own targets are routed around.** C1q, C5, IgG and FcRn, where
+  immunoglobulin, plasma exchange and the antibodies act, score 0.05 to 0.2 for
+  small-molecule tractability and are absent from the profile, and a test asserts it.
+  A small-molecule design reaches the disease through the C5a receptor, sodium
+  channels, Kv1.1 and MMP9, on its edges.
+- 10-variable QUBO, 45 couplings, 45 feasible states of 1,024. Enumeration, the exact
+  eigensolver and QAOA all reach +0.1113. QAOA falls short only at depth 1 (+0.1025)
+  and reaches the optimum at depths 2 to 5, the ordinary pattern.
+- Axis gaps range from 0.00 (`neuropathic_pain_relief`) to **1.00**
+  (`nerve_repair_promotion`), the only axis at exactly 1.00 since Alzheimer's, and one
+  with no agent in the panel at all.
+
+**Five things worth reading past the headline.**
+
+1. **All four designs use the same two arms.** The Kv1 arm and the hydroxamate arm
+   appear in every one, so the campaign explored a narrow region again.
+2. **The hydroxamic acid is a liability the pipeline cannot see.** The structural-alert
+   list returned nothing for it. Hydroxamates chelate metals and are a recognised
+   liability class for poor pharmacokinetics and mutagenicity concerns, and 4-aminopyridine
+   carries seizures as its dose-limiting toxicity. Neither appears in the output.
+3. **It does not address the largest gap or the highest-leverage target.**
+   `nerve_repair_promotion` (1.00 unmet) is on no design, and `C5AR1`, second in the
+   profile, is not on the leading designs. It is not a substitute for a complement or
+   IgG-targeting agent.
+4. **The stage inversion held, but only just.** The Hamiltonian's rank-1 arm set
+   (hydroxamate + S1P azetidine acid, +0.1113) built a best molecule of fitness 1.552;
+   rank 2 (Kv1 + hydroxamate, +0.1025) built 1.585, and rank 3 built 1.552. A margin of
+   about 2% is much smaller than in the other four diseases, so this is the weakest
+   confirmation yet of that pattern.
+5. **The novelty figure means little here.** The reference set is 7 structures because
+   9 of the 16 panel agents are biologics or procedures, so the design is being
+   compared with far less chemical matter than in any other disease.
+
+The reported axes include `cns_innate` and `neuroprotection`, which are MS labels
+carried by the shared `mmp_hydroxamate` fragment, the same vocabulary leak seen in
+Alzheimer's and still not fixed.
+
 ### What their efficacy is
 
 **Unknown, and untested even in silico for binding.** No docking score, no
@@ -587,7 +654,9 @@ effect.
 
 All three designs rank **first** against their disease panels on signed
 signature reversal (0.0573, 0.0550, and 0.0512 for Alzheimer's, against
-approved-agent medians of 0.0301, 0.0104, and 0.0189). **That comparison is close to circular** and is
+approved-agent medians of 0.0301, 0.0104, and 0.0189). The epilepsy (2.44%) and
+Guillain-Barré (4.04%) designs do not: each is below its own panel's best single agent
+(3.08% and 8.06%). **That comparison is close to circular** and is
 reported only to explain why it should not be leaned on: the arms were
 selected by the optimiser to maximise alignment with the very signature they
 are then scored against, while the panel agents were not. It is evidence the
@@ -605,7 +674,7 @@ document still receives the caveat with the data.
 
 ### The arm set that wins is not the arm set that builds the best molecule
 
-This held for all four diseases, and it is easy to quote the wrong number:
+This held for all five diseases, and it is easy to quote the wrong number:
 
 | disease | Hamiltonian rank 1 | best assembled fitness came from |
 | --- | --- | --- |
@@ -613,6 +682,7 @@ This held for all four diseases, and it is easy to quote the wrong number:
 | Parkinson's | GLUT + MAO-B (+0.0830) | caspase-1 + MAO-B, **rank 2** (+0.0732) |
 | Alzheimer's | cholinesterase carbamate + arylpropionic acid (+0.0724) | cholinesterase carbamate + CSF1R amide, **rank 3** (+0.0542) |
 | Epilepsy | arylpropionic acid + SV2A ligand (+0.0868) | S6K arm + SV2A ligand, **rank 3** (+0.0553) |
+| Guillain-Barré | hydroxamate + S1P azetidine acid (+0.1113) | Kv1 arm + hydroxamate, **rank 2** (+0.1025), by a margin of about 2% |
 
 The two stages optimise different things. The QUBO scores confidence-weighted
 coverage under a linearised property envelope; design fitness adds
@@ -685,6 +755,8 @@ python -m experiments.design.run_denovo_design --disease alzheimers --quantum-be
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
 python -m experiments.design.run_denovo_design --disease epilepsy --quantum-benchmark \
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/epilepsy
+python -m experiments.design.run_denovo_design --disease guillain_barre --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/guillain_barre
 pytest -q tests/
 ```
 

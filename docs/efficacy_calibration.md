@@ -80,6 +80,35 @@ Also worth knowing: on this score the panel's top monotherapy is
 and interferon beta-1a ranks above fingolimod. I did not verify either against a
 source, so treat those as prompts to check, not findings.
 
+## 2b. Guillain-Barré: a second, smaller check, with a negative result
+
+Guillain-Barré has few randomised trials but several clear outcomes, so the same
+question was put to it with a coarse two-group split (`python -m tools.calibrate_gbs_efficacy`,
+which lists the sources). Three agents worked (tanruprubart in a positive phase 3, and
+plasma exchange and IVIG as the established standard of care) and three did not
+(methylprednisolone in a 242-patient trial, interferon beta-1a as an add-on, and
+fingolimod in CIDP, a related disease).
+
+On `signed_reversal` the effective group scores higher (AUC **0.89**) but the exact
+permutation *p* is **0.100**, so with three against three it is not evidence of
+separation. The cause is specific: **methylprednisolone scores 5.06%, between plasma
+exchange (5.10%) and IVIG (4.98%)**, so the score cannot tell a steroid that a trial
+found ineffective from the two established therapies. Its cytokine effects were
+curated broadly, knowing what a steroid does to cytokine transcripts, which is the same
+circularity as in MS.
+
+There is also an external *combination* check, and the screen fails it. The top
+approved-only pair is IVIG + plasma exchange (8.80% against 5.10% and 4.98%), and a
+383-patient randomised trial of exactly that pairing found the two therapies equally
+effective with **no significant advantage from combining them**
+([Lancet 1997](https://pubmed.ncbi.nlm.nih.gov/9014908/)). A higher reversal for a pair
+did not translate into a better outcome.
+
+Taken with the MS result, the supportable statement is narrow: the score can rank a
+clearly stronger tier of agents above a weaker one where curation did not decide the
+outcome, cannot separate a null agent from an effective one when both move many
+transcripts, and does not predict combination benefit.
+
 ## 3. Why no numeric mapping
 
 With two tiers there is no honest curve. Approximate the antibody tier at a 66–72%

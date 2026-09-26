@@ -1,0 +1,409 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "disease": "guillain_barre",
+    "direction_rule": "Tractability is scored in the direction the signature wants. Complement components, Fc receptors and cytokines must go DOWN and are reached by antibodies and biologics rather than small molecules, so they score low. Complement regulators (CD55, CD59), the inhibitory receptor FCGR2B, IL10, FOXP3 and the myelin genes must go UP and have no small-molecule route, so they score lower still.",
+    "purpose": "Per-target modality annotation for Guillain-Barre syndrome. Tells the design layer which proteins a small molecule can realistically engage.",
+    "schema": {
+      "target_class": "broad protein family",
+      "small_molecule_tractability": "0-1 ordinal prior that a drug-like small molecule can productively engage this protein; 0 marks a transcriptional readout rather than a target",
+      "note": "the reason for the value, so it can be argued with"
+    },
+    "curation_rule": "Ordinal priors reflecting precedent in the public literature, on the same scale as the MS, Parkinson's, Alzheimer's and epilepsy annotations. Judgements, not measurements.",
+    "readout_convention": "A target scoring below 0.2 is treated by the design engine as a readout: the profile may require its expression to move, but no arm of a designed molecule will be assigned to bind it.",
+    "the_defining_problem": "Guillain-Barre syndrome is the disease whose established treatments are not small molecules at all. Intravenous immunoglobulin and plasma exchange are biologic and procedural, and the newer candidates are antibodies and enzymes against complement, IgG and FcRn. The central pathogenic targets (C1q, C5, IgG, FcRn) score 0.05 to 0.2 for small-molecule tractability, so a small-molecule design has to work around the disease's own centre of gravity, through targets on its edges: the C5a receptor, sodium channels for pain, SARM1 for axon protection, glucosylceramide synthase for the ganglioside substrate, and Kv1.1 for conduction.",
+    "n_targets": 78
+  },
+  "targets": {
+    "AIF1": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Iba1, a macrophage activation marker"
+    },
+    "ANK3": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Ankyrin-G, a nodal scaffold readout"
+    },
+    "ATF3": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "Regeneration-associated transcription factor, a readout"
+    },
+    "B4GALNT1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.4,
+      "note": "Ganglioside synthase; inhibitors are tool compounds"
+    },
+    "C1QA": {
+      "target_class": "complement",
+      "small_molecule_tractability": 0.15,
+      "note": "Classical-pathway recognition subunit; reached by antibodies (tanruprubart), with few small molecules"
+    },
+    "C1QB": {
+      "target_class": "complement",
+      "small_molecule_tractability": 0.15,
+      "note": "C1q subunit; as C1QA"
+    },
+    "C1QC": {
+      "target_class": "complement",
+      "small_molecule_tractability": 0.15,
+      "note": "C1q subunit; as C1QA"
+    },
+    "C1S": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.7,
+      "note": "Serine protease with small-molecule inhibitors in development"
+    },
+    "C3": {
+      "target_class": "complement",
+      "small_molecule_tractability": 0.2,
+      "note": "Complement hub; peptide inhibitors (compstatin class) dominate"
+    },
+    "C5": {
+      "target_class": "complement",
+      "small_molecule_tractability": 0.2,
+      "note": "Reached by antibodies (eculizumab) and a macrocyclic peptide; small molecules are rare"
+    },
+    "C5AR1": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.85,
+      "note": "Avacopan is an approved small-molecule antagonist"
+    },
+    "CACNA2D1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.95,
+      "note": "Alpha-2-delta-1; gabapentin and pregabalin bind it"
+    },
+    "CCL2": {
+      "target_class": "chemokine",
+      "small_molecule_tractability": 0.15,
+      "note": "A chemokine, reached through its receptor"
+    },
+    "CD163": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Macrophage scavenger receptor, a readout"
+    },
+    "CD55": {
+      "target_class": "regulator",
+      "small_molecule_tractability": 0.1,
+      "note": "Decay-accelerating factor; raising a complement regulator is not a small-molecule goal"
+    },
+    "CD59": {
+      "target_class": "regulator",
+      "small_molecule_tractability": 0.1,
+      "note": "Membrane-attack-complex inhibitor; raising it is not a small-molecule goal"
+    },
+    "CD68": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Lysosomal macrophage marker, a readout"
+    },
+    "CLDN5": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.1,
+      "note": "Tight-junction protein, a barrier-integrity readout"
+    },
+    "CNTN1": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Contactin-1, a paranodal readout and an autoantibody target"
+    },
+    "CNTNAP1": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Caspr, a paranodal readout"
+    },
+    "CSF1R": {
+      "target_class": "kinase",
+      "small_molecule_tractability": 0.85,
+      "note": "Receptor kinase with several inhibitors"
+    },
+    "CXCL10": {
+      "target_class": "chemokine",
+      "small_molecule_tractability": 0.15,
+      "note": "A chemokine, reached through CXCR3"
+    },
+    "EGR2": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.15,
+      "note": "Schwann-cell myelination transcription factor; induced, not bound"
+    },
+    "FCGR1A": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.2,
+      "note": "High-affinity IgG receptor; antibody and IVIG blockade, few small molecules"
+    },
+    "FCGR2A": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.2,
+      "note": "Low-affinity IgG receptor; blocked by antibodies"
+    },
+    "FCGR2B": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.1,
+      "note": "Inhibitory IgG receptor, whose raising is the wanted direction and has no small-molecule route"
+    },
+    "FCGR3A": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.2,
+      "note": "IgG receptor on macrophages and NK cells; blocked by antibodies"
+    },
+    "FCGRT": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.15,
+      "note": "FcRn; blocked by antibody fragments (efgartigimod); small-molecule FcRn blockers are early"
+    },
+    "FOXP3": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "Regulatory T-cell transcription factor; raising it is not a small-molecule goal"
+    },
+    "GAP43": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Regeneration marker, a readout"
+    },
+    "GDNF": {
+      "target_class": "growth_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "A growth factor; delivered or induced"
+    },
+    "GJB1": {
+      "target_class": "gap_junction",
+      "small_molecule_tractability": 0.1,
+      "note": "Connexin 32; raising it has no small-molecule route"
+    },
+    "HMOX1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.3,
+      "note": "An inducible compensatory response, raised by upstream Nrf2 activation rather than bound"
+    },
+    "ICAM1": {
+      "target_class": "adhesion",
+      "small_molecule_tractability": 0.3,
+      "note": "Adhesion molecule; antibody and peptide blockers"
+    },
+    "IFNG": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.1,
+      "note": "A cytokine; reached through upstream signalling"
+    },
+    "IGHG1": {
+      "target_class": "immunoglobulin",
+      "small_molecule_tractability": 0.05,
+      "note": "Immunoglobulin heavy chain, a readout of IgG deposition"
+    },
+    "IL10": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.1,
+      "note": "Raising an anti-inflammatory cytokine is the wanted direction and has no small-molecule route"
+    },
+    "IL17A": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "Antibodies dominate; oral small molecules are early"
+    },
+    "IL1B": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "Reached through the inflammasome or receptor antagonism"
+    },
+    "IL6": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.15,
+      "note": "A cytokine, reached by antibodies and JAK inhibitors upstream"
+    },
+    "ITGAM": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.3,
+      "note": "Integrin alpha-M; antibodies and small-molecule modulators are early"
+    },
+    "JUN": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.15,
+      "note": "Regeneration-associated transcription factor; induced, not bound"
+    },
+    "KCNA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.8,
+      "note": "Kv1.1 exposed by demyelination; dalfampridine blocks it, and blocking is the wanted direction"
+    },
+    "MBP": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Myelin basic protein, a readout"
+    },
+    "MMP9": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.75,
+      "note": "Metalloprotease with hydroxamate and non-zinc inhibitors"
+    },
+    "MPZ": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Myelin protein zero, a myelin-integrity readout"
+    },
+    "MS4A1": {
+      "target_class": "surface_antigen",
+      "small_molecule_tractability": 0.05,
+      "note": "CD20, reached by antibodies; not a small-molecule target"
+    },
+    "MYD88": {
+      "target_class": "adaptor",
+      "small_molecule_tractability": 0.3,
+      "note": "Adaptor; inhibitors are peptidomimetic tool compounds"
+    },
+    "NEFL": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Neurofilament light, the axonal-injury biomarker, a readout"
+    },
+    "NFASC": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Neurofascin 155, a paranodal readout and an autoantibody target"
+    },
+    "NFE2L2": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.55,
+      "note": "Nrf2, activated through KEAP1 electrophiles"
+    },
+    "NFKB1": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.2,
+      "note": "Transcription factor; reached through upstream kinases"
+    },
+    "NGF": {
+      "target_class": "growth_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "A growth factor; delivered or induced"
+    },
+    "NLRP3": {
+      "target_class": "inflammasome",
+      "small_molecule_tractability": 0.65,
+      "note": "Several clinical-stage inhibitors"
+    },
+    "NMNAT2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.3,
+      "note": "Axon-survival enzyme; raising it is wanted, and activators are unusual"
+    },
+    "NOS2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.85,
+      "note": "Inducible NOS with inhibitor precedent"
+    },
+    "NRG1": {
+      "target_class": "growth_factor",
+      "small_molecule_tractability": 0.15,
+      "note": "Axonal signal driving myelination; delivered or induced, not bound"
+    },
+    "OCLN": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.1,
+      "note": "Tight-junction protein, a readout"
+    },
+    "P2RX3": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.8,
+      "note": "P2X3; gefapixant-class antagonists"
+    },
+    "PMP22": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Peripheral myelin protein 22, a readout"
+    },
+    "PRX": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Periaxin, a readout"
+    },
+    "S1PR1": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.9,
+      "note": "Fingolimod and the newer S1P modulators act through functional antagonism"
+    },
+    "SARM1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.7,
+      "note": "NADase driving axon degeneration, with small-molecule inhibitors reported"
+    },
+    "SCN10A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Nav1.8; suzetrigine-class inhibitors"
+    },
+    "SCN8A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.6,
+      "note": "Nav1.6 at the node; restoration is wanted, and activators are scarce"
+    },
+    "SCN9A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Nav1.7; the target of selective aryl-sulfonamide and newer inhibitors"
+    },
+    "SOD2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.2,
+      "note": "Antioxidant enzyme, induced rather than bound"
+    },
+    "SOX10": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "Schwann-cell lineage factor, a readout"
+    },
+    "ST3GAL2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.3,
+      "note": "Sialyltransferase; few inhibitors"
+    },
+    "STMN2": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Stathmin-2, an axon-maintenance readout"
+    },
+    "TLR2": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.4,
+      "note": "Few small-molecule antagonists"
+    },
+    "TLR4": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.6,
+      "note": "Small-molecule antagonists are clinical-stage"
+    },
+    "TNF": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "Biologics dominate"
+    },
+    "TRPA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.7,
+      "note": "Antagonists in development"
+    },
+    "TRPV1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.8,
+      "note": "Antagonists and desensitising agonists are well-precedented"
+    },
+    "UGCG": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.85,
+      "note": "Glucosylceramide synthase; eliglustat is an approved inhibitor"
+    },
+    "VCAM1": {
+      "target_class": "adhesion",
+      "small_molecule_tractability": 0.3,
+      "note": "Adhesion molecule; reached through VLA-4 blockade"
+    },
+    "VEGFA": {
+      "target_class": "growth_factor",
+      "small_molecule_tractability": 0.2,
+      "note": "A growth factor, reached by antibodies and receptor kinase inhibitors"
+    }
+  }
+}

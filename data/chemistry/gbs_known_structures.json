@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "disease": "guillain_barre",
+    "purpose": "Structures for the small-molecule members of guillain_barre_panel_v1, used as the known-chemical-matter reference set for novelty assessment in the de novo design campaign.",
+    "curation_rule": "Every entry carries the molecular formula and average mass reported in the public literature for that agent. tests/test_chemistry.py re-derives both from the SMILES and fails on any disagreement. Each structure was additionally cross-checked against RDKit (formula and average mass); all 7 agree with both backends on the first transcription.",
+    "validation_limit": "Structures were written from memory of the published skeletons. Formula and mass cannot detect a positional isomer, and methylprednisolone is entered without stereochemistry, which the connectivity-based novelty fingerprint does not read. Confirm each against a primary structure source before publication use.",
+    "why_this_file_exists": "Without it, novelty for a Guillain-Barre design would be measured only against the pharmacophore library's own parent fragments. Registered before the first design run.",
+    "the_defining_limitation": "This is the smallest reference set of the five diseases (7 structures), and for a structural reason: 9 of the panel's 16 agents are biologics or procedures with no small-molecule structure, including both approved disease-specific therapies (intravenous immunoglobulin and plasma exchange). Novelty is therefore measured against much less chemical matter than for any other disease, and the novelty figure a design earns here means correspondingly less.",
+    "omissions": "Nine of the 16 panel records have no entry: intravenous immunoglobulin, its second-course record, plasma exchange, efgartigimod, imlifidase, eculizumab, tanruprubart, interferon beta-1a (all proteins or procedures) and 'C5aR antagonist (avacopan-class exemplar)', which names a chemotype rather than a settled structure and is omitted rather than guessed.",
+    "stereochemistry": "Stereodescriptors are retained where the marketed agent is a single enantiomer (pregabalin). The fingerprint is connectivity-based and does not read them.",
+    "n_structures": 7
+  },
+  "structures": [
+    {
+      "name": "Gabapentin",
+      "smiles": "NCC1(CC(=O)O)CCCCC1",
+      "formula": "C9H17NO2",
+      "mass": 171.24
+    },
+    {
+      "name": "Pregabalin",
+      "smiles": "CC(C)C[C@H](CN)CC(=O)O",
+      "formula": "C8H17NO2",
+      "mass": 159.23
+    },
+    {
+      "name": "Carbamazepine",
+      "smiles": "NC(=O)N1c2ccccc2C=Cc2ccccc12",
+      "formula": "C15H12N2O",
+      "mass": 236.27
+    },
+    {
+      "name": "Amitriptyline",
+      "smiles": "CN(C)CCC=C1c2ccccc2CCc2ccccc12",
+      "formula": "C20H23N",
+      "mass": 277.4
+    },
+    {
+      "name": "Dalfampridine",
+      "smiles": "Nc1ccncc1",
+      "formula": "C5H6N2",
+      "mass": 94.12
+    },
+    {
+      "name": "Fingolimod",
+      "smiles": "CCCCCCCCc1ccc(CCC(N)(CO)CO)cc1",
+      "formula": "C19H33NO2",
+      "mass": 307.47
+    },
+    {
+      "name": "Methylprednisolone",
+      "smiles": "CC1CC2C3CCC(O)(C(=O)CO)C3(C)CC(O)C2C2(C)C=CC(=O)C=C12",
+      "formula": "C22H30O5",
+      "mass": 374.47
+    }
+  ]
+}

@@ -1,11 +1,13 @@
 # Disease campaign protocol — adding a disease, and what the engine does with it
 
-This is the standing procedure. Four diseases are registered — multiple
-sclerosis, Parkinson's, Alzheimer's, and epilepsy — and the point of writing this
-down is that the fifth, sixth, and seventh should not require reading any scoring
-code. Alzheimer's was the first built from this document rather than alongside it,
-and the checklist below was corrected where it turned out to be wrong. Epilepsy is
-the first built from the corrected version.
+This is the standing procedure. Five diseases are registered — multiple
+sclerosis, Parkinson's, Alzheimer's, epilepsy, and Guillain-Barré syndrome — and the
+point of writing this down is that the sixth, seventh, and eighth should not require
+reading any scoring code. Alzheimer's was the first built from this document rather
+than alongside it, and the checklist below was corrected where it turned out to be
+wrong. Epilepsy was the first built from the corrected version, and Guillain-Barré is
+the first **peripheral** disease, which exercised the branch of the delivery logic
+that the other four never reach.
 
 A **campaign** is everything the engine does for one disease: rank the agents
 that already exist ([combination screen](#3-the-combination-screen)), and
@@ -18,6 +20,7 @@ read the same registry entry. Neither names a disease anywhere in its logic.
 | Parkinson's disease | `data/diseases/parkinsons.json` | [protocol](parkinsons_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md) |
 | Alzheimer's disease | `data/diseases/alzheimers.json` | [protocol](alzheimers_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#alzheimers-disease) |
 | Epilepsy | `data/diseases/epilepsy.json` | [protocol](epilepsy_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#epilepsy) |
+| Guillain-Barré syndrome | `data/diseases/guillain_barre.json` | [protocol](guillain_barre_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#guillain-barré-syndrome) |
 
 Everything below is **discovery-stage hypothesis generation**. No output of any
 campaign is a clinical recommendation, and every campaign inherits every
@@ -287,7 +290,12 @@ No scoring code should need editing. If it does, that is the bug.
    data/<id>_expression.csv --out data/networks/string_<id>_network.tsv`;
    commit the `.tsv` and its `.meta.json`. Read `signature_genes_absent` in the
    metadata: every gene listed there needs a `gene_aliases` entry or it has zero
-   network leverage (Parkinson's needed `GBA` → `GBA1`; Alzheimer's needed none).
+   network leverage (Parkinson's needed `GBA` → `GBA1`; Alzheimer's needed none). A gene
+   listed there is not necessarily an alias problem: STRING v12 answers "not found"
+   for `AQP4`, `MPZ` and `IGHG1`, and resolves `VEGFA` to a different protein
+   (`COL18A1`). **Query STRING directly for each absent symbol** before writing down
+   why it is absent; epilepsy's `AQP4` was first recorded as "no interactions at the
+   cutoff", which was wrong.
 3. **Druggability** → `data/targets/druggability_<id>.json`. Anything below
    ~0.2 small-molecule tractability is a transcriptional readout, not a target
    an arm may be pointed at.
@@ -387,6 +395,16 @@ These apply to every disease and do not need restating in a per-disease doc.
   winning on bonus terms has an inverse failure for narrow ones. Read the efficacy
   block, not `priority_score`, for anything resembling efficacy, and evaluate any
   fix on every registered disease at once.
+- **A score that fails an external combination check.** In Guillain-Barré the top
+  approved-only pair is IVIG + plasma exchange (8.80% reversal against 5.10% and
+  4.98%). A 383-patient randomised trial of exactly that pairing found the two
+  therapies equally effective and the combination without a significant advantage.
+  Signature reversal adds across mechanisms and clinical benefit saturates, so a
+  higher score for a pair is not evidence the pair is better. Where a published
+  combination trial exists, report the screen's prediction beside it.
+- **Panel size changes what stability figures mean.** Guillain-Barré's top-25
+  bootstrap Jaccard is 0.60 at order 2, the first above 0.5, because the top 25 of 117
+  pairs is 21% of the space. Do not compare it with a screen of thousands of pairs.
 - **Panel composition sets what a screen can say.** Epilepsy's panel is 30
   approved agents of 37, so its ranking is mostly antiseizure drugs against each
   other, and the axis-gap analysis has no axis at 1.00 (a test that assumed one
@@ -412,6 +430,27 @@ These apply to every disease and do not need restating in a per-disease doc.
   [de novo design campaign](denovo_design_protocol.md) is for.
 - **Modality-blind.** Antibodies and small molecules are ranked side by side.
   The design campaign corrects this with per-target druggability.
+
+## Where quantum computing is and is not used (all diseases)
+
+This applies to every registered disease, and each disease's own document repeats it with
+its numbers.
+
+| Stage | Classical or quantum | Why |
+|---|---|---|
+| k = 1, 2, 3 combination screen | **Classical, all five diseases** | Exhaustive enumeration is exact at these sizes (16 to 29,757 triples), and the cost is classical statistics (permutation null, bootstrap), not search |
+| Fragment selection for the design campaign | **QAOA as a benchmark only**, on a simulator, all five diseases | A 10-variable QUBO has 1,024 states that enumeration covers in about 0.07 s; QAOA takes 5 to 6 s and only confirms the formulation is faithful |
+| Arm sets carried into assembly | **Enumeration** | QAOA's output is not used downstream |
+| Molecule assembly and refinement | **Classical** stochastic search | No quantum formulation of it exists here |
+| Real quantum hardware | **Never used** | Everything ran on a classical simulator (Qiskit Aer) |
+
+QAOA reproduced the enumeration optimum in every disease, so the formulation transfers to a
+quantum algorithm. It did **not** show a quantum advantage, and at ten variables none is
+possible to show. Its behaviour by depth differs by instance (the depths that fell short: MS d3, Parkinson's d1, Alzheimer's d1 and d5, epilepsy d2,
+Guillain-Barré d1), which is why the runner sweeps depths 1 to 5 and reports every one. The regime
+where quantum optimisation might matter, selections from hundreds of candidates at high
+order, is not one any panel here reaches. **No finding in any disease's document depends on
+quantum computing.**
 
 ## 8. Key references
 

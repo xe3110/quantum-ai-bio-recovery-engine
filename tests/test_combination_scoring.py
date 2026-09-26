@@ -27,7 +27,7 @@ from core.biology.combination_statistics import (
 from core.biology.signature import alignment_metrics, combine_effects
 from core.models.disease import load_disease
 
-DISEASES = ["parkinsons", "multiple_sclerosis", "alzheimers", "epilepsy"]
+DISEASES = ["parkinsons", "multiple_sclerosis", "alzheimers", "epilepsy", "guillain_barre"]
 
 
 @pytest.fixture(scope="module")

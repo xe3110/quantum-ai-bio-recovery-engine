@@ -38,6 +38,7 @@ SCREENS = {
     "parkinsons": ROOT / "experiments/parkinsons/results/pd_combinations_full.csv",
     "alzheimers": ROOT / "experiments/alzheimers/results/ad_combinations_full.csv",
     "epilepsy": ROOT / "experiments/epilepsy/results/ep_combinations_full.csv",
+    "guillain_barre": ROOT / "experiments/guillain_barre/results/gbs_combinations_full.csv",
 }
 
 

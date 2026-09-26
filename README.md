@@ -17,7 +17,7 @@ Quantum Bio Recovery Engine is a research platform for discovering optimal multi
 - **De novo molecular design** — deriving a target product profile from a
   disease model and assembling new chemical structures against it
 - Disease-agnostic contracts, exercised end to end for **multiple sclerosis,
-  Parkinson's, Alzheimer's, and epilepsy**
+  Parkinson's, Alzheimer's, epilepsy, and Guillain-Barré syndrome**
 
 The system is designed for **reproducibility, extensibility, and future quantum hardware deployment**.
 
@@ -70,12 +70,13 @@ quantum-bio-recovery-engine/
 │ ├── parkinsons/ # Parkinson's: monotherapy + pair + triple screen
 │ ├── alzheimers/ # Alzheimer's: monotherapy + pair + triple screen
 │ ├── epilepsy/ # Epilepsy: monotherapy + pair + triple screen
+│ ├── guillain_barre/ # Guillain-Barré: monotherapy + pair + triple screen
 │ ├── design/ # De novo design campaigns (disease-agnostic)
 │ └── benchmarks/ # Scaling and hardness benchmarks
 ├── tools/ # Input curation and external-database fetchers
 ├── tests/ # Behavioural tests for the screen and the design stack
 ├── data/
-│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons, alzheimers, epilepsy)
+│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons, alzheimers, epilepsy, guillain_barre)
 │ ├── chemistry/ # Fragment library and known-structure reference set
 │ └── targets/ # Per-target druggability annotations
 ├── figures/ # Generated plots and benchmark figures
@@ -274,7 +275,7 @@ pairs from exploration.
 
 The best triple reverses **7.41%** of the signature (best pair 5.27%, best single
 3.08%), 16.9% of the full-reversal ceiling and 24.1% of the pooled-panel ceiling —
-the lowest ceiling of the four diseases. **83.4% of triples have a negative gain
+the lowest full-reversal ceiling of the five diseases. **83.4% of triples have a negative gain
 over their best pair**, so a third agent almost never earns its place here. The
 strata favour the potassium-channel-opening axis, which the design campaign's gap
 analysis also rates most unmet, but that axis has two agents, one withdrawn in 2017.
@@ -286,6 +287,33 @@ rewards an agent with one well-aligned target regardless of how little it moves
 reported as a failure of the scorer and not tuned away. See [the epilepsy
 protocol](docs/epilepsy_screen.md) for the inputs, the controls (each checked
 against a source) and the design results.
+
+### Guillain-Barré monotherapy, pair, and triple screen
+
+The fifth disease, and the first **peripheral** one: the CNS gate is switched off, so
+this exercises the branch of the delivery logic the other four never reach. A
+**16-agent** panel (short on purpose, because few agents have a randomised trial in the
+disease) is scored against a **78-gene signature** at **k = 1, 2, 3**: 16
+monotherapies, 120 pairs, 518 triples.
+
+```bash
+python -u -m experiments.guillain_barre.run_combination_screen --top 25 --seed 7   # seconds
+python -m tools.calibrate_gbs_efficacy
+```
+
+The two established therapies, IVIG and plasma exchange, are a biologic and a
+procedure, so 9 of the 16 agents have no structure and the novelty reference set is
+only 7 structures. The best single agent is tanruprubart (a C1q antibody with a
+positive phase 3) at **8.06%** signature reversal; the best pair is tanruprubart +
+methylprednisolone at **13.13%** and the best triple adds IVIG at **16.72%**. Both
+contain methylprednisolone, which a 242-patient trial found no better than placebo.
+With null-trial agents removed the best pair is **IVIG + tanruprubart** (12.02%).
+
+**The screen fails an external check.** Its top approved-only pair is IVIG + plasma
+exchange (8.80% against 5.10% and 4.98%), and a 383-patient randomised trial of that
+exact combination found no significant advantage over either therapy alone. See [the
+Guillain-Barré protocol](docs/guillain_barre_screen.md) for the controls, the
+calibration check, and the design results.
 
 ### De novo molecular design
 
@@ -334,7 +362,9 @@ to a caspase-1 warhead; the Alzheimer's campaign produces a cholinesterase
 carbamate fused to a CSF1R amide — built on an axis the gap analysis calls
 already served, with the top-priority target (`BACE1`) never reaching the
 optimiser; the epilepsy campaign produces an S6 kinase arm fused to an SV2A ligand,
-on two axes that are mostly unserved. All four are walked through in full — including what their
+on two axes that are mostly unserved; the Guillain-Barré campaign produces a Kv1 blocker
+fused to an MMP9-inhibiting hydroxamic acid, the first design on the peripheral branch.
+All five are walked through in full — including what their
 efficacy is not — in
 [§8 of the design protocol](docs/denovo_design_protocol.md#8-reading-a-design--worked-examples).
 
@@ -361,6 +391,26 @@ scoring directly, so the optimiser has a reason to prefer well-evidenced arms.
 
 See [the de novo design protocol](docs/denovo_design_protocol.md) for the full
 assumption set and the validation work that would have to come first.
+
+### Where quantum computing is used, and where it is not
+
+The project is described as hybrid quantum-classical, so it is worth being exact about which
+part is which, for all five diseases (MS, Parkinson's, Alzheimer's, epilepsy, Guillain-Barré).
+
+| Stage | Classical or quantum | Why |
+| --- | --- | --- |
+| k = 1, 2, 3 combination screens | **Classical** | Exhaustive enumeration is exact at these sizes (up to 29,757 triples), and the cost is classical statistics (permutation null, bootstrap), not search |
+| Fragment selection for design | **QAOA as a benchmark only**, on a simulator | A 10-variable QUBO has 1,024 states that enumeration covers in about 0.07 s; QAOA takes 5 to 6 s |
+| Arm sets carried into assembly | **Enumeration** | QAOA's output is not used downstream |
+| Molecule assembly | **Classical** | No quantum formulation of it exists here |
+| Real quantum hardware | **Never used** | Everything ran on a classical simulator |
+
+QAOA matched the enumeration optimum in every disease, which shows the Hamiltonian formulation
+transfers to a quantum algorithm. It shows **no quantum advantage**, and at ten variables none
+is possible to show. Its result varies by circuit depth and by instance, so the runner sweeps
+depths 1 to 5 and reports all of them. No finding in this repository depends on quantum
+computing. Each disease's protocol document states this with its own numbers, and the design
+protocol's section on the quantum backends explains the depth behaviour.
 
 ### Chemistry backend
 
@@ -389,17 +439,18 @@ adamantane inflating its synthetic-tractability penalty.
 
 ### Registered diseases
 
-Four, so the disease-agnostic claim is checkable rather than asserted:
+Five, so the disease-agnostic claim is checkable rather than asserted:
 
-| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy |
-| --- | --- | --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways |
-| Panel | 74 agents | 35 agents | 36 agents | 37 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes |
-| Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated | 85 targets annotated |
-| Known structures | 42 agents | 26 agents | 23 agents | 31 agents |
-| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) | none at 1.00; potassium channel opening (0.92) |
-| Combination screen | pairs (v3), plus monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples |
+| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy | Guillain-Barré |
+| --- | --- | --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways | 78 genes, 12 pathways |
+| Panel | 74 agents | 35 agents | 36 agents | 37 agents | 16 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes | STRING v12, 226 nodes |
+| Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated | 85 targets annotated | 78 targets annotated |
+| Known structures | 42 agents | 26 agents | 23 agents | 31 agents | 7 agents |
+| CNS gate | on | on | on | on | **off (peripheral)** |
+| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) | none at 1.00; potassium channel opening (0.92) | nerve repair (1.00, no agent in panel) |
+| Combination screen | pairs (v3), plus monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples |
 
 No two of them share a **therapeutic axis**, and any two overlap only on generic
 toxicity (cardiac, hepatic, gastrointestinal, and teratogenicity, which MS and
@@ -416,6 +467,8 @@ python -m experiments.design.run_denovo_design --disease alzheimers --quantum-be
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
 python -m experiments.design.run_denovo_design --disease epilepsy --quantum-benchmark \
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/epilepsy
+python -m experiments.design.run_denovo_design --disease guillain_barre --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/guillain_barre
 ```
 
 Each disease declares a **known-structure reference set** that the design
@@ -465,6 +518,7 @@ covers, which is how the library learns what it is missing.
 | [Disease campaign protocol](docs/disease_campaign_protocol.md) | **Start here for a new disease.** What a registry entry must carry, the k-ary scoring contract, the cross-order comparison rule, the statistical treatment, and the checklist for adding the next disease |
 | [MS publication protocol](docs/ms_publication_protocol.md) | Screen inputs, all 20 scoring parameters, statistical treatment, controls, and the validation required for a manuscript |
 | [Parkinson's screen protocol](docs/parkinsons_screen.md) | The k = 1/2/3 screen: monotherapy vs combination results, mechanism strata, controls, and the caveats specific to chronic dopaminergic polypharmacy |
+| [Guillain-Barré screen protocol](docs/guillain_barre_screen.md) | The first peripheral disease: the CNS gate off, a 16-agent panel of mostly biologics and procedures, and a screen that fails an external combination check (IVIG + plasma exchange) |
 | [Epilepsy screen protocol](docs/epilepsy_screen.md) | The k = 1/2/3 screen for a disease with tractable channel targets and an approved-heavy panel: what a redundancy rule that matches clinical polytherapy costs, why epilepsy has no axis at 1.00, and the source-checked controls |
 | [Alzheimer's screen protocol](docs/alzheimers_screen.md) | The k = 1/2/3 screen: why amyloid cannot be scored from a transcript signature, the strata that disagree with the design analysis, the withdrawn-drug control that failed, and the antibody delivery assumption |
 | [De novo design protocol](docs/denovo_design_protocol.md) | Target profile derivation, the Hamiltonian and its two approximations, the chemistry model's validation state and blind spots, and the central transplantation assumption |

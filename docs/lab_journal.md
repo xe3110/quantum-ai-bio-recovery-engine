@@ -8,7 +8,7 @@
 
 **Start Date:** 2026-01-16 (Foundation Phase, Days 1-9)
 
-**Last updated:** 2026-09-27 (Phase 8)
+**Last updated:** 2026-09-27 (Phase 9)
 
 ---
 
@@ -1765,7 +1765,7 @@ channel targets are covered".
 | Panel | 74 agents | 35 agents | 36 agents | **37 agents, 32 mechanism classes** |
 | Approved share of panel | 24 of 74 | 16 of 35 | 8 of 36 | **30 of 37** |
 | Interactome | 261 nodes | 240 nodes | 247 nodes | **234 nodes, 7,001 edges** |
-| Genes absent from network | — | `GBA1` (aliased) | none | **`AQP4` (no edges at 0.4; not an alias)** |
+| Genes absent from network | — | `GBA1` (aliased) | none | **`AQP4` (STRING v12 does not recognise the symbol)** |
 | Known structures | 42 | 26 | 23 | **31** |
 
 ### What the disease forced
@@ -1820,6 +1820,13 @@ crossover had suggested some, so I recorded both.
 * **Unbuffered output.** The full screen was launched with `python -u` from the
   start, having learned from the MS run that redirected output is otherwise buffered
   until exit. Progress was visible throughout.
+* **`AQP4` explanation was wrong.** The epilepsy network omits `AQP4`, and I first
+  recorded the reason as "no interactions at the 0.4 cutoff" without checking.
+  Querying STRING directly for the symbol returns "not found", so it is a
+  symbol-recognition failure. Corrected in the registry entry, the epilepsy
+  protocol and the table above. Found while building the Guillain-Barré network,
+  where the same lookup showed `MPZ` and `IGHG1` unrecognised and `VEGFA` resolving
+  to a different protein.
 
 ### Design campaign
 
@@ -1935,3 +1942,212 @@ the heaviest risk. Two existing tests were changed deliberately, as described ab
 6. Gather verified per-drug effects to extend the efficacy calibration beyond MS;
    epilepsy has an unusually large number of approved agents with published
    seizure-reduction figures, which makes it the best candidate.
+
+---
+
+## Phase 9 — Guillain-Barré syndrome, the fifth campaign and the first peripheral one (2026-09-27)
+
+### Objective
+
+Run the same two tracks for Guillain-Barré syndrome (GBS): the k = 1, 2, 3 combination
+screen, then the de novo design campaign, and report the best combination and a new
+molecule. GBS was chosen because it is the non-CNS disease that has been on the next-steps
+list since Phase 4. Every earlier disease sets `requires_cns_exposure`; GBS attacks
+peripheral nerve and root, so switching the gate off exercises the branch of the delivery
+logic that none of the other four had run.
+
+| | MS | Parkinson's | Alzheimer's | Epilepsy | **GBS** |
+| --- | --- | --- | --- | --- | --- |
+| Signature | 112 genes | 90 genes | 97 genes | 85 genes | **78 genes, 12 pathways** |
+| Panel | 74 agents | 35 agents | 36 agents | 37 agents | **16 agents, 14 mechanism classes** |
+| Approved in panel | 24 of 74 | 16 of 35 | 8 of 36 | 30 of 37 | **7 of 16** |
+| Interactome | 261 nodes | 240 nodes | 247 nodes | 234 nodes | **226 nodes, 11,062 edges** |
+| Known structures | 42 | 26 | 23 | 31 | **7** |
+| CNS gate | on | on | on | on | **off** |
+
+### What the disease forced
+
+* **The peripheral branch ran, with no code change.** With the gate off the profile uses
+  a general oral property window (MW 250–500, TPSA 40–130, no CNS floor). Whether the
+  compartment term, scored as *spread* (the term written for MS), means anything in a
+  disease where every effective agent acts peripherally is not established, so I have
+  recorded it as unvalidated.
+* **The panel is short on purpose.** Few agents have a randomised trial in GBS. Padding
+  the panel with agents never tested in it would have added ranked names and no
+  information. I dropped subcutaneous immunoglobulin as a redundancy control for that
+  reason: it is approved for CIDP, not GBS, so it would have been an extrapolation.
+* **Most of what works is not chemistry.** IVIG and plasma exchange are a biologic and a
+  procedure, and the newest candidates are antibodies and enzymes. Nine of the 16 agents
+  have no structure, so the novelty reference set is 7 structures, the smallest of the
+  five, and novelty figures here carry less weight.
+* **Two agent records I had to decide about.** The second IVIG course is the same drug as
+  IVIG, so it has identical target effects and is excluded from the redundancy pair by
+  construction; I kept it because a randomised trial (SID-GBS) found no benefit and more
+  serious adverse events (35% against 16%), which makes it a clean safety-penalty control.
+  Fingolimod failed a phase 3 in CIDP, not GBS, so it is a negative control from a related
+  disease and is labelled that way.
+* **A new risk vocabulary.** Respiratory depression carries the highest weight, because the
+  disease weakens the respiratory muscles and a sedating pain drug can tip a patient into
+  failure. Thromboembolism and meningococcal infection follow. The eight domains share
+  only `cardiac` and `hepatic` with the other diseases, so no test had to be widened this
+  time.
+
+### Verifying the controls
+
+Each control was checked against a source before it was declared: the methylprednisolone
+trial (242 patients, no benefit), the interferon beta-1a add-on trial (no significant
+improvement), the eculizumab phase 2 (33 patients, too small to prove efficacy; inconclusive,
+so not a control), the SID-GBS second-dose trial, the positive tanruprubart phase 3, the
+imlifidase phase 2, and the fingolimod CIDP failure. The trial summaries came from search
+results, not the primary papers, which the calibration tool records.
+
+### Problems found during the build
+
+* **STRING symbol resolution, and a correction to Phase 8.** Three signature genes are
+  missing from the GBS network. Querying STRING directly for each showed `IGHG1` and `MPZ`
+  are answered "not found" and `VEGFA` resolves to a different protein (`COL18A1`). The
+  same lookup for `AQP4` (missing from the epilepsy network) also returns "not found", so
+  my Phase 8 note that it had "no interactions at the 0.4 cutoff" was wrong; it is a
+  symbol-recognition failure. Corrected in the epilepsy registry entry and protocol. The
+  campaign protocol's network step now says to query STRING directly for each absent symbol
+  before recording a reason.
+* **The screen was launched unbuffered** (`python -u`), so its progress was visible.
+
+### Combination screen
+
+16 + 120 + 518 combinations (42 triples were not enumerated because a pair inside them was
+excluded), `--seed 7`, seconds.
+
+* Best reversal: tanruprubart alone **8.06%**, tanruprubart + methylprednisolone **13.13%**,
+  IVIG + tanruprubart + methylprednisolone **16.72%**. Against the panel's ceiling (32 of 78
+  genes targeted; full-reversal 46.9%, pooled-panel 29.8%) the best triple captures 35.6% and
+  56.0%, the highest of the five, which reflects a tiny panel of broad-acting agents and not
+  anything about GBS.
+* **Methylprednisolone is in the best pair and triple**, although a 242-patient trial found it
+  no better than placebo. It is the third-highest single agent (5.06%), level with plasma
+  exchange (5.10%) and above IVIG (4.98%).
+* Removing agents with a null trial, the best pair is **IVIG + tanruprubart** (12.02%,
+  *q* = 0.018) and the lowest-burden alternative is efgartigimod + tanruprubart (10.21%). No
+  triple clearly earns its place: the best gains +0.017 over its best pair.
+* **79.2% of triples have a negative gain over their best pair** (median −0.0857), close to
+  epilepsy's 83.4%.
+* Bootstrap top-25 Jaccard is 0.598 at order 2 (the first above 0.5) and 0.360 at order 3, but
+  the top 25 of 117 pairs is 21% of the space, so these are not comparable with the larger
+  screens.
+* Every one of the top six order-2 strata contains a symptomatic axis (pain or conduction),
+  and the axis with the largest gap (`nerve_repair_promotion`, 1.00) has no agent in the panel,
+  so the screen cannot rank anything on it.
+
+**The screen fails an external combination check.** The top approved-only pair is IVIG +
+plasma exchange at 8.80% reversal against 5.10% and 4.98% for the two singles. I searched
+for a trial of that pairing and found one: 383 patients randomised to plasma exchange, IVIG,
+or plasma exchange followed by IVIG (*Lancet* 1997), which found the two therapies equally
+effective and the combination without a significant advantage. The score predicted a gain
+that a randomised trial found does not exist, which is the clearest external check available
+and it goes against the method. Signature reversal adds across mechanisms and clinical benefit
+saturates.
+
+Controls: gabapentin and pregabalin are excluded as expected. **The safety controls
+(eculizumab, second IVIG course) do not reach the top 25** at any order, unlike tacrine in
+Alzheimer's and vigabatrin and retigabine in epilepsy. I do not think the scorer prices
+toxicity better here; they are not the narrowest agents (reversal efficiency 0.66 and 0.31),
+so they do not get the advantage that put vigabatrin first. Two of the three negative controls
+reach the top 25 (methylprednisolone 14th, fingolimod 16th).
+
+### Calibration
+
+Six agents have a sourced outcome (three that worked, three that did not), so I ran the coarse
+check (`python -m tools.calibrate_gbs_efficacy`). The effective group scores higher on
+signature reversal (AUC 0.89), but with three against three the exact *p* is 0.100, so it is
+not evidence of separation. The reason is the steroid: methylprednisolone scores between plasma
+exchange and IVIG, so the score cannot tell it from the established therapies. I curated its
+cytokine effects broadly, knowing what a steroid does to cytokine transcripts, so this is the
+same circularity as in MS.
+
+### Design campaign
+
+Run under RDKit and qiskit, `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+* 14-requirement profile led by `MMP9` (0.818), `C5AR1` (0.743), `CSF1R`. **Seven of fourteen
+  targets were unreachable**; six pharmacophores were added (82 fragments) and the gap went to
+  zero, with the other four diseases' lists unchanged.
+* The disease's own targets (C1q, C5, IgG, FcRn) score 0.05 to 0.2 for small-molecule
+  tractability and are routed around; a test asserts it.
+* Enumeration, exact eigensolver and QAOA all reach +0.1113; QAOA falls short only at depth 1.
+* Leading design `C12H15N5O2`, MW 261.3, cLogP 0.79, TPSA 92.1: a 4-aminopyridine arm (the
+  Kv1 blocker scaffold of dalfampridine) fused to an MMP9-inhibiting hydroxamic acid. **Reversal
+  is 4.04%, about half of tanruprubart's 8.06%.** It addresses conduction and barrier
+  protection, not the 1.00 gap, and `C5AR1` is not on the leading designs.
+* All four designs share the same two arms. The pipeline's structural-alert list returned
+  nothing for the hydroxamic acid, a known liability class, and 4-aminopyridine's seizure risk
+  is not in the output either.
+* **The stage inversion held only just**: rank 2 built 1.585 against 1.552 for ranks 1 and 3, a
+  margin of about 2%, the weakest confirmation of the five.
+* The design axes line again carries MS labels (`cns_innate`, `neuroprotection`) from the shared
+  `mmp_hydroxamate` fragment, the vocabulary leak I noted in Phase 7 and have not fixed.
+
+### Tests
+
+**346 passed, 24 skipped** without RDKit; **370 passed** with it (322 / 346 before). New
+checks: GBS is the only peripheral disease and the profile has no CNS floor, the central protein
+targets are routed around, the reference set is small because the treatments are not small
+molecules, respiratory depression is the heaviest weight, and gabapentin and pregabalin are
+excluded as duplicates. No existing test needed relaxing.
+
+### Reflection
+
+> The best-evidenced results in GBS are the ones the method is least able to see. IVIG, plasma
+> exchange and the antibodies act on proteins, so they are scored through proxy genes, and the
+> one external combination check I could find went against the screen. I would rather have that
+> recorded than a ranked list of pairs that looks like an answer.
+>
+> The small panel changed how I read the numbers. Stability, ceilings and stratum sizes all move
+> with panel size, so several figures that looked like findings (the high Jaccard, the high
+> ceiling capture) are properties of having 16 agents.
+
+### Next steps
+
+1. **Report the screen's prediction beside any published combination trial**, as a standing
+   check, starting with the IVIG and plasma exchange result.
+2. **A time axis.** GBS treatment works if started within about two weeks, and a ranking without
+   time cannot say when to give it.
+3. Give protein-level agents a scoring path that does not run through a transcript proxy; GBS is
+   the disease where that matters most.
+4. Fix the max-domain safety term, the narrow-agent advantage in `reversal_efficiency`, and the
+   missing `withdrawn` flag together, evaluated on all five diseases at once.
+5. Re-annotate fragment axes per disease, so a design's axis line never carries another disease's
+   vocabulary.
+6. Test the IVIG + tanruprubart pairing directly; the one pairing already tested (IVIG + plasma
+   exchange) showed no advantage.
+
+### Addendum (2026-09-27): where quantum computing is and is not used
+
+Recorded for all five diseases (MS, Parkinson's, Alzheimer's, epilepsy, Guillain-Barré),
+because the project is described as hybrid quantum-classical and the write-ups did not say
+which stage was which.
+
+* **The k = 1, 2, 3 combination screens are classical in every disease.** They enumerate every
+  combination exhaustively (from 654 rows for Guillain-Barré to 31,837 for MS), so the answer is
+  exact and there is no search problem for a quantum heuristic to help with. The cost is
+  classical statistics (permutation null, bootstrap, weight sensitivity), not search.
+* **QAOA ran only as a benchmark of the design campaign's fragment selection**, a 10-variable
+  QUBO, on a classical simulator (Qiskit Aer). Enumeration takes about 0.07 s and the QAOA depth
+  sweep 5 to 6 s. The arm sets carried into assembly come from enumeration; QAOA's output is not
+  used downstream. At ten variables there are 1,024 states, so no quantum advantage can be
+  demonstrated or expected.
+* **QAOA matched the enumeration optimum in all five diseases**, so the formulation transfers to
+  a quantum algorithm. By depth: MS fell short at depth 3 (+0.0355 against +0.0443), Parkinson's
+  at depth 1 (+0.0732 against +0.0830), Alzheimer's at depths 1 and 5 (+0.0404 against +0.0724),
+  epilepsy dipped at depth 2 (−0.0573 against +0.0868) and recovered, and Guillain-Barré fell
+  short at depth 1 (+0.1025 against +0.1113).
+* **Molecule assembly is a classical stochastic search.** No real quantum hardware was used
+  anywhere.
+* The foundation-phase Hamiltonian (Day 8) was solved with an exact minimum eigensolver running
+  classically, and the Day 9 benchmark compared exact, greedy and random classical solvers. That
+  is the argument for stronger optimisers at larger scale, not a result obtained with a quantum
+  one.
+
+No finding in any of the five diseases depends on quantum computing. The regime where quantum
+optimisation might matter, selections from hundreds of candidates at high order, is not one any
+panel here reaches. Each disease's protocol document now has a section stating this with its own
+numbers.

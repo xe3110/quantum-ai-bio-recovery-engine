@@ -51,6 +51,6 @@
     "signature_version": "v1, 85 directional genes",
     "network_source": "STRING v12, cached 2026-09-27",
     "panel_version": "1.0.0",
-    "note": "Illustrative discovery-stage context built to exercise the disease-agnostic contracts. The signature is curated from literature knowledge rather than derived from a specific cohort, mixes findings from acquired temporal lobe epilepsy and monogenic channelopathies that would be analysed separately in a real study, and is weaker evidence than the MS entry's. AQP4 has no interactions at the 0.4 cutoff in the cached network and contributes to signature reversal but not to network proximity. Nothing derived from it is a clinical recommendation."
+    "note": "Illustrative discovery-stage context built to exercise the disease-agnostic contracts. The signature is curated from literature knowledge rather than derived from a specific cohort, mixes findings from acquired temporal lobe epilepsy and monogenic channelopathies that would be analysed separately in a real study, and is weaker evidence than the MS entry's. AQP4 is absent from the cached network because STRING v12 does not recognise that symbol (a direct lookup returns 'not found'); it contributes to signature reversal but not to network proximity. Nothing derived from it is a clinical recommendation."
   }
 }

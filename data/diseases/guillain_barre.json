@@ -1,0 +1,54 @@
+{
+  "identifier": "guillain_barre",
+  "name": "Guillain-Barre syndrome",
+  "description": "An acute, usually post-infectious autoimmune polyneuropathy in which antibodies (often against gangliosides, after a mimicking infection such as Campylobacter jejuni), complement activation and macrophage attack damage peripheral nerve myelin or axon, with rapid ascending weakness that can reach the respiratory muscles. Intravenous immunoglobulin and plasma exchange are the only established treatments and are similar in effect; corticosteroids do not help, a substantial minority of patients remain disabled at a year, and no drug protects the axon or promotes repair.",
+  "vocabulary": {
+    "pathways": [
+      "complement_cascade", "autoantibody_fc_receptor", "macrophage_activation",
+      "t_cell_cytokine", "blood_nerve_barrier", "schwann_myelin", "nodal_paranodal",
+      "axonal_degeneration_regeneration", "ganglioside_synthesis",
+      "neuropathic_pain_excitability", "innate_toll_like", "oxidative_stress"
+    ],
+    "therapeutic_axes": [
+      "complement_inhibition", "antibody_clearance", "fc_receptor_modulation",
+      "cytokine_immune_modulation", "conduction_restoration",
+      "neuropathic_pain_relief", "nerve_repair_promotion"
+    ],
+    "risk_domains": [
+      "thromboembolic_events", "renal_injury", "meningococcal_infection",
+      "immune_haemolysis", "treatment_related_fluctuation",
+      "respiratory_depression", "cardiac", "hepatic"
+    ],
+    "risk_weights": {
+      "thromboembolic_events": 0.9,
+      "renal_injury": 0.7,
+      "meningococcal_infection": 0.9,
+      "immune_haemolysis": 0.6,
+      "treatment_related_fluctuation": 0.5,
+      "respiratory_depression": 1.0,
+      "cardiac": 0.6,
+      "hepatic": 0.5
+    },
+    "risk_weights_rationale": "Weighted by how strongly each domain constrains use in a patient who may be ventilated or on the way to it. Respiratory depression is weighted highest because the disease itself weakens the respiratory muscles, so a sedating pain drug can tip a patient into failure. Thromboembolism is weighted next because immobility already carries a high baseline risk and immunoglobulin adds to it (a second course raised serious adverse events from 16% to 35% in a randomised trial). Meningococcal infection is the defining risk of terminal complement inhibition and carries a boxed warning. Treatment-related fluctuation, a relapse after an initial response to immunoglobulin or plasma exchange, is specific to the disease. This vocabulary shares no therapeutic axis with any other registered disease and shares only generic organ toxicity (cardiac, hepatic) among risk domains."
+  },
+  "delivery": {
+    "requires_cns_exposure": false,
+    "cns_mpo_floor": 4.0,
+    "preferred_routes": ["infusion", "oral"],
+    "sanctuary_rationale": "There is no sanctuary compartment. The target tissue is peripheral nerve and nerve root, and in the acute disease the blood-nerve barrier is itself breached (the signature carries barrier genes such as CLDN5, ICAM1 and MMP9), so the large protein therapeutics that define treatment, immunoglobulin and antibodies, reach the nerve. Nothing has to cross the blood-brain barrier, so CNS exposure is not a gate on a design here and the CNS multi-parameter score is not applied as one. This is the first registered disease to switch the constraint off, and the branch of the delivery logic it exercises had not been run by any earlier disease. Compartment complementarity is therefore scored as spread, the term written for MS, and it has not been checked that spread means anything in a disease where every effective agent acts peripherally."
+  },
+  "gene_aliases": {},
+  "data": {
+    "signature": "data/gbs_expression.csv",
+    "network": "data/networks/string_gbs_network.tsv",
+    "panel": "data/drugs/guillain_barre_panel_v1.json",
+    "druggability": "data/targets/druggability_guillain_barre.json",
+    "structures": "data/chemistry/gbs_known_structures.json"
+  },
+  "provenance": {
+    "signature_version": "v1, 78 directional genes",
+    "network_source": "STRING v12, cached 2026-09-27",
+    "panel_version": "1.0.0",
+    "note": "Illustrative discovery-stage context built to exercise the disease-agnostic contracts. The signature is curated from literature knowledge rather than derived from a specific cohort, and mixes demyelinating and axonal forms that a real study would separate. Three signature genes are absent from the cached network: IGHG1 and MPZ because STRING v12 does not recognise the symbols, and VEGFA because STRING resolves that symbol to a different protein. They contribute to signature reversal but not to network proximity. Nothing derived from it is a clinical recommendation."
+  }
+}

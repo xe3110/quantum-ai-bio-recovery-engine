@@ -1,0 +1,18 @@
+{
+  "source": "STRING v12 REST API",
+  "signature": "data/gbs_expression.csv",
+  "url": "https://string-db.org/api/json/network",
+  "species": 9606,
+  "required_score": 400,
+  "add_nodes": 150,
+  "query_genes": 78,
+  "nodes": 226,
+  "edges": 11062,
+  "signature_genes_in_network": 75,
+  "signature_genes_absent": [
+    "IGHG1",
+    "MPZ",
+    "VEGFA"
+  ],
+  "note": "Absent genes are excluded from network-proximity metrics but still contribute to signature-reversal metrics."
+}

@@ -12,7 +12,7 @@
       "cap": "monovalent group tuning solubility, polarity, or metabolic stability; no engagement claim"
     },
     "sources": "Chemotypes abstracted from published inhibitor and modulator classes named in each entry's parent_chemotype field.",
-    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable, and Alzheimer's when its profile reported six of fourteen (BACE1, PPARG, FYN, PTGS2, MAPK14, BCHE), and epilepsy when its profile reported ten of fourteen (SLC12A2, GABRA1, KCNQ2, SV2A, ADK, CACNA2D1, RPS6KB1, KCNQ3, P2RX7, CACNA1H). unreachable_requirements() is the diagnostic that drives this file's growth.",
+    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable, and Alzheimer's when its profile reported six of fourteen (BACE1, PPARG, FYN, PTGS2, MAPK14, BCHE), and epilepsy when its profile reported ten of fourteen (SLC12A2, GABRA1, KCNQ2, SV2A, ADK, CACNA2D1, RPS6KB1, KCNQ3, P2RX7, CACNA1H), and Guillain-Barre syndrome when its profile reported seven of fourteen (C5AR1, SCN10A, SCN9A, TRPV1, KCNA1, C1S, P2RX3). unreachable_requirements() is the diagnostic that drives this file's growth.",
     "evidence_schema": {
       "evidence_tier": "strength of the published precedent that this chemotype engages its primary targets: approved_drug > clinical_candidate > published_chemotype > speculative",
       "primary_targets": "the targets the chemotype is claimed to bind directly. Every other gene in `engages` is a downstream transcriptional consequence and is a materially weaker claim.",
@@ -1408,6 +1408,135 @@
       "evidence_tier": "approved_drug",
       "primary_targets": [
         "GRIA1"
+      ]
+    },
+    {
+      "id": "c5ar_acylpiperidine",
+      "name": "N-Acyl 2-arylpiperidine C5a receptor antagonist arm",
+      "role": "pharmacophore",
+      "smiles": "*C1CCCCN1C(=O)c1c(C)cccc1F",
+      "target_family": "C5aR_antagonist",
+      "parent_chemotype": "Avacopan / N-acyl-2-arylpiperidine C5aR series",
+      "therapeutic_axes": [
+        "complement_inhibition"
+      ],
+      "engages": {
+        "C5AR1": -0.8,
+        "CD68": -0.15
+      },
+      "liabilities": [],
+      "note": "The acylpiperidine holds the aryl and benzoyl groups in the receptor's allosteric pocket. Avacopan is approved for ANCA vasculitis and its hepatic enzyme elevations travel with the chemotype. Blocking the receptor leaves C5 cleavage intact, so it does not carry terminal complement inhibition's meningococcal risk in the same way.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "C5AR1"
+      ]
+    },
+    {
+      "id": "nav_aryl_sulfonamide",
+      "name": "Aryl sulfonamide Nav1.7 / Nav1.8 blocker arm",
+      "role": "pharmacophore",
+      "smiles": "*c1ccc(cc1)S(=O)(=O)Nc1nccs1",
+      "target_family": "Nav17_inhibitor",
+      "parent_chemotype": "Aryl and acyl sulfonamide Nav1.7 inhibitors (PF-05089771 class)",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "engages": {
+        "SCN9A": -0.75,
+        "SCN10A": -0.3
+      },
+      "liabilities": [
+        "acidic_sulfonamide"
+      ],
+      "note": "The acidic sulfonamide binds the voltage-sensor domain of Nav1.7 with subtype selectivity. Isoform selectivity is the whole difficulty: non-selective sodium channel block would also hit nodal Nav1.6, whose loss impairs conduction, which is the wrong direction in a demyelinating neuropathy.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "SCN9A"
+      ]
+    },
+    {
+      "id": "trpv1_indazolyl_urea",
+      "name": "Indazolyl urea TRPV1 antagonist arm",
+      "role": "pharmacophore",
+      "smiles": "*NC(=O)Nc1ccc2[nH]ncc2c1",
+      "target_family": "TRPV1_antagonist",
+      "parent_chemotype": "ABT-102 / heteroaryl urea TRPV1 antagonists",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "engages": {
+        "TRPV1": -0.75
+      },
+      "liabilities": [
+        "thermoregulation"
+      ],
+      "note": "The urea bridges the vanilloid pocket. Hyperthermia was the class-defining adverse effect of the systemic antagonists, and a design that reproduces the chemotype reproduces the liability.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "TRPV1"
+      ]
+    },
+    {
+      "id": "kv1_aminopyridine",
+      "name": "4-Aminopyridine Kv1 potassium channel blocker arm",
+      "role": "pharmacophore",
+      "smiles": "*Nc1ccncc1",
+      "target_family": "Kv1_blocker",
+      "parent_chemotype": "Dalfampridine / 4-aminopyridine",
+      "therapeutic_axes": [
+        "conduction_restoration"
+      ],
+      "engages": {
+        "KCNA1": -0.75
+      },
+      "liabilities": [],
+      "note": "Blocks exposed Kv1.1 channels at demyelinated nodes, restoring conduction. It is approved in MS to improve walking. The window is narrow: seizure is the dose-limiting toxicity, and the fragment is too small to carry selectivity.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "KCNA1"
+      ]
+    },
+    {
+      "id": "c1s_benzamidine",
+      "name": "Benzamidine serine-protease P1 group for C1s",
+      "role": "pharmacophore",
+      "smiles": "*c1ccc(cc1)C(=N)N",
+      "target_family": "C1s_inhibitor",
+      "parent_chemotype": "Benzamidine-type C1s / trypsin-like serine protease inhibitors",
+      "therapeutic_axes": [
+        "complement_inhibition"
+      ],
+      "engages": {
+        "C1S": -0.7,
+        "C3": -0.15
+      },
+      "liabilities": [
+        "basic_amidine"
+      ],
+      "note": "The amidine sits in the S1 pocket that recognises arginine. C1s is the classical-pathway protease, and blocking it acts downstream of C1q. Trypsin-like proteases share the pocket, so selectivity is the recurring problem, and the strongly basic amidine limits permeability.",
+      "evidence_tier": "published_chemotype",
+      "primary_targets": [
+        "C1S"
+      ]
+    },
+    {
+      "id": "p2x3_diaminopyrimidine_ether",
+      "name": "Diaminopyrimidine aryl ether P2X3 antagonist arm",
+      "role": "pharmacophore",
+      "smiles": "*Oc1cnc(N)nc1N",
+      "target_family": "P2X3_antagonist",
+      "parent_chemotype": "Gefapixant / diaminopyrimidine P2X3 antagonists",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "engages": {
+        "P2RX3": -0.75
+      },
+      "liabilities": [],
+      "note": "P2X3 on sensory neurons is the ATP-gated channel behind the class's activity in cough and pain. Taste disturbance is the class-defining adverse effect. Approved in some regions for cough, not for neuropathic pain.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "P2RX3"
       ]
     }
   ]

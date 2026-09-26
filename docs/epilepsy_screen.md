@@ -87,10 +87,12 @@ genuinely useful dual-sodium combination would be invisible to this screen.
   against 10.4% on placebo at 25 mg).
 
 - **`data/networks/string_ep_network.tsv`** — STRING v12, confidence ≥ 0.4, 234
-  nodes, 7,001 edges. **84 of 85 signature genes are present.** `AQP4` has no
-  interactions at that cutoff. This is not a symbol alias (the other diseases' fix),
-  so none is declared, and it contributes to signature reversal but not to network
-  proximity.
+  nodes, 7,001 edges. **84 of 85 signature genes are present.** `AQP4` is
+  missing because **STRING v12 does not recognise that symbol** (a direct lookup
+  returns "not found"), not because it lacks interactions. I first recorded this as
+  "no interactions at the 0.4 cutoff" without checking, and that was wrong. No alias
+  is declared because none is known to resolve it, and the gene contributes to
+  signature reversal but not to network proximity.
 
 - **Vocabulary** — eight therapeutic axes (`sodium_channel_stabilisation`,
   `gabaergic_potentiation`, `glutamate_attenuation`, `vesicle_release_modulation`,
@@ -132,7 +134,8 @@ singles are everolimus (2.19%), midazolam (2.13%), clobazam (2.00%), phenobarbit
 **As a share of what the panel could reach**
 ([tools/reversal_ceiling.py](../tools/reversal_ceiling.py)): the panel targets 41 of
 85 signature genes, a full-reversal ceiling of 43.9% and a pooled-panel ceiling of
-30.8%, the lowest of the four diseases. The best single, pair and triple are 7.0%,
+30.8%, the lowest full-reversal ceiling of the five diseases (the pooled-panel figure
+is second lowest, after Guillain-Barré's 29.8%). The best single, pair and triple are 7.0%,
 12.0% and 16.9% of the full ceiling, and 10.0%, 17.1% and 24.1% of the pooled-panel
 one. This is a normalisation for comparing diseases, not a clinical calibration;
 see [the calibration write-up](efficacy_calibration.md).
@@ -168,9 +171,10 @@ down.
 
 **The unit of inference is the mechanism stratum, not the named combination.**
 Bootstrap top-25 Jaccard is **0.358 at order 2 and 0.235 at order 3**, the highest of
-the four diseases but still far below the 0.5 the runner treats as stable, so
+the first four diseases (Guillain-Barré's 0.598 at order 2 is a panel-size effect, not
+comparable) but still far below the 0.5 the runner treats as stable, so
 individual combinations are not a defensible result. Weight sensitivity is the
-*lowest* of the four (Spearman 0.951 / 0.942 mean, with minimums of 0.83 and 0.80),
+*lowest* of the five (Spearman 0.951 / 0.942 mean, with minimums of 0.83 and 0.80),
 so unlike the other diseases the ranking is somewhat sensitive to the weights too.
 
 Top and bottom strata at order 2:
@@ -340,6 +344,33 @@ apply. What is different here:
    (kindling, pilocarpine, or a genetic model such as *Scn1a*+/-).
 7. Release code, frozen inputs, seed, full rankings including excluded
    combinations, and the control analysis.
+
+## Where quantum computing is and is not used
+
+**Not used: the combination screen.** The k = 1, 2, 3 screen (37 monotherapies, 666 pairs, 6,174 triples) is classical.
+
+*Why.* (1) The screen enumerates every combination exhaustively, so the answer is exact
+and there is no search problem for a quantum heuristic to help with; the full run takes about fourteen minutes.
+(2) The expensive part is statistical scoring (the permutation null, bootstrap stability,
+weight sensitivity), which is classical and has no quantum counterpart here. (3) The
+drug-selection problem can be written as a QUBO (the project does this, see below), but at
+this size exact enumeration is faster and gives the true optimum, so there is nothing for
+a quantum solver to improve on. Quantum optimisation could matter for much larger
+selections (many agents, high order); none of the panels here is in that regime.
+
+**Used, as a benchmark only: the design campaign's fragment selection.** The 10-variable arm-selection QUBO gives +0.0868 on all three solvers; the depth sweep is d1 +0.0868, **d2 −0.0573**, then +0.0868 at depths 3 to 5, so QAOA dipped at depth 2 and recovered.
+Enumeration finishes in about 0.07 s; the QAOA depth sweep takes 5 to 6 s. The arm sets
+carried into molecule assembly come from **enumeration**, not from QAOA, and QAOA's output
+is not used downstream.
+
+*Why only a benchmark.* At 10 binary variables there are 1,024 states, which exhaustive
+search covers instantly, so no quantum advantage can be demonstrated or is expected. The
+benchmark checks that the Hamiltonian formulation is faithful and transfers to a quantum
+algorithm, and that is all it shows.
+
+**Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
+simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
+stochastic search. None of the findings in this document depends on quantum computing.
 
 ## 10. Key references
 

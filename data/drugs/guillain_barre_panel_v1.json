@@ -1,0 +1,738 @@
+{
+  "metadata": {
+    "panel_version": "1.0.0",
+    "generated_by": "tools/curate_gbs_panel.py",
+    "disease": "guillain_barre",
+    "purpose": "Mechanism-curated candidate panel for research prioritisation. Not a prescribing, efficacy, or co-administration dataset.",
+    "curation_rule": "Agents with a randomised trial or an approved role in Guillain-Barre syndrome, plus a small number of extrapolated candidates flagged as such. The evidence base is small, so the panel is short (16 agents) and is not padded with agents never tested in the disease. Each control was checked against a source. The three negative-efficacy controls are methylprednisolone (no benefit in a 242-patient trial), interferon beta-1a (no significant improvement as an add-on) and fingolimod (failed a phase 3 in CIDP, a related disease, not GBS itself). The two safety controls are eculizumab (boxed meningococcal warning) and the second IVIG course (35% against 16% serious adverse events).",
+    "controls": {
+      "positive_redundancy": [
+        "Gabapentin",
+        "Pregabalin"
+      ],
+      "negative_efficacy": [
+        "Methylprednisolone",
+        "Interferon beta-1a",
+        "Fingolimod"
+      ],
+      "safety_penalty": [
+        "Eculizumab",
+        "IVIG, second course (SID-GBS)"
+      ]
+    },
+    "statistics": {
+      "n_drugs": 16,
+      "n_signature_genes": 78,
+      "n_genes_targeted": 32,
+      "signature_gene_coverage": 0.41,
+      "mechanism_classes": 14,
+      "evidence_tiers": {
+        "approved": 7,
+        "phase_3": 4,
+        "phase_2": 5,
+        "preclinical": 0
+      }
+    },
+    "caveat": "Directional target effects are curated hypotheses, not measured pharmacology. Immunoglobulin, plasma exchange and the antibody agents act on proteins, not transcripts, so they are scored through downstream proxy genes and the result for them is the least reliable. Every record requires independent verification before publication use."
+  },
+  "drugs": [
+    {
+      "name": "Intravenous immunoglobulin",
+      "mechanism_class": "polyclonal_immunoglobulin",
+      "primary_moa": "Pooled IgG: Fc-receptor blockade, complement scavenging, FcRn saturation and anti-idiotypic neutralisation",
+      "evidence_tier": "approved",
+      "indication": "standard_of_care",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "fc_receptor_modulation",
+        "complement_inhibition",
+        "antibody_clearance"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "immunoglobulin_product"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ],
+      "target_effects": {
+        "FCGR2B": 0.5,
+        "FCGR3A": -0.4,
+        "FCGR1A": -0.3,
+        "FCGRT": -0.4,
+        "C3": -0.3,
+        "C1QA": -0.3,
+        "IGHG1": -0.35,
+        "TNF": -0.25,
+        "IL6": -0.2,
+        "FOXP3": 0.2
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.6,
+        "renal_injury": 0.4,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.3,
+        "treatment_related_fluctuation": 0.3,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "polyclonal_immunoglobulin",
+      "relevant_pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ]
+    },
+    {
+      "name": "Plasma exchange",
+      "mechanism_class": "plasmapheresis",
+      "primary_moa": "Removes autoantibody, complement and cytokines from plasma",
+      "evidence_tier": "approved",
+      "indication": "standard_of_care",
+      "route": "plasmapheresis",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "antibody_clearance",
+        "complement_inhibition",
+        "cytokine_immune_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "extracorporeal_procedure"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ],
+      "target_effects": {
+        "C3": -0.4,
+        "C1QA": -0.35,
+        "C5": -0.25,
+        "IGHG1": -0.6,
+        "TNF": -0.3,
+        "IL6": -0.25,
+        "IFNG": -0.2,
+        "CXCL10": -0.2
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.3,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.4,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.5,
+        "hepatic": 0.0
+      },
+      "target_family": "plasmapheresis",
+      "relevant_pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ]
+    },
+    {
+      "name": "IVIG, second course (SID-GBS)",
+      "mechanism_class": "polyclonal_immunoglobulin",
+      "primary_moa": "A second immunoglobulin course for patients with a poor prognosis; the randomised trial found no benefit and more serious adverse events (35% against 16%), including thromboembolism",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "fc_receptor_modulation",
+        "complement_inhibition",
+        "antibody_clearance"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "immunoglobulin_product"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ],
+      "target_effects": {
+        "FCGR2B": 0.5,
+        "FCGR3A": -0.4,
+        "FCGR1A": -0.3,
+        "FCGRT": -0.4,
+        "C3": -0.3,
+        "C1QA": -0.3,
+        "IGHG1": -0.35,
+        "TNF": -0.25,
+        "IL6": -0.2,
+        "FOXP3": 0.2
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.9,
+        "renal_injury": 0.5,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.4,
+        "treatment_related_fluctuation": 0.3,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "polyclonal_immunoglobulin",
+      "relevant_pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade",
+        "t_cell_cytokine"
+      ]
+    },
+    {
+      "name": "Efgartigimod",
+      "mechanism_class": "fcrn_antagonist",
+      "primary_moa": "FcRn antagonist lowering circulating IgG; approved for CIDP, in a randomised phase 2 against IVIG in GBS",
+      "evidence_tier": "phase_2",
+      "indication": "candidate",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "antibody_clearance"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "igg_lowering"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "autoantibody_fc_receptor"
+      ],
+      "target_effects": {
+        "FCGRT": -0.85,
+        "IGHG1": -0.6,
+        "C1QA": -0.15
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.2,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "fcrn_antagonist",
+      "relevant_pathways": [
+        "autoantibody_fc_receptor"
+      ]
+    },
+    {
+      "name": "Imlifidase",
+      "mechanism_class": "igg_cleaving_enzyme",
+      "primary_moa": "IgG-cleaving enzyme; a phase 2 with IVIG showed rapid recovery against an external comparison and was safe and well tolerated",
+      "evidence_tier": "phase_2",
+      "indication": "candidate",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "antibody_clearance",
+        "fc_receptor_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "igg_cleaving"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade"
+      ],
+      "target_effects": {
+        "IGHG1": -0.85,
+        "FCGR3A": -0.2,
+        "C1QA": -0.2,
+        "C3": -0.15
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.5,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.2,
+        "hepatic": 0.1
+      },
+      "target_family": "igg_cleaving_enzyme",
+      "relevant_pathways": [
+        "autoantibody_fc_receptor",
+        "complement_cascade"
+      ]
+    },
+    {
+      "name": "Eculizumab",
+      "mechanism_class": "anti_c5_antibody",
+      "primary_moa": "C5 antibody; a 33-patient randomised phase 2 (JET-GBS) was too small to prove efficacy, and it is approved in other diseases",
+      "evidence_tier": "phase_2",
+      "indication": "inconclusive",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "complement_inhibition"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "terminal_complement_inhibition"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "complement_cascade"
+      ],
+      "target_effects": {
+        "C5": -0.9,
+        "C5AR1": -0.5
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.95,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "anti_c5_antibody",
+      "relevant_pathways": [
+        "complement_cascade"
+      ]
+    },
+    {
+      "name": "Tanruprubart (ANX005)",
+      "mechanism_class": "anti_c1q_antibody",
+      "primary_moa": "C1q antibody blocking the classical pathway; positive phase 3 (2.4-fold improvement on the GBS disability scale at week 8, p = 0.0058)",
+      "evidence_tier": "phase_3",
+      "indication": "candidate",
+      "route": "infusion",
+      "cns_penetration": 0.02,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "complement_inhibition"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "classical_complement_inhibition"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "complement_cascade"
+      ],
+      "target_effects": {
+        "C1QA": -0.9,
+        "C1QB": -0.8,
+        "C1QC": -0.8,
+        "C1S": -0.5,
+        "C3": -0.55,
+        "C5": -0.45,
+        "C5AR1": -0.3
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.3,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.1,
+        "hepatic": 0.0
+      },
+      "target_family": "anti_c1q_antibody",
+      "relevant_pathways": [
+        "complement_cascade"
+      ]
+    },
+    {
+      "name": "C5aR antagonist (avacopan-class exemplar)",
+      "mechanism_class": "c5ar_antagonist",
+      "primary_moa": "Oral C5a receptor antagonist; evidence extrapolated from ANCA vasculitis, with none in GBS",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.1,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "complement_inhibition",
+        "cytokine_immune_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "c5ar_antagonism"
+      ],
+      "target_uncertainty": 0.55,
+      "pathways": [
+        "complement_cascade",
+        "t_cell_cytokine"
+      ],
+      "target_effects": {
+        "C5AR1": -0.85,
+        "CD68": -0.2,
+        "TNF": -0.15,
+        "ICAM1": -0.15
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.1,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.4
+      },
+      "target_family": "c5ar_antagonist",
+      "relevant_pathways": [
+        "complement_cascade",
+        "t_cell_cytokine"
+      ]
+    },
+    {
+      "name": "Methylprednisolone",
+      "mechanism_class": "glucocorticoid",
+      "primary_moa": "Intravenous glucocorticoid; a 242-patient randomised trial found no benefit over placebo",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "infusion",
+      "cns_penetration": 0.3,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "cytokine_immune_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "glucocorticoid_class"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ],
+      "target_effects": {
+        "TNF": -0.4,
+        "IL6": -0.4,
+        "IL1B": -0.4,
+        "MMP9": -0.35,
+        "ICAM1": -0.3,
+        "CCL2": -0.35,
+        "CD68": -0.2,
+        "NFKB1": -0.4,
+        "FOXP3": 0.2
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.2,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.3,
+        "hepatic": 0.1
+      },
+      "target_family": "glucocorticoid",
+      "relevant_pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ]
+    },
+    {
+      "name": "Interferon beta-1a",
+      "mechanism_class": "type_i_interferon",
+      "primary_moa": "Type I interferon; a randomised add-on to IVIG showed no significant improvement",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "subcutaneous",
+      "cns_penetration": 0.05,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "cytokine_immune_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "interferon_class"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ],
+      "target_effects": {
+        "IFNG": -0.2,
+        "IL10": 0.3,
+        "MMP9": -0.3,
+        "ICAM1": -0.2,
+        "CXCL10": 0.25
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.1,
+        "hepatic": 0.3
+      },
+      "target_family": "type_i_interferon",
+      "relevant_pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ]
+    },
+    {
+      "name": "Fingolimod",
+      "mechanism_class": "s1p_receptor_modulator",
+      "primary_moa": "S1P receptor functional antagonist; failed a phase 3 in CIDP, a related chronic neuropathy (not GBS)",
+      "evidence_tier": "phase_3",
+      "indication": "failed_in_related_disease",
+      "route": "oral",
+      "cns_penetration": 0.4,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "cytokine_immune_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "s1p_modulator_class"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ],
+      "target_effects": {
+        "S1PR1": -0.8,
+        "IFNG": -0.2,
+        "IL17A": -0.25,
+        "VCAM1": -0.15
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.5,
+        "hepatic": 0.3
+      },
+      "target_family": "s1p_receptor_modulator",
+      "relevant_pathways": [
+        "t_cell_cytokine",
+        "blood_nerve_barrier"
+      ]
+    },
+    {
+      "name": "Gabapentin",
+      "mechanism_class": "alpha2delta_ligand",
+      "primary_moa": "Alpha-2-delta-1 ligand; a placebo-controlled crossover trial in GBS pain, and more effective than carbamazepine in an ICU trial",
+      "evidence_tier": "approved",
+      "indication": "pain",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "alpha2delta_sedation"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "neuropathic_pain_excitability"
+      ],
+      "target_effects": {
+        "CACNA2D1": -0.7
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.2,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.5,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "alpha2delta_ligand",
+      "relevant_pathways": [
+        "neuropathic_pain_excitability"
+      ]
+    },
+    {
+      "name": "Pregabalin",
+      "mechanism_class": "alpha2delta_ligand",
+      "primary_moa": "Higher-affinity alpha-2-delta-1 ligand; used for GBS pain by extrapolation from other neuropathic pain",
+      "evidence_tier": "approved",
+      "indication": "pain",
+      "route": "oral",
+      "cns_penetration": 0.55,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "alpha2delta_sedation"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "neuropathic_pain_excitability"
+      ],
+      "target_effects": {
+        "CACNA2D1": -0.8
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.2,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.5,
+        "cardiac": 0.0,
+        "hepatic": 0.0
+      },
+      "target_family": "alpha2delta_ligand",
+      "relevant_pathways": [
+        "neuropathic_pain_excitability"
+      ]
+    },
+    {
+      "name": "Carbamazepine",
+      "mechanism_class": "sodium_channel_blocker",
+      "primary_moa": "Sodium channel blockade for pain; less effective than gabapentin in an ICU trial",
+      "evidence_tier": "approved",
+      "indication": "pain",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "neuropathic_pain_excitability",
+        "nodal_paranodal"
+      ],
+      "target_effects": {
+        "SCN9A": -0.6,
+        "SCN10A": -0.5,
+        "SCN8A": -0.45
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.2,
+        "cardiac": 0.3,
+        "hepatic": 0.3
+      },
+      "target_family": "sodium_channel_blocker",
+      "relevant_pathways": [
+        "neuropathic_pain_excitability",
+        "nodal_paranodal"
+      ]
+    },
+    {
+      "name": "Amitriptyline",
+      "mechanism_class": "tricyclic_antidepressant",
+      "primary_moa": "Tricyclic with sodium channel block and monoamine reuptake inhibition, used for neuropathic pain; no trial in GBS",
+      "evidence_tier": "approved",
+      "indication": "pain",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "neuropathic_pain_relief"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "tricyclic_class"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "neuropathic_pain_excitability"
+      ],
+      "target_effects": {
+        "SCN9A": -0.35,
+        "SCN10A": -0.25
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.0,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.2,
+        "cardiac": 0.5,
+        "hepatic": 0.1
+      },
+      "target_family": "tricyclic_antidepressant",
+      "relevant_pathways": [
+        "neuropathic_pain_excitability"
+      ]
+    },
+    {
+      "name": "Dalfampridine",
+      "mechanism_class": "kv1_potassium_channel_blocker",
+      "primary_moa": "Broad-spectrum potassium channel blocker improving conduction in demyelinated axons; approved to improve walking in MS, with no trial in GBS",
+      "evidence_tier": "approved",
+      "indication": "conduction",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "conduction_restoration"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "potassium_channel_blocker"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "nodal_paranodal"
+      ],
+      "target_effects": {
+        "KCNA1": -0.7
+      },
+      "safety_burden": {
+        "thromboembolic_events": 0.0,
+        "renal_injury": 0.3,
+        "meningococcal_infection": 0.0,
+        "immune_haemolysis": 0.0,
+        "treatment_related_fluctuation": 0.0,
+        "respiratory_depression": 0.0,
+        "cardiac": 0.1,
+        "hepatic": 0.0
+      },
+      "target_family": "kv1_potassium_channel_blocker",
+      "relevant_pathways": [
+        "nodal_paranodal"
+      ]
+    }
+  ]
+}

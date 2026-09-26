@@ -22,7 +22,7 @@ from core.design.target_profile import build_target_profile
 from core.models.disease import available_diseases, load_disease
 
 ROOT = Path(__file__).resolve().parents[1]
-DISEASES = ["multiple_sclerosis", "parkinsons", "alzheimers", "epilepsy"]
+DISEASES = ["multiple_sclerosis", "parkinsons", "alzheimers", "epilepsy", "guillain_barre"]
 
 
 @pytest.fixture(scope="module")
@@ -280,6 +280,61 @@ def test_epilepsy_names_teratogenicity_as_its_heaviest_risk():
     assert max(disease.risk_weights, key=disease.risk_weights.get) == "teratogenicity"
     panel = {d["name"]: d for d in disease.panel()}
     assert panel["Valproate"]["safety_burden"]["teratogenicity"] == 1.0
+
+
+def test_guillain_barre_is_the_only_peripheral_disease():
+    """The CNS gate is a registry decision, and one disease must switch it off.
+
+    Guillain-Barre attacks peripheral nerve, so nothing has to cross the
+    blood-brain barrier. It is the first registered disease to exercise the
+    branch of the delivery logic that the other four never reach, and the
+    profile's property window must reflect that (no CNS floor).
+    """
+    peripheral = load_disease("guillain_barre")
+    assert not peripheral.delivery.requires_cns_exposure
+    window = build_target_profile(peripheral, top_n=12).property_window
+    assert window.cns_mpo_floor == 0.0
+    for identifier in ("multiple_sclerosis", "parkinsons", "alzheimers", "epilepsy"):
+        assert load_disease(identifier).delivery.requires_cns_exposure, identifier
+
+
+def test_guillain_barre_routes_around_its_protein_therapeutic_targets():
+    """The disease's centre of gravity is C1q, C5, IgG and FcRn, and none is a small-molecule target.
+
+    Immunoglobulin, plasma exchange and the antibody candidates all act there.
+    The profile must reach the disease through targets on its edges (the C5a
+    receptor, sodium channels, Kv1.1) and must not point a designed arm at
+    the protein targets because their leverage is high.
+    """
+    disease = load_disease("guillain_barre")
+    druggability = disease.druggability()
+    for gene in ("C1QA", "C5", "FCGRT", "IGHG1"):
+        assert druggability[gene]["small_molecule_tractability"] < 0.3, gene
+    profile = build_target_profile(disease, top_n=14)
+    assert not {"C1QA", "C5", "FCGRT", "IGHG1"} & set(profile.genes)
+    assert "C5AR1" in profile.genes
+
+
+def test_guillain_barre_reference_set_is_small_because_the_treatments_are_not_small_molecules():
+    """A structural fact about the disease, and a limit on what its novelty numbers mean."""
+    disease = load_disease("guillain_barre")
+    named = {name for name, _ in disease.known_structures()}
+    assert "Intravenous immunoglobulin" not in named and "Plasma exchange" not in named
+    assert len(named) < len(disease.panel()) / 2
+
+
+def test_guillain_barre_weights_respiratory_depression_highest():
+    """The disease weakens the respiratory muscles, so a sedating pain drug can tip a patient over."""
+    disease = load_disease("guillain_barre")
+    assert max(disease.risk_weights, key=disease.risk_weights.get) == "respiratory_depression"
+
+
+def test_guillain_barre_excludes_the_two_alpha2delta_agents_as_duplicates():
+    from core.biology.combination_scoring import CombinationConfig, redundancy_flags
+
+    panel = {d["name"]: d for d in load_disease("guillain_barre").panel()}
+    flags = redundancy_flags([panel["Gabapentin"], panel["Pregabalin"]], CombinationConfig())
+    assert flags["excluded_from_primary_ranking"] and flags["same_mechanism"]
 
 
 def test_gene_aliases_recover_a_target_the_interactome_names_differently():
