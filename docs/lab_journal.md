@@ -2388,3 +2388,17 @@ and the circuits small enough for the hardware are the ones that cannot search. 
 options were all opt-in, and the default stays dense. Where I am: the hardware runs measure noise tolerance, the
 simulator shows CVaR can concentrate on good regimens only with dense couplings and 8 to 12 layers, and those two
 things do not overlap at any size I can run on ibm_fez.
+
+### Can the circuit improve a classical search? No, not by itself
+
+I wanted the circuit to make the classical search better, so I set up the fair test: each method proposes 20 regimens
+for the true scorer to evaluate (that is the expensive step) and I score the best true rank among them. On all five
+diseases at 12 agents and k = 4, ranking by the classical pairwise surrogate and rescoring its top 20 finds the true
+optimum in four diseases and rank 2 in Guillain-Barré (mean 1.2, random 23.3). The circuit, tuned over four CVaR
+alpha values, is worse: mean 2.4 to 5.4, and 7 or 15 in individual cells. That is what I should have expected, since
+the circuit optimises the same surrogate that the classical ranking sorts by. Parameters do matter (alpha moves the
+epilepsy result from rank 1 to 15) but I have only five diseases, so picking the best alpha would be tuning on the
+test. What I take from it is different from what I set out to show: the surrogate's own optimum is a poor answer in
+three diseases (true rank 7, 8, 7) and it is scoring a set of 20 candidates with the true scorer that fixes that,
+whichever solver made the set. A circuit would only add something if it proposed candidates the surrogate ranks
+poorly and the true scorer likes, and mine does not. The script is `experiments/quantum/run_hybrid_guided.py`.

@@ -331,3 +331,35 @@ that every solver returns a feasible selection, that the XY mixer preserves the 
 selected agents, and that the optimised state has a lower expected cost than uniform. They do
 **not** assert that the algorithm finds the best regimen, because on the measured problems it
 does not reliably do so.
+
+## 10. Does the circuit guide a classical search better? (simulation, five diseases)
+
+`experiments/quantum/run_hybrid_guided.py`. The expensive step is the true k-ary scorer, so each method proposes 20
+regimens for it to evaluate, and the score is the best **true rank** among the 20 (1 = the true optimum; pool 12,
+k = 4, 495 subsets, ground truth by enumeration). Circuit: dense, Dicke start, 8 layers, noiseless, CVaR at four
+values of alpha (the circuit parameter that mattered most in §12 of `docs/ibm_quantum_hardware.md`); the circuit's 20
+candidates are its 20 most probable subsets (a version using 4,000 sampled shots gave the same or worse).
+
+| disease | surrogate optimum's true rank | random 20 | classical surrogate top 20 | annealing + neighbours | circuit CVaR 0.02 / 0.05 / 0.10 / 0.25 |
+|---|---|---|---|---|---|
+| multiple sclerosis | 7 | 22.9 | **1** | **1** | 2 / 5 / 2 / 7 |
+| Parkinson's | 2 | 24.0 | **1** | **1** | 1 / 1 / 1 / 1 |
+| Alzheimer's | 8 | 22.3 | **1** | **1** | 3 / 7 / 7 / 2 |
+| epilepsy | 7 | 22.7 | **1** | **1** | 7 / 7 / 15 / 1 |
+| Guillain-Barré | 2 | 24.5 | 2 | **1** | 2 / 1 / 2 / 1 |
+| **mean best rank** | | 23.3 | 1.2 | 1.0 | 3.0 / 4.2 / 5.4 / 2.4 |
+
+**The circuit does not improve the classical search.** Ranking by the classical pairwise surrogate and rescoring its
+top 20 finds the true optimum in four of five diseases and rank 2 in the fifth; the circuit's best is worse in most
+cells (mean rank 2.4 to 5.4 against 1.2). This is expected: the circuit optimises the same surrogate, so its
+candidates are at best that ranking, blurred by an imperfect optimisation. The one setting that ties or nearly ties
+(CVaR alpha = 0.25, mean 2.4) is not consistent across diseases (7 in MS), and the choice of alpha changes the
+result by more than the difference between the circuit and the classical ranking, which is itself a warning about
+tuning on five cases. Circuit parameters do matter (alpha changes the epilepsy result from rank 1 to 15), but
+tuning them did not get the circuit ahead of the method it is built from. Mean probability on the true top 1% was
+0.03 to 0.05 (uniform about 0.008).
+
+**What this leaves open.** The surrogate's own optimum is a poor answer in three diseases (true rank 7, 8, 7), yet
+its top 20 always contains the true best, so what helps is scoring a *set* of good candidates with the true scorer,
+not the solver that produced them. A hybrid that gets value from a circuit would need to generate candidates the
+surrogate ranks poorly but the true scorer likes, which this circuit, optimising the surrogate, does not do.
