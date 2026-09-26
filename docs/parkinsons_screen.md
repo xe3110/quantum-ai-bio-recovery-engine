@@ -363,7 +363,7 @@ can be shown. For Parkinson's the pool is the 18 best of 35 eligible agents. The
 [the regimen-selection document](quantum_regimen_selection.md).
 
 **Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
-simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
+simulator (Qiskit Aer) A pipeline for running on IBM hardware now exists ([ibm_quantum_hardware.md](ibm_quantum_hardware.md)), but no hardware run has been made,, and the assembly step that builds the new structures is a classical
 stochastic search. None of the findings in this document depends on the quantum solvers: the regimens it reports come from exhaustive classical scoring, and the quantum solvers are judged on whether they recover them.
 
 ## 10. Key references

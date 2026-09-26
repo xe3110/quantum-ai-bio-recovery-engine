@@ -2234,3 +2234,157 @@ higher-order terms, since the pairwise approximation is the binding limit. Compi
 preparation and XY mixer to gates and count their depth, the concrete step towards a device. Try a
 pool of hundreds of agents at high order with classical heuristics, which is the regime a simulator
 cannot verify.
+\n
+### Addendum (2026-09-27): a pipeline for IBM quantum hardware
+
+I wanted to know whether real hardware could take the regimen problem beyond the ~20 qubits a classical
+simulator handles. I looked at what is free. IBM's open plan is described as giving real processors of up to
+127 qubits with about 10 minutes of quantum time a month (from search summaries, one third-party; not confirmed
+on IBM's own pages). D-Wave's free trial is about a minute of annealing time. I chose IBM. Full write-up in
+[ibm_quantum_hardware.md](ibm_quantum_hardware.md).
+
+**No hardware run has been made.** There are no IBM credentials on this machine and nothing has been sent
+anywhere. I built everything short of that.
+
+* **A separate environment.** A dry-run install of IBM's runtime library into the working environment showed pip
+  would upgrade Qiskit from 1.4.5 to 2.5.2, risking every earlier result, so I did not install it there.
+  `qbio-ibm-env` holds Qiskit 2.5.2 and the runtime, and the two environments are decoupled through a JSON spec.
+* **An anonymous spec.** It holds numbers only (qubit count, k, cost coefficients, mixer edges, initial bitstring,
+  angles): no drug names, gene names or disease. The index-to-agent mapping stays in a private local file the run
+  script never reads. A test asserts it, and the run script refuses a spec not marked anonymous.
+* **Angles are optimised on a simulator and only the fixed circuit goes to hardware**, so scarce quantum time is not
+  spent on the variational loop. The cost is that angles cannot be optimised beyond ~20 qubits.
+* **The gate circuit is checked against the simulator.** It matches the subspace simulation to 1e-8 bitstring by
+  bitstring and never leaves the subspace with exactly k ones (`tests/test_gate_qaoa.py`). The fraction of shots
+  with weight k is then a model-free noise gauge on a real device.
+
+**What a free noise model of a real 127-qubit device (Sherbrooke) predicts**, run locally with no account, for
+Guillain-Barré at k = 4, two layers. This is a simulation of noise, not a hardware run.
+
+| qubits | two-qubit gates | shots with exactly k ones | random bits | distance from ideal | verdict |
+|---|---|---|---|---|---|
+| 6 | 130 | 0.564 | 0.234 | 0.19 | clear signal |
+| 8 | 259 | 0.391 | 0.273 | 0.42 | partial signal |
+| 10 | 410 | 0.250 | 0.205 | 0.83 | none |
+| 12 | 496 | 0.178 | 0.121 | 0.93 | none |
+| 14 | 850 | 0.108 | 0.061 | 0.98 | none |
+| 16 | 907 | 0.063 | 0.028 | 0.98 | none |
+
+Signal survives to about 8 qubits and is gone from 10. The problem is dense (every pair of agents interacts), so
+two-qubit gates grow from 130 to 907 between 6 and 16 qubits and the signal decays exponentially in the gate
+count. **Submitting a 20-, 30- or 64-qubit version is possible, and the model says it would return noise.** More
+physical qubits do not help unless the problem is made sparse or error rates fall by an order of magnitude.
+
+**Two things I corrected along the way.** My first verdict rule was too strict (it called 8 qubits "no signal" when
+the distribution was clearly closer to ideal than uniform), and at 6 and 8 qubits the space has only 15 and 70
+feasible subsets, so 2,000 shots visit most of them and "the best measured regimen ranked first" means nothing. The
+analysis now warns when shots cover more than half the feasible subsets.
+
+**What a real run could show.** Whether the noise model is right on 6 and 8 qubits, and that the pipeline works.
+Not a quantum advantage (exhaustive search is instant and annealing already matches it), and not the sizes that
+matter. **To run it** I need a credential that only I can create: an IBM Quantum Platform account and API key set in
+my own terminal as `QISKIT_IBM_TOKEN`, never pasted into the repository or a chat. The steps are in the document.
+
+**Next steps.** Make the IBM account and run 6 and 8 qubits, comparing the fraction of shots with weight k with the
+predictions above. Try a sparse formulation of the problem, which is the only route the model suggests to more
+usable qubits. Compare with D-Wave annealing, which is a natural fit for a QUBO but a different algorithm.
+
+### First real hardware run (ibm_fez, 2026-09-27)
+
+I ran the 6- and 8-qubit Guillain-Barré circuits on **ibm_fez** (156 qubits, free open plan), 4,000 shots each, 3
+quantum seconds per job. Only the anonymous numeric circuit was sent. The noise model was close on both.
+
+| qubits | 2-qubit gates | shots with weight k (hardware) | noise model | random bits | TV from ideal (hardware) | verdict |
+|---|---|---|---|---|---|---|
+| 6 | 136 | 0.582 | 0.564 | 0.234 | 0.14 | clear signal |
+| 8 | 262 | 0.431 | 0.391 | 0.273 | 0.36 | partial signal |
+
+The device did slightly better than the model predicted, at both sizes, and the verdicts match. The model is a
+reasonable guide, so its prediction that signal is gone from 10 qubits is now something I trust more, though I have
+not run 10 or above on hardware. The most-measured regimen was the same as in the model at both sizes.
+
+**What this does not show.** At 6 and 8 qubits the 4,000 shots visited 100% and 99% of all feasible regimens, so
+"the best measured regimen ranked first" means nothing here. The circuit is not doing a search that beats
+exhaustive enumeration (15 and 70 subsets). It shows the pipeline works on a real device and the noise gauge is
+sound. It is not a quantum advantage.
+
+### Sparse circuits (noise model)
+
+The dense problem was the reason signal died from 10 qubits, so I added `--keep N`, which keeps each agent's N
+strongest couplings and drops the rest. With N = 2 the ZZ terms fall from 45, 66 and 120 to 15, 18 and 23 at 10, 12
+and 16 qubits, and the noise model gives weight-k fractions of 0.36, 0.35 and 0.23 against random 0.21, 0.12 and
+0.03, so 16 qubits keeps a partial signal where the dense circuit had none. **The catch is mine to own:** the
+noiseless sparse circuit already picks poorly (its most likely regimen ranks 106 of 210, 88 of 495 and 335 of 1,820
+by the true score), so I bought hardware survivability with problem fidelity. The gauge I use only measures noise,
+so it cannot tell me this. I have not run any of it on hardware.
+
+### 10 qubits on hardware: the model was wrong
+
+I ran the dense 10-qubit circuit on ibm_fez (410 two-qubit gates, 4,000 shots). 28.8% of shots kept exactly four
+agents against 20.5% for random bits, and the distance from the ideal distribution was 0.67 against 0.83 in the
+noise model. I had written that signal was gone from 10 qubits, and the device says partial. My earlier line that I
+"trust the model more" after 6 and 8 qubits was too strong: it has now been too pessimistic three times running, so
+it is a conservative floor, not a forecast. The margin over random is small, and the gauge still measures noise, not
+the quality of the regimens. I have not run 12 or above on hardware.
+
+### 12 dense and 16 sparse on hardware
+
+Dense 12 qubits (474 gates): 22.0% of shots kept exactly four agents against 12.1% for random bits, partial signal,
+where the noise model said none. Sparse 16 qubits (355 gates): 20.3% against 2.8% for random bits, partial signal,
+and this time the device was slightly *below* the model's 23.1%. So my "the model is a conservative floor" line from
+the 10-qubit entry is also too strong: it was pessimistic on the four dense circuits and mildly optimistic on the one
+sparse one. Sparsity did what I wanted, since 16 qubits survives at roughly the gate count of dense 10. What it did
+not do is fix the thing I flagged before: the noiseless sparse circuit ranks its own favourite regimen 335 of 1,820,
+so I have shown a circuit that survives the device, not one that finds good regimens.
+
+### Better couplings, and I had blamed the wrong thing
+
+I added a fitted sparsifier (orthogonal matching pursuit with refit weights) and compared it with keeping the
+strongest couplings at the same edge count. It tracks the dense objective better at 10 and 12 qubits (Spearman 0.925
+against 0.878, and 0.906 against 0.866) and slightly worse at 16 (0.836 against 0.845), so it is no clear win. Then I
+ran the dense circuit for comparison and found it is **just as poor**: at two layers the noiseless state sits with
+probability 1.000 on one regimen, the same for dense and sparse, and it is not the optimum. So my entry on sparse
+circuits, where I said I had "bought survivability with problem fidelity", was wrong about the cause. The problem is
+the circuit, not the sparsity: it starts from one computational-basis subset (0, 1, 2, 3) and a two-layer ring mixer
+only reaches subsets a couple of hops away. The exact simulator I used earlier starts from the Dicke superposition
+and does not have this problem. Deeper circuits spread the state (16 qubits: the optimum's probability goes from 0 at
+two layers to 0.018 at six), at more gates. What I still have not done is the fix that targets the cause: a
+Dicke-state start, a warm start from the annealing solution, or more layers on hardware.
+
+### Dicke-state start: it did not help, and it changed how I read the last result
+
+I built the Dicke-state preparation, found the gate layout by checking the statevector against the exact state for
+several sizes (my recollection of the paper's layout did not survive that, and the first search failed until I
+fixed my own window placement), and confirmed the circuit matches the exact simulation. Then I measured. With the
+Dicke start, the noiseless circuit puts about the uniform amount of probability on the true top 1% of regimens
+(0.010 to 0.015 against 0.008 to 0.010) and its mean rank is 0.39 to 0.46 against 0.5 for random. It is barely better
+than random. The basis-start circuit's good mean rank (0.18) turns out not to be search at all: my pool is sorted by
+monotherapy score, so the fixed start (0, 1, 2, 3) is the four best single agents and two layers stay near it. I had
+been reading a classical prior as circuit quality. So both fixes I proposed (better couplings, a Dicke start) did
+nothing for quality, and I have not sent a Dicke circuit to hardware because the noiseless version has nothing worth
+preserving. The consistent picture from the simulator work and this is that shallow QAOA does not find the top
+regimens here; what the hardware runs show is noise tolerance only.
+
+### Deeper circuits and CVaR: the first thing that moved the top end
+
+With the mean-cost objective, going from 4 to 12 layers never lifted the top-1% probability above uniform, at 12 or 16
+qubits. Switching the objective to CVaR (mean cost of the best 5% of the mass) did. At 12 qubits, 8 layers put 0.082
+on the true top 1% (about 10 times uniform) and 0.050 on the surrogate optimum (25 times uniform). At 16 qubits it took
+12 layers to get 0.055 and 0.006. So the objective mattered more than depth, which fits the simulator work where CVaR
+was the one thing that helped. My caveats: this is noiseless simulation only, the concentration weakens with size
+(at 16 qubits 4 layers is still at chance), the optimiser had a small budget so these are not upper bounds, and the
+gate counts are far past what ibm_fez preserved (a dense 16-qubit circuit is 907 two-qubit gates at two layers, so
+twelve layers is not something I can measure on the device). Exhaustive search is instant at these sizes and
+annealing already matches it, so this is still not an advantage; it is the first evidence that the algorithm itself
+can concentrate on good regimens when it is given the right objective and enough depth.
+
+### Sparse CVaR: it lost, so I kept the dense circuit
+
+I tried CVaR on the sparse circuits, with both the strongest-coupling and the fitted rules, hoping to get the
+concentration I saw on the dense circuit at a gate count the device can hold. It did not work. At 12 qubits the top-1%
+probability was 0.006 to 0.014 (uniform 0.008) against 0.082 for dense at 8 layers, and at 16 qubits it reached only
+0.024 to 0.025 at 12 layers against 0.055 for dense. So the couplings I dropped were carrying the signal CVaR needs,
+and the circuits small enough for the hardware are the ones that cannot search. Nothing needed reverting because the
+options were all opt-in, and the default stays dense. Where I am: the hardware runs measure noise tolerance, the
+simulator shows CVaR can concentrate on good regimens only with dense couplings and 8 to 12 layers, and those two
+things do not overlap at any size I can run on ibm_fez.

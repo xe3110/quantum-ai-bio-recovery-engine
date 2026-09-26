@@ -308,7 +308,11 @@ composite, so they inherit its preference for narrow, well-aligned agents.
   Compiling the Dicke-state preparation and XY mixer into gates, and counting their depth,
   is the concrete step from here to a device.
 
-## 8. Files
+## 8. Real hardware
+
+A pipeline for running the same circuit on IBM devices is in [the IBM document](ibm_quantum_hardware.md). No hardware run has been made. A free local noise model of a real 127-qubit device predicts usable signal only up to about 8 qubits for this dense problem, and none by 10, so submitting a 20-qubit or larger version would return noise.
+
+## 9. Files
 
 | | |
 |---|---|
@@ -316,6 +320,10 @@ composite, so they inherit its preference for narrow, well-aligned agents.
 | [core/quantum/constrained_qaoa.py](../core/quantum/constrained_qaoa.py) | Constraint-preserving QAOA (Dicke start, XY mixer) with an optional CVaR objective |
 | [experiments/quantum/run_regimen_selection.py](../experiments/quantum/run_regimen_selection.py) | Runs every solver on one disease and judges each against the true optimum |
 | [experiments/quantum/summarize.py](../experiments/quantum/summarize.py) | Tabulates the per-disease results |
+| [core/quantum/gate_circuit.py](../core/quantum/gate_circuit.py) | The gate-level circuit from an anonymous spec, with no project dependencies, so the IBM environment needs only this file |
+| [core/quantum/gate_qaoa.py](../core/quantum/gate_qaoa.py) | Angle optimisation on the feasible subspace using the same unitary as the gate circuit, and hardware-count analysis helpers |
+| [experiments/quantum/ibm_prepare.py](../experiments/quantum/ibm_prepare.py), [ibm_run.py](../experiments/quantum/ibm_run.py) | Prepare an anonymous spec, run it on a free noise model or real IBM hardware, and analyse the counts |
+| [tests/test_gate_qaoa.py](../tests/test_gate_qaoa.py) | The gate circuit matches the subspace simulation to 1e-8, preserves the number of selected agents, and the spec is anonymous |
 | [tests/test_regimen_selection.py](../tests/test_regimen_selection.py) | Surrogate construction, feasibility of every solver, constraint preservation of the mixer, and that the optimised state beats uniform sampling |
 
 The tests assert only what the algorithm supports: that the surrogate is built as documented,

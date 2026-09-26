@@ -443,7 +443,7 @@ its numbers.
 | Higher-order regimen selection (k = 4 to 6) | **QAOA (penalty, constraint-preserving, CVaR) as a benchmark against ground truth**, on a simulator | The k = 3 screen is exhaustive; beyond it the question is which k agents from a pool. Answers are re-scored with the true scorer and judged against all feasible subsets; classical greedy and annealing are the baselines. See [the regimen-selection document](quantum_regimen_selection.md) |
 | Arm sets carried into assembly | **Enumeration** | QAOA's output is not used downstream |
 | Molecule assembly and refinement | **Classical** stochastic search | No quantum formulation of it exists here |
-| Real quantum hardware | **Never used** | Everything ran on a classical simulator (Qiskit Aer) |
+| Real quantum hardware | **Never used; a pipeline exists** | Everything ran on a classical simulator (Qiskit Aer). A pipeline for IBM hardware is built and tested against a noise model, which predicts usable signal only up to about 8 qubits for this dense problem; see [the IBM document](ibm_quantum_hardware.md) |
 
 QAOA reproduced the enumeration optimum in every disease, so the formulation transfers to a
 quantum algorithm. It did **not** show a quantum advantage, and at ten variables none is

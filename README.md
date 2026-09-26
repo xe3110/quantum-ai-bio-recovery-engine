@@ -404,7 +404,7 @@ part is which, for all five diseases (MS, Parkinson's, Alzheimer's, epilepsy, Gu
 | Higher-order regimen selection (k = 4 to 6) | **QAOA (penalty, constraint-preserving, CVaR), benchmarked against ground truth**, on a simulator | The k = 3 screen is exhaustive, so beyond it the question is which k agents from a pool. Answers are re-scored with the true scorer; classical baselines are included. See [docs/quantum_regimen_selection.md](docs/quantum_regimen_selection.md) |
 | Arm sets carried into assembly | **Enumeration** | QAOA's output is not used downstream |
 | Molecule assembly | **Classical** | No quantum formulation of it exists here |
-| Real quantum hardware | **Never used** | Everything ran on a classical simulator |
+| Real quantum hardware | **Never used; a pipeline exists** | Everything ran on a classical simulator. A pipeline for IBM hardware (anonymous circuits, a separate environment) is built and tested; a noise model of a real device predicts usable signal only up to about 8 qubits for this dense problem. See [docs/ibm_quantum_hardware.md](docs/ibm_quantum_hardware.md) |
 
 QAOA matched the enumeration optimum in every disease, which shows the Hamiltonian formulation
 transfers to a quantum algorithm. It shows **no quantum advantage**, and at ten variables none
@@ -528,6 +528,7 @@ covers, which is how the library learns what it is missing.
 | [Epilepsy screen protocol](docs/epilepsy_screen.md) | The k = 1/2/3 screen for a disease with tractable channel targets and an approved-heavy panel: what a redundancy rule that matches clinical polytherapy costs, why epilepsy has no axis at 1.00, and the source-checked controls |
 | [Alzheimer's screen protocol](docs/alzheimers_screen.md) | The k = 1/2/3 screen: why amyloid cannot be scored from a transcript signature, the strata that disagree with the design analysis, the withdrawn-drug control that failed, and the antibody delivery assumption |
 | [De novo design protocol](docs/denovo_design_protocol.md) | Target profile derivation, the Hamiltonian and its two approximations, the chemistry model's validation state and blind spots, and the central transplantation assumption |
+| [IBM quantum hardware](docs/ibm_quantum_hardware.md) | The pipeline for running the regimen circuit on IBM devices: what is sent (numbers only), how the circuit is checked against the simulator, and what a noise model of a real device predicts about how many qubits are usable |
 | [Quantum regimen selection](docs/quantum_regimen_selection.md) | The Hamiltonian machinery applied to choosing k = 4 to 6 drugs: how good the pairwise surrogate is, constraint-preserving and CVaR QAOA against the penalty version and classical baselines, and why no quantum advantage can be shown on a simulator |
 | [Efficacy calibration](docs/efficacy_calibration.md) | Whether the screen's score tracks published efficacy: a two-tier separation in MS against sourced meta-analyses, why the composite does not, and why no score-to-effect mapping is supported |
 | [Lab journal](docs/lab_journal.md) | Dated research log across every phase, including the failures and what they changed |
