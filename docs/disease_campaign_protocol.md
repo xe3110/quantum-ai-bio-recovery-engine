@@ -440,6 +440,7 @@ its numbers.
 |---|---|---|
 | k = 1, 2, 3 combination screen | **Classical, all five diseases** | Exhaustive enumeration is exact at these sizes (16 to 29,757 triples), and the cost is classical statistics (permutation null, bootstrap), not search |
 | Fragment selection for the design campaign | **QAOA as a benchmark only**, on a simulator, all five diseases | A 10-variable QUBO has 1,024 states that enumeration covers in about 0.07 s; QAOA takes 5 to 6 s and only confirms the formulation is faithful |
+| Higher-order regimen selection (k = 4 to 6) | **QAOA (penalty, constraint-preserving, CVaR) as a benchmark against ground truth**, on a simulator | The k = 3 screen is exhaustive; beyond it the question is which k agents from a pool. Answers are re-scored with the true scorer and judged against all feasible subsets; classical greedy and annealing are the baselines. See [the regimen-selection document](quantum_regimen_selection.md) |
 | Arm sets carried into assembly | **Enumeration** | QAOA's output is not used downstream |
 | Molecule assembly and refinement | **Classical** stochastic search | No quantum formulation of it exists here |
 | Real quantum hardware | **Never used** | Everything ran on a classical simulator (Qiskit Aer) |
@@ -449,8 +450,14 @@ quantum algorithm. It did **not** show a quantum advantage, and at ten variables
 possible to show. Its behaviour by depth differs by instance (the depths that fell short: MS d3, Parkinson's d1, Alzheimer's d1 and d5, epilepsy d2,
 Guillain-Barré d1), which is why the runner sweeps depths 1 to 5 and reports every one. The regime
 where quantum optimisation might matter, selections from hundreds of candidates at high
-order, is not one any panel here reaches. **No finding in any disease's document depends on
-quantum computing.**
+order, is not one any panel here reaches. **No finding in any disease's document depends on the
+quantum solvers**: the regimens reported come from exhaustive classical scoring, and the quantum
+solvers are judged on whether they recover them. On the higher-order selection problem the
+classical heuristics (greedy, annealing) are currently exact at the sizes a simulator can hold, and
+the largest error is the pairwise surrogate, not the solver. Across the five diseases (15 runs),
+the project's original penalty QAOA failed outright twice and ranked in the hundreds to thousands
+otherwise; the constraint-preserving QAOA with CVaR matched exact enumeration in 12 of 15; simulated
+annealing matched it in all 15; and greedy in only 5.
 
 ## 8. Key references
 

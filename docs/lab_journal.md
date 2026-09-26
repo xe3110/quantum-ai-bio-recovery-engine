@@ -2151,3 +2151,86 @@ No finding in any of the five diseases depends on quantum computing. The regime 
 optimisation might matter, selections from hundreds of candidates at high order, is not one any
 panel here reaches. Each disease's protocol document now has a section stating this with its own
 numbers.
+
+### Addendum (2026-09-27): applying the quantum machinery to the combination problem
+
+The previous addendum recorded that quantum computing was used only as a benchmark of the
+ten-variable fragment selection, and that no finding depended on it. The project is built around
+quantum optimisation, so I pointed the same Hamiltonian machinery at the combination problem
+itself: which k = 4 to 6 drugs to combine, the question that lies beyond the exhaustive k = 3
+screen. Full write-up in [quantum_regimen_selection.md](quantum_regimen_selection.md).
+
+**What was built.**
+
+* A QUBO for regimen selection ([core/quantum/regimen_selection.py](../core/quantum/regimen_selection.py)).
+  Every k-ary term in the scorer is a mean of its pairwise form, so a k-subset's score is
+  approximated by the sum of its pair scores, with a penalty on pairs the redundancy rule
+  excludes. The existing enumeration, exact eigensolver and QAOA solvers work on it unchanged.
+* Two objectives on every problem: `qubo_objective` (what the solvers optimise) and
+  `exact_objective` (the true k-ary score). Every solver's answer is re-scored with the true
+  scorer and ranked against all feasible subsets in the pool, so solvers are judged against ground
+  truth and not against each other.
+* A constraint-preserving QAOA (Dicke-state start, XY mixer) and a CVaR variant
+  ([core/quantum/constrained_qaoa.py](../core/quantum/constrained_qaoa.py)), run as exact
+  statevector simulations on the feasible subspace. Classical baselines: greedy, simulated
+  annealing, random, and random with as many draws as the quantum solvers' shots.
+* 11 tests ([tests/test_regimen_selection.py](../tests/test_regimen_selection.py)); the suite is at 357 passing.
+
+**Why the constrained QAOA.** The project's existing penalty-based Qiskit QAOA did badly on this
+problem. At k = 6 on Guillain-Barré it returned a regimen ranked 588th of 8,008, worse than 100
+random picks (115th). Folding "choose exactly k" into a penalty over all 2^n bitstrings leaves most
+of the space infeasible, and the optimiser spends its budget avoiding it. Restricting to the
+feasible subspace fixes that.
+
+**Results, all five diseases** (15 runs: k = 4, 5, 6 for each; the pool is the 18 best agents for MS,
+Parkinson's, Alzheimer's and epilepsy, and the whole 16-agent panel for Guillain-Barré; every solver
+is judged against the true optimum from exhaustively scoring the pool).
+
+* **The surrogate loses fidelity as k grows, unevenly.** Spearman with the true score stays about 0.9
+  in Parkinson's and Guillain-Barré, but falls from 0.91 to 0.44 in MS and from 0.93 to 0.75 in
+  epilepsy. Even where it holds, the surrogate's own optimum can sit hundreds of places down the true
+  ranking (Alzheimer's k = 6: 328th of 18,564; epilepsy k = 6: 513th). The surrogate, not the solver,
+  is the binding limit.
+* **The project's original penalty QAOA was the wrong formulation.** It returned no feasible selection
+  at any depth in 2 of the 15 runs and otherwise ranked in the hundreds to thousands (median 1,290),
+  beating matched random sampling in only 2 of the 13 runs where it answered.
+* **The constraint-preserving QAOA works, and CVaR is better.** It matched exact enumeration in 9 of 15
+  runs and beat matched random in 10, tied 4 and lost 1. With CVaR it matched enumeration in 12 of 15
+  (the misses: MS k = 6, Alzheimer's k = 5 and k = 6).
+* **Simulated annealing matched enumeration in all 15 runs in about 10 ms; greedy in only 5** (all of
+  Guillain-Barré, which flatters it, and two MS runs).
+* **A worse solver can beat the surrogate optimum on the true score, because the surrogate is wrong**:
+  greedy reached rank 5 against 20 in MS k = 4 and rank 10 against 61 in epilepsy k = 5.
+* **The final quantum state concentrates probability but not on the optimum.** With the mean objective it
+  puts 13 to 36 times the uniform probability on the best 1% of regimens in every run, but on the single
+  best regimen it is above uniform in only 6 of 15 (and zero in epilepsy k = 6). CVaR is above uniform in
+  all 15 (by 1.5 to 56 times).
+* **Annealing on the full panel** (up to 75 million subsets in MS) beat the best of 3,000 random regimens on
+  the true score in 5 of 15 cases, including all three in MS, the only disease large enough that random
+  draws cannot compete.
+* **The best 4-, 5- and 6-drug regimens** within each pool are in the regimen-selection document. The
+  epilepsy six-drug regimen contains retigabine and vigabatrin, the two failed safety controls, so it is
+  the composite failure again and not a recommendation.
+
+**A near miss.** The quantum solvers draw 4,096 shots from a space of 1,820 to 8,008 subsets, so
+even uniform random sampling with the same draws finds the optimum some of the time (it does at
+k = 4, because 4,096 exceeds 1,820). I had started reading "the best sampled regimen was the
+optimum" as evidence, and it is not. The tables use random sampling with matched shots as the
+baseline and report the probability the final state places on good subsets, which sampling cannot
+hide.
+
+**What this does and does not show.** It runs on a classical simulator capped at about 20 qubits, and
+at that size exhaustive search is instant, so no quantum advantage can be shown. The regimens
+reported still come from exhaustive classical scoring within the pool, and the quantum solvers are
+judged on whether they recover them. What it does establish is that the pipeline works end to end on
+the real combination problem, that the penalty formulation is the wrong one for a cardinality
+constraint, and that on the sizes a simulator can hold simulated annealing is as good as anything
+quantum I tried (greedy is not). A first
+hardware run would face noise at the depths that matter, and I would not expect it to match the
+simulator.
+
+**Next steps.** A better surrogate with
+higher-order terms, since the pairwise approximation is the binding limit. Compile the Dicke-state
+preparation and XY mixer to gates and count their depth, the concrete step towards a device. Try a
+pool of hundreds of agents at high order with classical heuristics, which is the regime a simulator
+cannot verify.

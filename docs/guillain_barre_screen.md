@@ -363,9 +363,18 @@ search covers instantly, so no quantum advantage can be demonstrated or is expec
 benchmark checks that the Hamiltonian formulation is faithful and transfers to a quantum
 algorithm, and that is all it shows.
 
+**Used for higher-order regimen selection (k = 4 to 6), as a benchmark against ground truth.**
+The k = 1, 2, 3 screen above stops at k = 3 because it scores every combination. The project's
+Hamiltonian machinery has since been pointed at the question beyond it, which k agents from a
+pool, written as a QUBO and solved by enumeration, the exact eigensolver, QAOA (penalty and
+constraint-preserving variants) and classical baselines. Every answer is re-scored with the true
+scorer and ranked against all feasible subsets. It runs on a classical simulator, so no advantage
+can be shown. For this disease the pool is the whole 16-agent panel. The pairwise surrogate tracks the true score well (Spearman about 0.9) but its optimum's true rank falls with k (2nd of 1,820 at k = 4, 13th of 4,368 at k = 5, 54th of 8,008 at k = 6); the penalty QAOA ranked in the hundreds, worse than random; the constraint-preserving QAOA recovered the surrogate optimum at k = 4 and 6 and CVaR at all three; and greedy and annealing reached it in milliseconds. Method, caveats and the full tables are in
+[the regimen-selection document](quantum_regimen_selection.md).
+
 **Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
 simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
-stochastic search. None of the findings in this document depends on quantum computing.
+stochastic search. None of the findings in this document depends on the quantum solvers: the regimens it reports come from exhaustive classical scoring, and the quantum solvers are judged on whether they recover them.
 
 ## 11. Key references
 

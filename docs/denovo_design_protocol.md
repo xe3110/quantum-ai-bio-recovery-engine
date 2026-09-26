@@ -169,6 +169,11 @@ solver result is reported against it.
 
 ### What the quantum backends do and do not show
 
+The same solvers have since been pointed at a second problem, choosing which k = 4 to 6 drugs
+to combine, and judged against the true scorer; see
+[the regimen-selection document](quantum_regimen_selection.md). The fragment problem below
+remains the ten-variable benchmark.
+
 QAOA reproducing the enumeration optimum shows the **formulation is faithful
 and transfers to a quantum algorithm**. It does **not** show a quantum
 advantage, and at ten binary variables there is none to show -- enumeration

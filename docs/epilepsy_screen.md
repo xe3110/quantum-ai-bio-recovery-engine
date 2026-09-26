@@ -368,9 +368,18 @@ search covers instantly, so no quantum advantage can be demonstrated or is expec
 benchmark checks that the Hamiltonian formulation is faithful and transfers to a quantum
 algorithm, and that is all it shows.
 
+**Used for higher-order regimen selection (k = 4 to 6), as a benchmark against ground truth.**
+The k = 1, 2, 3 screen above stops at k = 3 because it scores every combination. The project's
+Hamiltonian machinery has since been pointed at the question beyond it, which k agents from a
+pool, written as a QUBO and solved by enumeration, the exact eigensolver, QAOA (penalty and
+constraint-preserving variants) and classical baselines. Every answer is re-scored with the true
+scorer and ranked against all feasible subsets. It runs on a classical simulator, so no advantage
+can be shown. For epilepsy the pool is the 18 best of 37 eligible agents. The surrogate degrades with k (Spearman 0.93, 0.85, 0.75) and its optimum ranks 11th, 61st and 513th. The constrained QAOA matched exact enumeration at k = 4 and 5 but not at k = 6 (713 against 513), and CVaR matched it at all three. Greedy found a better regimen than the surrogate's own optimum at k = 5 (rank 10 against 61), which is the surrogate's error showing. The best pool-limited six-drug regimen contains retigabine and vigabatrin, the two failed safety controls above, so it is the known composite failure again and not a recommendation. Method, caveats and the full tables are in
+[the regimen-selection document](quantum_regimen_selection.md).
+
 **Never used: real quantum hardware, and molecule assembly.** QAOA ran on a classical
 simulator (Qiskit Aer), and the assembly step that builds the new structures is a classical
-stochastic search. None of the findings in this document depends on quantum computing.
+stochastic search. None of the findings in this document depends on the quantum solvers: the regimens it reports come from exhaustive classical scoring, and the quantum solvers are judged on whether they recover them.
 
 ## 10. Key references
 
