@@ -1,0 +1,54 @@
+{
+  "identifier": "alzheimers",
+  "name": "Alzheimer's disease",
+  "description": "Progressive neurodegenerative dementia characterised by extracellular amyloid-beta plaques, intraneuronal tau tangles, early cholinergic and synaptic loss, and chronic microglial activation. Symptomatic cholinergic and glutamatergic therapy gives modest benefit; anti-amyloid antibodies have only recently shown a small slowing of decline, at the cost of imaging-detected brain oedema and haemorrhage.",
+  "vocabulary": {
+    "pathways": [
+      "amyloid_processing", "tau_pathology", "cholinergic_signalling",
+      "glutamatergic_synaptic", "microglial_neuroinflammation",
+      "lipid_apoe_metabolism", "endolysosomal_autophagy",
+      "mitochondrial_bioenergetics", "oxidative_stress", "insulin_metabolic",
+      "neurotrophic_support", "calcium_homeostasis", "neuronal_injury_apoptosis"
+    ],
+    "therapeutic_axes": [
+      "cholinergic_symptomatic", "amyloid_modification", "tau_modification",
+      "synaptic_excitotoxicity_protection", "microglial_immune_modulation",
+      "metabolic_vascular_rescue"
+    ],
+    "risk_domains": [
+      "aria", "bradycardia_syncope", "cognitive_worsening", "falls_sedation",
+      "infusion_hypersensitivity", "cardiac", "hepatic", "gastrointestinal"
+    ],
+    "risk_weights": {
+      "aria": 1.0,
+      "bradycardia_syncope": 0.7,
+      "cognitive_worsening": 0.9,
+      "falls_sedation": 0.8,
+      "infusion_hypersensitivity": 0.4,
+      "cardiac": 0.8,
+      "hepatic": 0.7,
+      "gastrointestinal": 0.5
+    },
+    "risk_weights_rationale": "Weighted by how strongly each domain constrains use in a very elderly, cognitively impaired population who often cannot report adverse effects reliably. Amyloid-related imaging abnormalities are weighted highest because they are the dose-limiting toxicity of the only agents shown to modify the disease and they require serial MRI, with the risk concentrated in APOE4 carriers. Worsening cognition is next, because a drug that lowers the very function it is meant to protect (as the BACE1 and gamma-secretase inhibitors did) is a treatment failure regardless of its mechanism. Falls and syncope follow because fracture is a leading cause of loss of independence. This vocabulary shares no therapeutic axis with the MS or Parkinson's entries and only the generic organ-toxicity domains (cardiac, hepatic, gastrointestinal) among risk domains."
+  },
+  "delivery": {
+    "requires_cns_exposure": true,
+    "cns_mpo_floor": 4.0,
+    "preferred_routes": ["oral", "transdermal"],
+    "sanctuary_rationale": "The pathology is intraparenchymal: amyloid plaques, tau tangles, and the cholinergic and synaptic loss all sit behind the blood-brain barrier, and neither amyloid nor tau is reachable from the periphery except by an antibody exploiting the small fraction that crosses. Approved anti-amyloid antibodies reach the brain at roughly one per cent or less of plasma concentration and work by engaging plaque at that exposure, so the panel models them at low CNS penetration rather than zero. A small-molecule design has no such precedent to lean on, so CNS exposure is a gate on the design rather than a preference."
+  },
+  "gene_aliases": {},
+  "data": {
+    "signature": "data/ad_expression.csv",
+    "network": "data/networks/string_ad_network.tsv",
+    "panel": "data/drugs/alzheimers_panel_v1.json",
+    "druggability": "data/targets/druggability_alzheimers.json",
+    "structures": "data/chemistry/ad_known_structures.json"
+  },
+  "provenance": {
+    "signature_version": "v1, 97 directional genes",
+    "network_source": "STRING v12, cached 2026-09-26",
+    "panel_version": "1.0.0",
+    "note": "Illustrative discovery-stage context built to exercise the disease-agnostic contracts. The signature is curated from literature knowledge rather than derived from a specific cohort, and is weaker evidence than the MS entry's. Amyloid-beta is a cleavage product with no transcript, so the amyloid axis is represented through APP, the secretases, and downstream injury and glial markers. Nothing derived from it is a clinical recommendation."
+  }
+}

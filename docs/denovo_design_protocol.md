@@ -3,8 +3,8 @@
 A disease-agnostic pipeline that derives a **Target Product Profile** from a
 disease model, formulates **pharmacophore selection as a QUBO**, solves it
 exactly and on QAOA, and **assembles novel molecular structures** against the
-resulting specification. Registered and exercised end to end for two diseases:
-multiple sclerosis and Parkinson's.
+resulting specification. Registered and exercised end to end for three diseases:
+multiple sclerosis, Parkinson's, and Alzheimer's.
 
 It is **not** a drug-discovery result. There is no binding-affinity model
 anywhere in this pipeline. Nothing has been docked, simulated, synthesised, or
@@ -49,23 +49,25 @@ plateaus in progressive disease, so a molecule designed for progressive MS has
 to reach CNS parenchyma. The flag turns the CNS multi-parameter score from a
 preference into a gate.
 
-### Two diseases, and why the second one matters
+### Three diseases, and why the second and third matter
 
 An abstraction exercised by one instance is a claim, not a design. The
-registry holds two:
+registry holds three:
 
-| | multiple sclerosis | Parkinson's |
-| --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways |
-| Panel | 74 agents | 35 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes |
-| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support |
-| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic |
+| | multiple sclerosis | Parkinson's | Alzheimer's |
+| --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways |
+| Panel | 74 agents | 35 agents | 36 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes |
+| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support | cholinergic_symptomatic, amyloid_modification, tau_modification, synaptic_excitotoxicity_protection, microglial_immune_modulation, metabolic_vascular_rescue |
+| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic | aria, bradycardia_syncope, cognitive_worsening, falls_sedation, infusion_hypersensitivity, cardiac, hepatic, gastrointestinal |
 
-The two share **no therapeutic axis** and overlap on only two of their safety
-domains -- cardiac and hepatic, generic organ toxicity that genuinely applies
-to both. Nothing in Parkinson's care is constrained by infection risk; it is
-constrained by dyskinesia and psychosis. Those vocabularies, and the weighting
+No two of them share a **therapeutic axis**, and any two overlap only on
+generic organ toxicity -- cardiac, hepatic, and (for Parkinson's and
+Alzheimer's) gastrointestinal, which genuinely apply to every disease. Nothing
+in Parkinson's care is constrained by infection risk; it is constrained by
+dyskinesia and psychosis; Alzheimer's is constrained by imaging-detected brain
+oedema (ARIA) and by drugs that worsen the cognition they are meant to protect. Those vocabularies, and the weighting
 over them, are registry data. Tests assert the separation, and assert that no
 module under `core/design/` imports disease-specific scoring, because a layer
 that calls itself disease-agnostic while importing `ms_scoring` is not one
@@ -84,6 +86,27 @@ Two details the second disease forced into the design:
   prior of 0.25. The profile has to route around its most important target
   through lysosomal and autophagic mechanisms instead -- which is what the
   clinical field actually does.
+
+Three further details the third disease forced:
+
+* **Both defining proteins are out of reach.** Tau is intrinsically disordered
+  (tractability 0.15) and APP is a substrate rather than an enzyme (0.20), so
+  the profile reaches amyloid through the secretases and tau through the
+  kinases, and a test asserts neither protein appears in it. Amyloid-beta itself
+  is a cleavage product with no transcript, so it cannot be a profile entry at
+  all.
+* **Tractability has a direction.** Six signature targets (`AKT1`, `BCL2`,
+  `CAMK2A`, `GPX4`, `SIRT1`, `HMOX1`) have small-molecule precedent as
+  *inhibitors* and need to go *up*. The first draft scored them at their
+  inhibitor precedent, and `AKT1` came out fifth in the profile, a target no
+  fragment could have driven the wanted way. They are now scored as the harder
+  activation problem, the rule is written into the annotation file, and a test
+  pins it.
+* **The library learned what it was missing, again.** Alzheimer's reported
+  six of fourteen profile targets unreachable (`BACE1`, `PPARG`, `FYN`,
+  `PTGS2`, `MAPK14`, `BCHE`). Seven pharmacophores were added, taking the
+  library to 66 fragments, and the gap to zero. Adding them changed nothing for
+  the other two diseases (MS still 0, Parkinson's still `DDC` and `SLC18A2`).
 
 ## 3. Target Product Profile
 
@@ -421,6 +444,76 @@ was built. Its designs' nearest neighbour is still a library fragment, which is
 the honest answer there: no approved MS agent resembles a dual BTK/CSF1R
 covalent.
 
+### Alzheimer's disease
+
+```
+c1(ccc(cc1)CC(=O)Nc2cccnc2)OC(=O)N(C)CC
+C17H19N3O3   MW 313.4   cLogP 2.71   TPSA 71.5   CNS-MPO 5.48/6
+arms: bche_carbamate (approved_drug) + csf1r_picolinamide (published_chemotype)
+axes: cholinergic_symptomatic + cns_innate
+mean engagement confidence 0.48, weakest claim AIF1
+nearest known compound: Rivastigmine, Tanimoto 0.38
+```
+
+A **cholinesterase carbamate fused to a CSF1R amide**: symptomatic cholinergic
+benefit on one arm, microglial modulation on the other. Predicted effects: BCHE
+−0.75, CSF1R −0.75, ACHE −0.70, AIF1 −0.55, CD68 −0.50, TYROBP −0.40, ITGAM
+−0.35, IL1B −0.30, with CHRM1 +0.30 and CHRNA7 +0.20. Novelty was measured
+against the registered reference set (23 structures) from the first run — the
+first disease to get that right on the first pass — and the nearest neighbour
+is an approved drug, as it should be.
+
+Run under RDKit with qiskit, `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+- 14-requirement target profile led by `BACE1` (0.697), `GSK3B`, `NOS2`, `MTOR`,
+  `CASP3`. No unreachable requirements after the library additions above.
+- 10-variable QUBO, 45 couplings, 45 feasible states of 1,024. Enumeration, the
+  exact eigensolver, and QAOA all reach +0.0724. QAOA needs depth ≥ 2, holds at
+  depths 2 to 4, and **falls back to +0.0404 at depth 5** (d1 also +0.0404): more
+  layers made it worse, which is the same lesson as
+  [Session H of the lab journal](lab_journal.md) that QAOA's default depth was
+  luck and the depth sweep is the honest report.
+- Axis gaps: `tau_modification` and `metabolic_vascular_rescue` **1.00** unmet,
+  `synaptic_excitotoxicity_protection` 0.75, `microglial_immune_modulation` 0.50,
+  `amyloid_modification` 0.25, `cholinergic_symptomatic` 0.00.
+
+**Three things this result says that a reader should not skim past.**
+
+1. **The best molecule addresses a served axis, not an unserved one.** The gap
+   analysis reports tau and metabolic rescue at 1.00 and cholinergic at 0.00,
+   and the leading design is built on a cholinesterase arm. It does not close a
+   gap; it re-covers the one axis that is already fully served, and adds
+   microglial modulation. The optimiser is doing what it was told — maximise
+   confidence-weighted profile coverage — and the highest-confidence arm in the
+   library is an approved-drug chemotype.
+2. **The profile's top target never enters the optimiser.** `BACE1` is the
+   highest-priority target, and the library now has a fragment for it, but the
+   Hamiltonian pre-filters to the 10 fragments with the best solo benefit. The
+   BACE1 amidine ranks **31 of 38** at **−0.51**, because its polarity and mass
+   overrun its share of the CNS property envelope, so it is discarded before
+   assembly. This reproduces, for what it is worth, the medicinal-chemistry
+   problem the BACE1 programmes actually faced — a basic, polar amidine that
+   binds the catalytic aspartates and struggles with brain exposure — but it is
+   also a consequence of *my* choice of fragment and of the envelope weights, so
+   it is a finding about this library, not about BACE1. A less polar chemotype
+   (an amino-thiazine or amino-oxazine) might fit, and adding one is the obvious
+   next experiment.
+3. **The stage inversion held for the third disease.** The Hamiltonian's rank-1
+   arm set (cholinesterase carbamate + arylpropionic acid, +0.0724) built the
+   *worst* molecule of the three sets carried forward (best fitness 0.93,
+   against 1.45 and 1.48), because the carboxylic acid is what the CNS gate
+   penalises. The best design came from rank 3 (carbamate + CSF1R amide). Every
+   disease so far has shown this, which is why several arm sets are carried into
+   assembly.
+
+**A vocabulary leak, not fixed.** The design's `axes` line includes `cns_innate`,
+an MS axis. It comes from the shared fragment `csf1r_picolinamide`, whose
+`therapeutic_axes` were written when the library was MS-only and are library
+metadata, not registry vocabulary. The same happens in the other direction
+(`gsk3b_maleimide` carries a Parkinson's axis). The registry's axes are correct;
+the per-fragment labels are stale for any disease other than the one that added
+the fragment, and re-annotating them per disease is open work.
+
 ### What their efficacy is
 
 **Unknown, and untested even in silico for binding.** No docking score, no
@@ -428,9 +521,9 @@ assay, no animal model. Neither molecule has ever existed. Every number above
 is a specification match or a computed property, and none is a measurement of
 effect.
 
-Both designs rank **first of 75 and first of 36** against their disease panels
-on signed signature reversal (0.0573 and 0.0550, against approved-agent
-medians of 0.0301 and 0.0104). **That comparison is close to circular** and is
+All three designs rank **first** against their disease panels on signed
+signature reversal (0.0573, 0.0550, and 0.0512 for Alzheimer's, against
+approved-agent medians of 0.0301, 0.0104, and 0.0189). **That comparison is close to circular** and is
 reported only to explain why it should not be leaned on: the arms were
 selected by the optimiser to maximise alignment with the very signature they
 are then scored against, while the panel agents were not. It is evidence the
@@ -448,12 +541,13 @@ document still receives the caveat with the data.
 
 ### The arm set that wins is not the arm set that builds the best molecule
 
-This held for both diseases, and it is easy to quote the wrong number:
+This held for all three diseases, and it is easy to quote the wrong number:
 
 | disease | Hamiltonian rank 1 | best assembled fitness came from |
 | --- | --- | --- |
 | multiple sclerosis | BTK + RORgt (+0.0443) | BTK + CSF1R, **rank 3** (+0.0355) |
 | Parkinson's | GLUT + MAO-B (+0.0830) | caspase-1 + MAO-B, **rank 2** (+0.0732) |
+| Alzheimer's | cholinesterase carbamate + arylpropionic acid (+0.0724) | cholinesterase carbamate + CSF1R amide, **rank 3** (+0.0542) |
 
 The two stages optimise different things. The QUBO scores confidence-weighted
 coverage under a linearised property envelope; design fitness adds
@@ -500,9 +594,10 @@ In rough order of how much each would change the conclusions:
 3. **Selectivity.** `kinase_aminopyrimidine_hinge` is deliberately promiscuous
    across the kinome. A designed multi-target ligand and an uncontrolled
    polypharmacology liability are the same molecule seen from two sides.
-4. **The signatures.** The MS signature is illustrative; the Parkinson's one
-   is weaker still, curated from literature knowledge rather than derived from
-   a cohort. Both need replacing with versioned, batch-corrected,
+4. **The signatures.** The MS signature is illustrative; the Parkinson's and
+   Alzheimer's ones are weaker still, curated from literature knowledge rather
+   than derived from a cohort, and Alzheimer's cannot represent amyloid-beta
+   at all because it has no transcript. All three need replacing with versioned, batch-corrected,
    phenotype-stratified human datasets.
 5. **Selection bias in the library.** Assembly can only reach chemical matter
    the library contains. `unreachable_requirements()` reports profile targets
@@ -521,6 +616,8 @@ In rough order of how much each would change the conclusions:
 ```bash
 python -m experiments.design.run_denovo_design --disease multiple_sclerosis
 python -m experiments.design.run_denovo_design --disease parkinsons --quantum-benchmark
+python -m experiments.design.run_denovo_design --disease alzheimers --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
 pytest -q tests/
 ```
 

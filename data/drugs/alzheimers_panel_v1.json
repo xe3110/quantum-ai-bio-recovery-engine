@@ -1,0 +1,1590 @@
+{
+  "metadata": {
+    "panel_version": "1.0.0",
+    "generated_by": "tools/curate_ad_panel.py",
+    "disease": "alzheimers",
+    "purpose": "Mechanism-curated candidate panel for research prioritisation. Not a prescribing, efficacy, or co-administration dataset.",
+    "curation_rule": "Approved symptomatic and anti-amyloid therapies plus disease-modifying candidates, weighted deliberately toward agents that failed in phase 2/3. Alzheimer's has the longest record of failed disease-modification trials of any neurodegenerative disease, which makes it the strongest source of negative controls declared so far.",
+    "controls": {
+      "positive_redundancy": [
+        "Donepezil",
+        "Rivastigmine"
+      ],
+      "negative_efficacy": [
+        "Solanezumab",
+        "Verubecestat",
+        "Naproxen",
+        "Atorvastatin",
+        "Pioglitazone"
+      ],
+      "safety_penalty": [
+        "Tacrine",
+        "Semagacestat",
+        "Aducanumab"
+      ]
+    },
+    "statistics": {
+      "n_drugs": 36,
+      "n_signature_genes": 97,
+      "n_genes_targeted": 62,
+      "signature_gene_coverage": 0.639,
+      "mechanism_classes": 34,
+      "evidence_tiers": {
+        "approved": 8,
+        "phase_3": 17,
+        "phase_2": 11,
+        "preclinical": 0
+      }
+    },
+    "caveat": "Directional target effects are curated hypotheses, not measured pharmacology. Amyloid-beta is a cleavage product with no transcript, so the anti-amyloid antibodies are scored on APP and downstream injury and glial markers as a proxy for amyloid burden. Every record requires independent verification before publication use."
+  },
+  "drugs": [
+    {
+      "name": "Donepezil",
+      "mechanism_class": "cholinesterase_inhibitor",
+      "primary_moa": "Reversible acetylcholinesterase inhibition, plus sigma-1 agonism",
+      "evidence_tier": "approved",
+      "indication": "all_stages",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "cholinergic_excess"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "cholinergic_signalling"
+      ],
+      "target_effects": {
+        "ACHE": -0.85,
+        "BCHE": -0.15,
+        "CHRM1": 0.45,
+        "CHRNA7": 0.3,
+        "CHRNA4": 0.25,
+        "SIGMAR1": 0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.5,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.2,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.5
+      },
+      "target_family": "cholinesterase_inhibitor",
+      "relevant_pathways": [
+        "cholinergic_signalling"
+      ]
+    },
+    {
+      "name": "Rivastigmine",
+      "mechanism_class": "cholinesterase_inhibitor",
+      "primary_moa": "Pseudo-irreversible inhibition of both acetylcholinesterase and butyrylcholinesterase",
+      "evidence_tier": "approved",
+      "indication": "all_stages",
+      "route": "transdermal",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "cholinergic_excess"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "cholinergic_signalling"
+      ],
+      "target_effects": {
+        "ACHE": -0.8,
+        "BCHE": -0.8,
+        "CHRM1": 0.4,
+        "CHRNA7": 0.25,
+        "CHRNA4": 0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.4,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.2,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.7
+      },
+      "target_family": "cholinesterase_inhibitor",
+      "relevant_pathways": [
+        "cholinergic_signalling"
+      ]
+    },
+    {
+      "name": "Galantamine",
+      "mechanism_class": "cholinesterase_nicotinic_modulator",
+      "primary_moa": "Acetylcholinesterase inhibition with allosteric potentiation of nicotinic receptors",
+      "evidence_tier": "approved",
+      "indication": "mild_to_moderate",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "cholinergic_excess"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "cholinergic_signalling"
+      ],
+      "target_effects": {
+        "ACHE": -0.7,
+        "CHRNA7": 0.45,
+        "CHRNA4": 0.4,
+        "CHRM1": 0.3
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.5,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.2,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.5
+      },
+      "target_family": "cholinesterase_nicotinic_modulator",
+      "relevant_pathways": [
+        "cholinergic_signalling"
+      ]
+    },
+    {
+      "name": "Tacrine",
+      "mechanism_class": "cholinesterase_inhibitor_hepatotoxic",
+      "primary_moa": "First-generation cholinesterase inhibitor, withdrawn for hepatotoxicity",
+      "evidence_tier": "approved",
+      "indication": "withdrawn",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "cholinergic_excess",
+        "hepatotoxicity"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "cholinergic_signalling"
+      ],
+      "target_effects": {
+        "ACHE": -0.85,
+        "BCHE": -0.7,
+        "CHRM1": 0.4,
+        "CHRNA7": 0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.3,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.95,
+        "gastrointestinal": 0.6
+      },
+      "target_family": "cholinesterase_inhibitor_hepatotoxic",
+      "relevant_pathways": [
+        "cholinergic_signalling"
+      ]
+    },
+    {
+      "name": "Xanomeline-trospium",
+      "mechanism_class": "M1_M4_agonist",
+      "primary_moa": "Central M1/M4 muscarinic agonism with a peripheral antagonist to limit cholinergic effects",
+      "evidence_tier": "phase_3",
+      "indication": "psychosis_in_AD",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic",
+        "amyloid_modification"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "muscarinic_agonism"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "cholinergic_signalling",
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "CHRM1": 0.8,
+        "ADAM10": 0.25,
+        "GSK3B": -0.2,
+        "APP": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.2,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.3,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.6
+      },
+      "target_family": "M1_M4_agonist",
+      "relevant_pathways": [
+        "cholinergic_signalling",
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Encenicline",
+      "mechanism_class": "alpha7_nicotinic_agonist",
+      "primary_moa": "Partial agonism of the alpha-7 nicotinic receptor; stopped in phase 3",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic",
+        "synaptic_excitotoxicity_protection"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "nicotinic_agonism"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "cholinergic_signalling"
+      ],
+      "target_effects": {
+        "CHRNA7": 0.75,
+        "BDNF": 0.2,
+        "AKT1": 0.2,
+        "CASP3": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.1,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.7
+      },
+      "target_family": "alpha7_nicotinic_agonist",
+      "relevant_pathways": [
+        "cholinergic_signalling"
+      ]
+    },
+    {
+      "name": "Memantine",
+      "mechanism_class": "NMDA_antagonist",
+      "primary_moa": "Uncompetitive NMDA receptor antagonism limiting extrasynaptic excitotoxicity",
+      "evidence_tier": "approved",
+      "indication": "moderate_to_severe",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "synaptic_excitotoxicity_protection"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "NMDA_antagonism"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "glutamatergic_synaptic",
+        "neuronal_injury_apoptosis"
+      ],
+      "target_effects": {
+        "GRIN1": -0.5,
+        "GRIN2B": -0.7,
+        "CASP3": -0.2,
+        "BDNF": 0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.3,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.1
+      },
+      "target_family": "NMDA_antagonist",
+      "relevant_pathways": [
+        "glutamatergic_synaptic",
+        "neuronal_injury_apoptosis"
+      ]
+    },
+    {
+      "name": "Lecanemab",
+      "mechanism_class": "anti_protofibril_antibody",
+      "primary_moa": "Monoclonal antibody selective for soluble amyloid-beta protofibrils",
+      "evidence_tier": "approved",
+      "indication": "early_AD",
+      "route": "infusion",
+      "cns_penetration": 0.15,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "amyloid_modification",
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "amyloid_related_imaging_abnormalities"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "amyloid_processing",
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "APP": -0.5,
+        "NEFL": -0.25,
+        "GFAP": -0.25,
+        "C1QA": -0.2,
+        "AIF1": -0.15,
+        "MAPT": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.8,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.35,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_protofibril_antibody",
+      "relevant_pathways": [
+        "amyloid_processing",
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Donanemab",
+      "mechanism_class": "anti_pyroglutamate_antibody",
+      "primary_moa": "Monoclonal antibody against pyroglutamate-modified amyloid-beta in plaque",
+      "evidence_tier": "approved",
+      "indication": "early_AD",
+      "route": "infusion",
+      "cns_penetration": 0.15,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "amyloid_modification",
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "amyloid_related_imaging_abnormalities"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "amyloid_processing",
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "APP": -0.6,
+        "NEFL": -0.3,
+        "GFAP": -0.3,
+        "C1QA": -0.2,
+        "AIF1": -0.2,
+        "MAPT": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.9,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.3,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_pyroglutamate_antibody",
+      "relevant_pathways": [
+        "amyloid_processing",
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Aducanumab",
+      "mechanism_class": "anti_aggregated_amyloid_antibody",
+      "primary_moa": "Monoclonal antibody against aggregated amyloid-beta; withdrawn by its sponsor in 2024",
+      "evidence_tier": "approved",
+      "indication": "withdrawn",
+      "route": "infusion",
+      "cns_penetration": 0.12,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "amyloid_related_imaging_abnormalities"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "APP": -0.45,
+        "NEFL": -0.2,
+        "GFAP": -0.2
+      },
+      "safety_burden": {
+        "aria": 0.95,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.2,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_aggregated_amyloid_antibody",
+      "relevant_pathways": [
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Gantenerumab",
+      "mechanism_class": "anti_aggregated_amyloid_antibody",
+      "primary_moa": "Monoclonal antibody against aggregated amyloid-beta; phase 3 did not meet its primary endpoint",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "subcutaneous",
+      "cns_penetration": 0.12,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "amyloid_related_imaging_abnormalities"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "APP": -0.5,
+        "NEFL": -0.2,
+        "GFAP": -0.2,
+        "AIF1": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.85,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.2,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_aggregated_amyloid_antibody",
+      "relevant_pathways": [
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Solanezumab",
+      "mechanism_class": "anti_monomeric_amyloid_antibody",
+      "primary_moa": "Monoclonal antibody against soluble monomeric amyloid-beta; failed phase 3 twice",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "infusion",
+      "cns_penetration": 0.1,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "infusion_reaction"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "APP": -0.3,
+        "NEFL": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.05,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.2,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_monomeric_amyloid_antibody",
+      "relevant_pathways": [
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Valiltramiprosate (ALZ-801)",
+      "mechanism_class": "amyloid_oligomer_aggregation_inhibitor",
+      "primary_moa": "Oral prodrug of tramiprosate blocking amyloid-beta oligomer formation",
+      "evidence_tier": "phase_3",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "aggregation_inhibitor_class"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "amyloid_processing",
+        "lipid_apoe_metabolism"
+      ],
+      "target_effects": {
+        "APP": -0.35,
+        "APOE": -0.2,
+        "NEFL": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.1,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.3
+      },
+      "target_family": "amyloid_oligomer_aggregation_inhibitor",
+      "relevant_pathways": [
+        "amyloid_processing",
+        "lipid_apoe_metabolism"
+      ]
+    },
+    {
+      "name": "Verubecestat",
+      "mechanism_class": "BACE1_inhibitor",
+      "primary_moa": "BACE1 inhibition lowering amyloid-beta production; failed phase 3 with cognitive worsening",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "BACE_class_cognitive_worsening"
+      ],
+      "target_uncertainty": 0.35,
+      "pathways": [
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "BACE1": -0.9,
+        "APP": -0.3,
+        "ADAM10": 0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.6,
+        "falls_sedation": 0.4,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.2,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "BACE1_inhibitor",
+      "relevant_pathways": [
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Semagacestat",
+      "mechanism_class": "gamma_secretase_inhibitor",
+      "primary_moa": "Gamma-secretase inhibition; phase 3 halted for worsened cognition and skin cancer",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "notch_inhibition",
+        "skin_malignancy"
+      ],
+      "target_uncertainty": 0.35,
+      "pathways": [
+        "amyloid_processing"
+      ],
+      "target_effects": {
+        "PSEN1": -0.8,
+        "NCSTN": -0.6,
+        "APH1A": -0.5,
+        "APP": -0.3
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.9,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.1,
+        "gastrointestinal": 0.3
+      },
+      "target_family": "gamma_secretase_inhibitor",
+      "relevant_pathways": [
+        "amyloid_processing"
+      ]
+    },
+    {
+      "name": "Buntanetap",
+      "mechanism_class": "APP_translation_inhibitor",
+      "primary_moa": "Inhibits translation of APP and tau mRNA through 5' untranslated iron-responsive elements",
+      "evidence_tier": "phase_3",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "amyloid_modification",
+        "tau_modification"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "APP_translation_modulation"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "amyloid_processing",
+        "tau_pathology"
+      ],
+      "target_effects": {
+        "APP": -0.5,
+        "MAPT": -0.3,
+        "IL1B": -0.15,
+        "TNF": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.2
+      },
+      "target_family": "APP_translation_inhibitor",
+      "relevant_pathways": [
+        "amyloid_processing",
+        "tau_pathology"
+      ]
+    },
+    {
+      "name": "BIIB080 (MAPT antisense)",
+      "mechanism_class": "MAPT_antisense_oligonucleotide",
+      "primary_moa": "Intrathecal antisense oligonucleotide lowering tau expression",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "intrathecal",
+      "cns_penetration": 1.0,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "tau_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "intrathecal_procedure"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "tau_pathology"
+      ],
+      "target_effects": {
+        "MAPT": -0.9,
+        "NEFL": -0.25,
+        "GFAP": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.1,
+        "infusion_hypersensitivity": 0.3,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "MAPT_antisense_oligonucleotide",
+      "relevant_pathways": [
+        "tau_pathology"
+      ]
+    },
+    {
+      "name": "Bepranemab",
+      "mechanism_class": "anti_tau_antibody",
+      "primary_moa": "Monoclonal antibody against the mid-region of extracellular tau",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "infusion",
+      "cns_penetration": 0.1,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "tau_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "infusion_reaction"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "tau_pathology"
+      ],
+      "target_effects": {
+        "MAPT": -0.45,
+        "NEFL": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.3,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "anti_tau_antibody",
+      "relevant_pathways": [
+        "tau_pathology"
+      ]
+    },
+    {
+      "name": "Hydromethylthionine (LMTM)",
+      "mechanism_class": "tau_aggregation_inhibitor",
+      "primary_moa": "Methylene-blue-derived tau aggregation inhibitor; phase 3 missed its primary endpoint",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "tau_modification"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "methylene_blue_class"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "tau_pathology",
+        "endolysosomal_autophagy"
+      ],
+      "target_effects": {
+        "MAPT": -0.5,
+        "MAP1LC3B": 0.25,
+        "SQSTM1": -0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.1,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.4
+      },
+      "target_family": "tau_aggregation_inhibitor",
+      "relevant_pathways": [
+        "tau_pathology",
+        "endolysosomal_autophagy"
+      ]
+    },
+    {
+      "name": "Tideglusib",
+      "mechanism_class": "GSK3_inhibitor",
+      "primary_moa": "Irreversible GSK-3 inhibition limiting tau phosphorylation; failed phase 2",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "tau_modification"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "kinase_inhibition"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "tau_pathology",
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "GSK3B": -0.85,
+        "MAPT": -0.4,
+        "NFKB1": -0.2,
+        "BDNF": 0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.4,
+        "gastrointestinal": 0.2
+      },
+      "target_family": "GSK3_inhibitor",
+      "relevant_pathways": [
+        "tau_pathology",
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Saracatinib",
+      "mechanism_class": "FYN_inhibitor",
+      "primary_moa": "Src-family kinase inhibition, uncoupling amyloid-beta signalling from NMDA receptors and tau",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "tau_modification",
+        "synaptic_excitotoxicity_protection"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "kinase_inhibition"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "tau_pathology",
+        "glutamatergic_synaptic"
+      ],
+      "target_effects": {
+        "FYN": -0.8,
+        "MAPT": -0.2,
+        "GRIN2B": -0.25
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.3,
+        "gastrointestinal": 0.4
+      },
+      "target_family": "FYN_inhibitor",
+      "relevant_pathways": [
+        "tau_pathology",
+        "glutamatergic_synaptic"
+      ]
+    },
+    {
+      "name": "Blarcamesine (ANAVEX2-73)",
+      "mechanism_class": "sigma1_agonist",
+      "primary_moa": "Sigma-1 receptor agonism restoring autophagy and mitochondrial and ER homeostasis",
+      "evidence_tier": "phase_3",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "tau_modification",
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sigma1_agonism"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "neurotrophic_support",
+        "endolysosomal_autophagy"
+      ],
+      "target_effects": {
+        "SIGMAR1": 0.8,
+        "MTOR": -0.2,
+        "MAP1LC3B": 0.3,
+        "BECN1": 0.25,
+        "BDNF": 0.25,
+        "CASP3": -0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.4,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.1
+      },
+      "target_family": "sigma1_agonist",
+      "relevant_pathways": [
+        "neurotrophic_support",
+        "endolysosomal_autophagy"
+      ]
+    },
+    {
+      "name": "Masitinib",
+      "mechanism_class": "CSF1R_KIT_inhibitor",
+      "primary_moa": "Tyrosine kinase inhibition damping microglial and mast-cell activation",
+      "evidence_tier": "phase_3",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "kinase_inhibition",
+        "neutropenia"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "CSF1R": -0.6,
+        "FYN": -0.3,
+        "AIF1": -0.3,
+        "CD68": -0.25,
+        "IL6": -0.2,
+        "TNF": -0.2,
+        "GFAP": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.4,
+        "gastrointestinal": 0.4
+      },
+      "target_family": "CSF1R_KIT_inhibitor",
+      "relevant_pathways": [
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Neflamapimod",
+      "mechanism_class": "p38alpha_inhibitor",
+      "primary_moa": "Brain-penetrant p38 alpha inhibition, aimed at endosomal dysfunction in cholinergic neurons",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "microglial_immune_modulation",
+        "cholinergic_symptomatic"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "kinase_inhibition",
+        "p38_hepatotoxicity"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "microglial_neuroinflammation",
+        "endolysosomal_autophagy"
+      ],
+      "target_effects": {
+        "MAPK14": -0.85,
+        "IL1B": -0.3,
+        "TNF": -0.3,
+        "RAB5A": -0.4,
+        "CHAT": 0.25,
+        "NFKB1": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.3,
+        "gastrointestinal": 0.1
+      },
+      "target_family": "p38alpha_inhibitor",
+      "relevant_pathways": [
+        "microglial_neuroinflammation",
+        "endolysosomal_autophagy"
+      ]
+    },
+    {
+      "name": "AL002",
+      "mechanism_class": "TREM2_agonist_antibody",
+      "primary_moa": "Agonist antibody supporting protective microglial responses; missed its phase 2 endpoint",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "infusion",
+      "cns_penetration": 0.1,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "infusion_reaction"
+      ],
+      "target_uncertainty": 0.55,
+      "pathways": [
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "TREM2": 0.7,
+        "TYROBP": 0.4,
+        "C1QA": -0.15,
+        "IL1B": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.4,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.3,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "TREM2_agonist_antibody",
+      "relevant_pathways": [
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "NLRP3 inhibitor (class exemplar)",
+      "mechanism_class": "NLRP3_inhibitor",
+      "primary_moa": "Inflammasome blockade upstream of IL-1beta; evidence extrapolated from other indications",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "innate_immune_suppression"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "NLRP3": -0.85,
+        "CASP1": -0.7,
+        "IL1B": -0.7,
+        "IL6": -0.35,
+        "AIF1": -0.3,
+        "GFAP": -0.2,
+        "TNF": -0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.2,
+        "gastrointestinal": 0.2
+      },
+      "target_family": "NLRP3_inhibitor",
+      "relevant_pathways": [
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Naproxen",
+      "mechanism_class": "NSAID_COX_inhibitor",
+      "primary_moa": "Cyclooxygenase inhibition; failed the ADAPT prevention trial",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "NSAID_class"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "microglial_neuroinflammation"
+      ],
+      "target_effects": {
+        "PTGS2": -0.6,
+        "IL1B": -0.25,
+        "TNF": -0.2,
+        "IL6": -0.2,
+        "NFKB1": -0.15,
+        "GFAP": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.4,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.6
+      },
+      "target_family": "NSAID_COX_inhibitor",
+      "relevant_pathways": [
+        "microglial_neuroinflammation"
+      ]
+    },
+    {
+      "name": "Semaglutide",
+      "mechanism_class": "GLP1_agonist",
+      "primary_moa": "GLP-1 receptor agonism with anti-inflammatory and insulin-sensitising effects; did not slow progression in phase 3",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "subcutaneous",
+      "cns_penetration": 0.15,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue",
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "incretin_effects"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "insulin_metabolic",
+        "microglial_neuroinflammation",
+        "mitochondrial_bioenergetics"
+      ],
+      "target_effects": {
+        "GLP1R": 0.8,
+        "INSR": 0.3,
+        "IRS1": 0.3,
+        "AKT1": 0.3,
+        "GSK3B": -0.25,
+        "TNF": -0.25,
+        "IL1B": -0.25,
+        "BDNF": 0.25,
+        "NLRP3": -0.2,
+        "PPARGC1A": 0.25,
+        "CASP3": -0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.2,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.6
+      },
+      "target_family": "GLP1_agonist",
+      "relevant_pathways": [
+        "insulin_metabolic",
+        "microglial_neuroinflammation",
+        "mitochondrial_bioenergetics"
+      ]
+    },
+    {
+      "name": "Pioglitazone",
+      "mechanism_class": "PPARG_agonist",
+      "primary_moa": "PPAR-gamma agonism improving insulin sensitivity; failed phase 3 in mild cognitive impairment",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.35,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue",
+        "microglial_immune_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "fluid_retention"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "insulin_metabolic",
+        "mitochondrial_bioenergetics"
+      ],
+      "target_effects": {
+        "PPARG": 0.75,
+        "PPARGC1A": 0.4,
+        "TNF": -0.25,
+        "IL1B": -0.25,
+        "NFKB1": -0.25,
+        "INSR": 0.2,
+        "AIF1": -0.2,
+        "BACE1": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.3,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.5,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "PPARG_agonist",
+      "relevant_pathways": [
+        "insulin_metabolic",
+        "mitochondrial_bioenergetics"
+      ]
+    },
+    {
+      "name": "Intranasal insulin",
+      "mechanism_class": "insulin_receptor_agonist",
+      "primary_moa": "Nose-to-brain insulin delivery correcting central insulin resistance",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "intranasal",
+      "cns_penetration": 0.8,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "hypoglycaemia"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "insulin_metabolic"
+      ],
+      "target_effects": {
+        "INSR": 0.6,
+        "IRS1": 0.5,
+        "AKT1": 0.4,
+        "GSK3B": -0.3,
+        "SLC2A1": 0.15,
+        "BDNF": 0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.1,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "insulin_receptor_agonist",
+      "relevant_pathways": [
+        "insulin_metabolic"
+      ]
+    },
+    {
+      "name": "Metformin",
+      "mechanism_class": "biguanide_AMPK_activator",
+      "primary_moa": "Indirect AMPK activation improving metabolic signalling",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "biguanide_class"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "mitochondrial_bioenergetics",
+        "insulin_metabolic"
+      ],
+      "target_effects": {
+        "PRKAA1": 0.6,
+        "PPARGC1A": 0.3,
+        "MTOR": -0.3,
+        "IRS1": 0.2,
+        "SIRT1": 0.2
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.3
+      },
+      "target_family": "biguanide_AMPK_activator",
+      "relevant_pathways": [
+        "mitochondrial_bioenergetics",
+        "insulin_metabolic"
+      ]
+    },
+    {
+      "name": "Atorvastatin",
+      "mechanism_class": "HMGCR_inhibitor",
+      "primary_moa": "HMG-CoA reductase inhibition; failed the LEADe trial",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.25,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "statin_class"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "lipid_apoe_metabolism"
+      ],
+      "target_effects": {
+        "HMGCR": -0.85,
+        "LDLR": 0.35,
+        "NOS2": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.05,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.2,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "HMGCR_inhibitor",
+      "relevant_pathways": [
+        "lipid_apoe_metabolism"
+      ]
+    },
+    {
+      "name": "Nilvadipine",
+      "mechanism_class": "CaV1_blocker",
+      "primary_moa": "L-type calcium channel blockade with reported amyloid-clearance effects; failed phase 3",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.5,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "vasodilation"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "calcium_homeostasis"
+      ],
+      "target_effects": {
+        "CACNA1C": -0.7,
+        "RYR2": -0.15,
+        "TNF": -0.1
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.5,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.3,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "CaV1_blocker",
+      "relevant_pathways": [
+        "calcium_homeostasis"
+      ]
+    },
+    {
+      "name": "Resveratrol",
+      "mechanism_class": "sirtuin_activator",
+      "primary_moa": "Putative SIRT1 and AMPK activation; no cognitive benefit in phase 2",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "nutraceutical"
+      ],
+      "target_uncertainty": 0.55,
+      "pathways": [
+        "mitochondrial_bioenergetics",
+        "oxidative_stress"
+      ],
+      "target_effects": {
+        "SIRT1": 0.5,
+        "PPARGC1A": 0.3,
+        "NFE2L2": 0.2,
+        "PRKAA1": 0.2,
+        "SOD2": 0.15,
+        "TNF": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.0,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.2
+      },
+      "target_family": "sirtuin_activator",
+      "relevant_pathways": [
+        "mitochondrial_bioenergetics",
+        "oxidative_stress"
+      ]
+    },
+    {
+      "name": "Vitamin E (alpha-tocopherol)",
+      "mechanism_class": "lipophilic_antioxidant",
+      "primary_moa": "Chain-breaking lipid antioxidant; slowed functional decline in mild-to-moderate AD",
+      "evidence_tier": "phase_3",
+      "indication": "adjunct",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "nutraceutical_high_dose"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "oxidative_stress"
+      ],
+      "target_effects": {
+        "GPX4": 0.25,
+        "SOD1": 0.15,
+        "CAT": 0.15,
+        "NOS2": -0.15
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.2,
+        "hepatic": 0.0,
+        "gastrointestinal": 0.0
+      },
+      "target_family": "lipophilic_antioxidant",
+      "relevant_pathways": [
+        "oxidative_stress"
+      ]
+    },
+    {
+      "name": "Rapamycin (sirolimus)",
+      "mechanism_class": "mTOR_inhibitor",
+      "primary_moa": "mTORC1 inhibition inducing autophagy and TFEB-driven lysosomal biogenesis",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.4,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "tau_modification",
+        "metabolic_vascular_rescue"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "mTOR_immunosuppression"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "endolysosomal_autophagy"
+      ],
+      "target_effects": {
+        "MTOR": -0.75,
+        "TFEB": 0.35,
+        "BECN1": 0.3,
+        "MAP1LC3B": 0.35,
+        "SQSTM1": -0.3
+      },
+      "safety_burden": {
+        "aria": 0.0,
+        "bradycardia_syncope": 0.0,
+        "cognitive_worsening": 0.0,
+        "falls_sedation": 0.0,
+        "infusion_hypersensitivity": 0.0,
+        "cardiac": 0.2,
+        "hepatic": 0.2,
+        "gastrointestinal": 0.3
+      },
+      "target_family": "mTOR_inhibitor",
+      "relevant_pathways": [
+        "endolysosomal_autophagy"
+      ]
+    }
+  ]
+}

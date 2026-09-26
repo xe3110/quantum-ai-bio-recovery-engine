@@ -1,8 +1,10 @@
 # Disease campaign protocol — adding a disease, and what the engine does with it
 
-This is the standing procedure. Two diseases are registered — multiple
-sclerosis and Parkinson's — and the point of writing this down is that the
-third, fourth, and fifth should not require reading any scoring code.
+This is the standing procedure. Three diseases are registered — multiple
+sclerosis, Parkinson's, and Alzheimer's — and the point of writing this down is
+that the fourth, fifth, and sixth should not require reading any scoring code.
+Alzheimer's was the first built from this document rather than alongside it, and
+the checklist below was corrected where it turned out to be wrong.
 
 A **campaign** is everything the engine does for one disease: rank the agents
 that already exist ([combination screen](#3-the-combination-screen)), and
@@ -13,6 +15,7 @@ read the same registry entry. Neither names a disease anywhere in its logic.
 |---|---|---|---|
 | Multiple sclerosis | `data/diseases/multiple_sclerosis.json` | [protocol](ms_publication_protocol.md) — pairs only, `ms_scoring` | [protocol](denovo_design_protocol.md) |
 | Parkinson's disease | `data/diseases/parkinsons.json` | [protocol](parkinsons_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md) |
+| Alzheimer's disease | `data/diseases/alzheimers.json` | [protocol](alzheimers_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#alzheimers-disease) |
 
 Everything below is **discovery-stage hypothesis generation**. No output of any
 campaign is a clinical recommendation, and every campaign inherits every
@@ -30,9 +33,9 @@ from any constant in any module:
 | Field | What it is | Why it belongs to the disease, not the code |
 |---|---|---|
 | `vocabulary.pathways` | The biological processes the signature is annotated against | A pathway list is a claim about what the disease *is* |
-| `vocabulary.therapeutic_axes` | The distinct ways a therapy can help | MS and Parkinson's share **zero** axes; a shared constant would be a lie |
+| `vocabulary.therapeutic_axes` | The distinct ways a therapy can help | No two registered diseases share an axis; a shared constant would be a lie |
 | `vocabulary.risk_domains` + `risk_weights` | What constrains a regimen, and how strongly | MS therapy is constrained by infection and malignancy; Parkinson's by dyskinesia, impulse-control disorders, and psychosis. Weighted by how strongly each domain ends a regimen in *that* population |
-| `delivery` | Whether a molecule must reach a sanctuary compartment | For Parkinson's the pathology is intraparenchymal from the outset, so CNS exposure is a gate. `sanctuary_rationale` records why, because a constraint without a stated reason gets relaxed by whoever next finds it inconvenient |
+| `delivery` | Whether a molecule must reach a sanctuary compartment | For Parkinson's and Alzheimer's the pathology is intraparenchymal from the outset, so CNS exposure is a gate. `sanctuary_rationale` records why, because a constraint without a stated reason gets relaxed by whoever next finds it inconvenient. Where an approved modality works at very low exposure (Alzheimer's antibodies, roughly 1% brain-to-plasma), state it there and model the agents low-but-nonzero, not at zero |
 | `gene_aliases` | Symbol drift between the interactome and HGNC | STRING v12 still calls glucocerebrosidase `GBA`; HGNC calls it `GBA1`. Unmapped, the most common genetic risk factor in PD silently has zero network leverage |
 | `data` | Paths to signature, network, panel, druggability, **structures** | Loading fails loudly if any of the first four is missing. `structures` is optional in the loader and that is a trap — see §2 |
 
@@ -73,7 +76,14 @@ and the exact network is auditable.
 **Druggability** — `data/targets/druggability_<id>.json`, per-target
 small-molecule tractability and target class. Used by the design campaign to
 keep a designed arm off a target no small molecule can reach (α-synuclein in
-PD, CD20 in MS).
+PD, CD20 in MS, tau and APP in Alzheimer's).
+
+> **Score tractability in the direction the signature wants.** A kinase has
+> precedent as an inhibitor; if the signature needs it to go *up*, the
+> tractability is that of an activator, which is usually far lower. The first
+> Alzheimer's draft scored `AKT1`, `BCL2`, `CAMK2A`, `GPX4`, `SIRT1` and `HMOX1`
+> at inhibitor precedent and would have let the optimiser aim an arm at a target
+> the chemistry cannot drive the wanted way. A test now pins it.
 
 **Known structures** — `data/chemistry/<id>_known_structures.json`, SMILES plus
 literature formula and mass for the small-molecule members of the panel. This is
@@ -164,6 +174,19 @@ Order k + 1 is enumerated only over combinations all of whose k-faces survived,
 so a triple can never be built around a duplicate pair. This is what keeps the
 higher-order enumeration both honest and affordable.
 
+### Reading reversal as a percentage — the ceiling
+
+`signed_reversal` is a fraction of the signature's total weight and has no
+natural scale: it shrinks when the signature gains untargeted genes and cannot
+exceed what the panel's targets cover. To make diseases comparable,
+`python -m tools.reversal_ceiling` divides each disease's best reversal at each
+order by two ceilings: the **full-reversal ceiling** (weight fraction of every
+signature gene the panel targets, as if each were reversed completely) and the
+**pooled-panel ceiling** (all agents at once, therapeutic effects only,
+Bliss-combined, so curated effect sizes are respected). Both are generous
+because panels are curated from the signature's genes. It is a normalisation,
+not a calibration to clinical benefit.
+
 ### Comparing across orders — the rule
 
 > **`priority_score` is comparable only within a fixed order.** It includes
@@ -212,15 +235,24 @@ A ranked list is not a result on its own.
 
 ### The finding that keeps recurring
 
-In both campaigns run so far, **individual combination ranks are not stable**
-under the curated target-effect uncertainty (top-K Jaccard ≈ 0.2), while
-**stratum medians are**. The runner prints an explicit warning whenever that
+In every campaign run so far, **individual combination ranks are not stable**
+under the curated target-effect uncertainty (top-K Jaccard 0.2 in Parkinson's;
+0.19 at order 2 and 0.09 at order 3 in Alzheimer's), while **stratum medians are
+far steadier**. The runner prints an explicit warning whenever that
 Jaccard falls below 0.5.
 
 > **The unit of inference is the mechanism stratum, not the named combination.**
 > A leaderboard of specific combinations is not a defensible result from this
 > class of screen. Named combinations should be read as *illustrative of their
 > stratum*.
+
+A stratum result still has to be read against the design campaign's independent
+axis-gap analysis, and the two need not agree. In MS and Parkinson's the
+strongest strata paired something with the axis that had the least approved
+cover, and the gap analysis said the same. In Alzheimer's the strongest strata
+were dominated by the already-served cholinergic axis while the gap analysis
+pointed at tau and metabolic rescue, and the protocol reports the disagreement
+rather than choosing the reading that matches the earlier two.
 
 This is also why `--max-per-drug` exists: without it, one broadly-acting agent
 occupies most of the leaderboard and hides the mechanistic diversity the screen
@@ -248,8 +280,11 @@ No scoring code should need editing. If it does, that is the bug.
 1. **Signature** → `data/<id>_expression.csv`. Annotate every gene
    `pathogenic` / `protective_deficit` / `compensatory` and set
    `desired_direction` from the *therapeutic* direction, not the observed one.
-2. **Interactome** → `python -m tools.fetch_string_network` for the seed gene
-   set; commit the `.tsv` and its `.meta.json`.
+2. **Interactome** → `python -m tools.fetch_string_network --signature
+   data/<id>_expression.csv --out data/networks/string_<id>_network.tsv`;
+   commit the `.tsv` and its `.meta.json`. Read `signature_genes_absent` in the
+   metadata: every gene listed there needs a `gene_aliases` entry or it has zero
+   network leverage (Parkinson's needed `GBA` → `GBA1`; Alzheimer's needed none).
 3. **Druggability** → `data/targets/druggability_<id>.json`. Anything below
    ~0.2 small-molecule tractability is a transcriptional readout, not a target
    an arm may be pointed at.
@@ -268,26 +303,48 @@ No scoring code should need editing. If it does, that is the bug.
    rationale, any `gene_aliases`, the `data.structures` path from step 5, and a
    `provenance` block that is honest about how the signature was derived.
 7. **Runner** → copy
-   [experiments/parkinsons/run_combination_screen.py](../experiments/parkinsons/run_combination_screen.py)
-   and change the `DISEASE` constant. Nothing else in it is disease-specific.
+   [experiments/alzheimers/run_combination_screen.py](../experiments/alzheimers/run_combination_screen.py)
+   and change the `DISEASE` constant, the `RESULTS` directory, the result-file
+   prefix, and the prose that names the disease's controls (the
+   `control_report` note and its `interpretation` string, and the
+   `diversity_filter` docstring). **The scoring path is disease-agnostic; the
+   reporting text was not.** The first Alzheimer's run wrote "two non-ergot D2/D3
+   agonists" into its own control report until it was caught. Reading control
+   names and descriptions from the panel metadata would remove the copy step and
+   is the right refactor. If you copy with `sed`, do not use `.` as a wildcard in
+   a path pattern: `experiments.parkinsons.` also matches
+   `experiments/parkinsons/`, and the first Alzheimer's run wrote its results to
+   a directory literally named `experiments.alzheimers.results`.
 8. **Tests** → add the identifier to `DISEASES` in
    [tests/test_multi_disease.py](../tests/test_multi_disease.py) and
    [tests/test_combination_scoring.py](../tests/test_combination_scoring.py).
    Both are parametrised, so the new disease is held to every existing claim
-   without new test code.
-9. **Doc** → a screen protocol beside this one, stating the disease's own
-   caveats. The generic ones are here; do not restate them, state what is
-   *different*.
+   without new test code, and the pairwise vocabulary tests iterate the same
+   list, so an entry that reuses another disease's axis fails. Structure
+   validation and the novelty-reference tests pick up the new disease
+   automatically.
+9. **Fragment coverage** → run the design campaign and read
+   `unreachable_requirements()`. Every profile target with no fragment is a
+   library gap; add pharmacophores in
+   `data/chemistry/pharmacophore_library.json` (byte-stable at `indent=2`, so
+   the diff stays reviewable) and re-run **every** registered disease to confirm
+   their unreachable lists did not change. Also read the Hamiltonian's
+   pre-filter: a target can be reachable and still never reach the optimiser
+   (Alzheimer's `BACE1`).
+10. **Doc** → a screen protocol beside this one, stating the disease's own
+    caveats. The generic ones are here; do not restate them, state what is
+    *different*.
 
 ### Two checks the test suite already enforces
 
 - The design layer must not import disease-specific scoring. A layer that says
   it is disease-agnostic while importing `ms_scoring` is not, whatever its
   registry contains.
-- Registered diseases must have genuinely different vocabularies. MS and PD
-  share **no** therapeutic axis and only generic organ toxicity (`cardiac`,
-  `hepatic`) among risk domains. Two diseases with the same vocabulary would
-  not test the abstraction at all.
+- Registered diseases must have genuinely different vocabularies, checked
+  pairwise across every registered disease. No two share a therapeutic axis, and
+  any two overlap only on generic organ toxicity (`cardiac`, `hepatic`,
+  `gastrointestinal`) among risk domains. Two diseases with the same vocabulary
+  would not test the abstraction at all.
 - Every registered disease must declare a novelty reference set that overlaps
   its own panel and adds chemical matter beyond the fragment library. An
   optional field that silently degrades a result is worse than a required one.
@@ -312,6 +369,19 @@ These apply to every disease and do not need restating in a per-disease doc.
   cost is represented only by route burden and half-life spread in
   `regimen_burden`. This is the largest open gap, it binds hardest on diseases
   treated with chronic oral polypharmacy, and it is the next model to build.
+- **Withdrawal and averaged safety.** `evidence_tier` records approval, not
+  withdrawal, and `safety_union` is a weighted mean over risk domains, so a
+  single catastrophic domain is diluted. In Alzheimer's, tacrine — withdrawn for
+  hepatotoxicity, with the highest safety union of any single agent — ranked
+  **first of 36 monotherapies** by composite score and reached the diversity-capped
+  top 25 six times, while the safety-penalty control's own result line read
+  "passes". A max-domain term is the follow-up, to be evaluated on all three
+  diseases together rather than tuned to one.
+- **Transcript-blind to protein-level mechanisms.** A transcript signature cannot
+  represent an agent whose action is on a protein that has no transcript
+  (amyloid-β) or that acts post-translationally. Such agents are scored through a
+  proxy gene, and the result for them is weaker than the same number for a
+  transcription-modulating agent.
 - **Bounded by the panel.** A screen can only return a molecule someone has
   already made. Lifting that bound is what the
   [de novo design campaign](denovo_design_protocol.md) is for.

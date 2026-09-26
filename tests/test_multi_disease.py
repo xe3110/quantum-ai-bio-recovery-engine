@@ -22,7 +22,7 @@ from core.design.target_profile import build_target_profile
 from core.models.disease import available_diseases, load_disease
 
 ROOT = Path(__file__).resolve().parents[1]
-DISEASES = ["multiple_sclerosis", "parkinsons"]
+DISEASES = ["multiple_sclerosis", "parkinsons", "alzheimers"]
 
 
 @pytest.fixture(scope="module")
@@ -65,6 +65,33 @@ def test_the_two_diseases_share_no_therapeutic_axes():
     ms = set(load_disease("multiple_sclerosis").therapeutic_axes)
     pd = set(load_disease("parkinsons").therapeutic_axes)
     assert not (ms & pd)
+
+
+def test_no_two_diseases_share_a_therapeutic_axis():
+    """Pairwise, across every registered disease, not just the first two.
+
+    The claim that the vocabulary belongs to the disease is only tested if a
+    new entry cannot quietly reuse an old one's axes.
+    """
+    from itertools import combinations
+
+    for a, b in combinations(DISEASES, 2):
+        shared = set(load_disease(a).therapeutic_axes) & set(load_disease(b).therapeutic_axes)
+        assert not shared, f"{a} and {b} share therapeutic axes: {shared}"
+
+
+def test_risk_domains_overlap_only_on_generic_organ_toxicity():
+    """Alzheimer's adds ARIA, bradycardia and cognitive worsening; none transfer.
+
+    Cardiac, hepatic and gastrointestinal toxicity genuinely apply to every
+    disease and are the only domains any two registry entries may share.
+    """
+    from itertools import combinations
+
+    generic = {"cardiac", "hepatic", "gastrointestinal"}
+    for a, b in combinations(DISEASES, 2):
+        shared = set(load_disease(a).risk_domains) & set(load_disease(b).risk_domains)
+        assert shared <= generic, f"{a} and {b} share non-generic risk domains: {shared - generic}"
 
 
 @pytest.mark.parametrize("identifier", DISEASES)
@@ -150,6 +177,54 @@ def test_parkinsons_routes_around_its_least_tractable_central_target():
     assert disease.druggability()["SNCA"]["small_molecule_tractability"] < 0.3
     profile = build_target_profile(disease, top_n=8)
     assert "SNCA" not in profile.genes
+
+
+def test_alzheimers_routes_around_both_of_its_defining_proteins():
+    """Tau and APP are the disease and are the two proteins a small molecule reaches worst.
+
+    Tau is intrinsically disordered and APP is a substrate, not an enzyme. The
+    profile must reach amyloid and tau through the secretases and the tau
+    kinases instead, exactly as the clinical field has tried to, and must not
+    point a designed arm at either protein because its leverage is high.
+    """
+    disease = load_disease("alzheimers")
+    druggability = disease.druggability()
+    assert druggability["MAPT"]["small_molecule_tractability"] < 0.3
+    assert druggability["APP"]["small_molecule_tractability"] < 0.3
+    profile = build_target_profile(disease, top_n=14)
+    assert "MAPT" not in profile.genes and "APP" not in profile.genes
+    assert {"BACE1", "GSK3B"} <= set(profile.genes)
+
+
+def test_alzheimers_tractability_is_scored_in_the_direction_the_signature_wants():
+    """An inhibitor-only target that must go UP is not a tractable target.
+
+    AKT1, BCL2, CAMK2A, GPX4, SIRT1 and HMOX1 all have small-molecule precedent
+    as inhibitors, and all need to increase in Alzheimer's. Scoring them at
+    their inhibitor precedent would put an arm on a target the chemistry cannot
+    drive in the wanted direction.
+    """
+    disease = load_disease("alzheimers")
+    signature = disease.signature()
+    druggability = disease.druggability()
+    for gene in ("AKT1", "BCL2", "CAMK2A", "GPX4", "SIRT1", "HMOX1"):
+        assert signature.desired[gene] == 1
+        assert druggability[gene]["small_molecule_tractability"] < 0.4, gene
+
+
+def test_alzheimers_panel_names_every_amyloid_antibody_as_low_cns_but_not_zero():
+    """Anti-amyloid antibodies reach the brain at about one per cent and still work.
+
+    Modelling them at zero exposure would rank the only approved
+    disease-modifying agents below drugs that failed; modelling them like small
+    molecules would overstate them. The registry states the reasoning.
+    """
+    disease = load_disease("alzheimers")
+    panel = {d["name"]: d for d in disease.panel()}
+    for name in ("Lecanemab", "Donanemab", "Aducanumab", "Gantenerumab"):
+        assert 0.0 < panel[name]["cns_penetration"] <= 0.2
+        assert panel[name]["route"] in ("infusion", "subcutaneous")
+    assert "antibod" in disease.delivery.sanctuary_rationale
 
 
 def test_gene_aliases_recover_a_target_the_interactome_names_differently():

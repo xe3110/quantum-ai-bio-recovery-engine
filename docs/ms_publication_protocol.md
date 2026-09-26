@@ -125,6 +125,13 @@ retained in the full CSV but **excluded from the primary ranking**.
 | Safety penalty | Daclizumab (withdrawn), Cyclophosphamide, Mitoxantrone | must not reach the top of the ranking |
 | Negative efficacy | Ustekinumab, High-dose biotin, Opicinumab, Evobrutinib | failed MS trials; see caveat below |
 
+**Reversal as a share of the panel's ceiling.** The panel targets 93 of 112
+signature genes, a full-reversal ceiling of 85.5% and a pooled-panel ceiling of
+69.9%. The best monotherapy (5.58%) and best pair (10.54%) are 6.5% and 12.3% of
+the full ceiling, and 8.0% and 15.1% of the pooled-panel one
+(`python -m tools.reversal_ceiling`). It is a normalisation for comparing
+diseases, not a clinical calibration.
+
 Negative-efficacy controls test a **known limitation** rather than a pass/fail
 criterion. The screen scores mechanism and transcriptional direction, not trial
 outcome, so an agent that is mechanistically coherent but clinically

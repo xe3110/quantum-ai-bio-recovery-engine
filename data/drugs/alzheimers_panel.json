@@ -1,0 +1,296 @@
+[
+  {
+    "name": "Donepezil",
+    "targets": {}
+  },
+  {
+    "name": "Rivastigmine",
+    "targets": {}
+  },
+  {
+    "name": "Galantamine",
+    "targets": {}
+  },
+  {
+    "name": "Memantine",
+    "targets": {}
+  },
+  {
+    "name": "SULINDAC SULFIDE",
+    "targets": {
+      "PSEN1": 0.924
+    }
+  },
+  {
+    "name": "alpha-TOCHOPHEROL",
+    "targets": {
+      "PSEN1": 0.05
+    }
+  },
+  {
+    "name": "GSI-NC",
+    "targets": {
+      "PSEN1": 0.385
+    }
+  },
+  {
+    "name": "MRK-560",
+    "targets": {
+      "PSEN1": 0.999
+    }
+  },
+  {
+    "name": "DONEPEZIL HYDROCHLORIDE",
+    "targets": {
+      "ACHE": 0.994
+    }
+  },
+  {
+    "name": "SALIGCINNAMIDE",
+    "targets": {
+      "ACHE": 0.076
+    }
+  },
+  {
+    "name": "DONEPEZIL",
+    "targets": {
+      "ACHE": 0.978
+    }
+  },
+  {
+    "name": "TACRINE",
+    "targets": {
+      "ACHE": 0.84,
+      "GRIN2B": 0.05
+    }
+  },
+  {
+    "name": "GALANTAMINE",
+    "targets": {
+      "ACHE": 0.629,
+      "GRIN2B": 0.21
+    }
+  },
+  {
+    "name": "CHLORMEQUAT CHLORIDE",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "CHOLINE IODIDE",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "PHYSOSTIGMINE",
+    "targets": {
+      "ACHE": 0.989
+    }
+  },
+  {
+    "name": "GENESERINE",
+    "targets": {
+      "ACHE": 0.365
+    }
+  },
+  {
+    "name": "RIVASTIGMINE TARTRATE",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "4-HYDROXYBENZALDEHYDE",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "TACRINE HYDROCHLORIDE",
+    "targets": {
+      "ACHE": 0.207
+    }
+  },
+  {
+    "name": "GALLAMINE",
+    "targets": {
+      "ACHE": 0.062
+    }
+  },
+  {
+    "name": "IRINOTECAN",
+    "targets": {
+      "ACHE": 0.974
+    }
+  },
+  {
+    "name": "PROPIDIUM",
+    "targets": {
+      "ACHE": 0.211
+    }
+  },
+  {
+    "name": "DECIDIUM",
+    "targets": {
+      "ACHE": 0.979
+    }
+  },
+  {
+    "name": "GANSTIGMINE",
+    "targets": {
+      "ACHE": 0.163
+    }
+  },
+  {
+    "name": "ISOFLUROPHATE",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "HUPRINE X",
+    "targets": {
+      "ACHE": 1.0
+    }
+  },
+  {
+    "name": "HUPERZINE B",
+    "targets": {
+      "ACHE": 0.75
+    }
+  },
+  {
+    "name": "RIVASTIGMINE",
+    "targets": {
+      "ACHE": 0.998
+    }
+  },
+  {
+    "name": "HUPERZINE A",
+    "targets": {
+      "ACHE": 0.915
+    }
+  },
+  {
+    "name": "PETROSAMINE",
+    "targets": {
+      "ACHE": 0.917
+    }
+  },
+  {
+    "name": "PHYSOSTIGMINE SALICYLATE",
+    "targets": {
+      "ACHE": 0.976
+    }
+  },
+  {
+    "name": "HELICIDE",
+    "targets": {
+      "ACHE": 0.976
+    }
+  },
+  {
+    "name": "NEOSTIGMINE",
+    "targets": {
+      "ACHE": 0.995
+    }
+  },
+  {
+    "name": "PYRIDOSTIGMINE",
+    "targets": {
+      "ACHE": 0.924
+    }
+  },
+  {
+    "name": "MEFENAMIC ACID",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "CALENDULADIOL",
+    "targets": {
+      "ACHE": 0.05
+    }
+  },
+  {
+    "name": "GALANTAMINE HYDROBROMIDE",
+    "targets": {
+      "ACHE": 0.483
+    }
+  },
+  {
+    "name": "MK-7622",
+    "targets": {
+      "CHRM1": 0.999
+    }
+  },
+  {
+    "name": "BESONPRODIL",
+    "targets": {
+      "GRIN2B": 0.992
+    }
+  },
+  {
+    "name": "TRAXOPRODIL",
+    "targets": {
+      "GRIN2B": 0.971
+    }
+  },
+  {
+    "name": "RADIPRODIL",
+    "targets": {
+      "GRIN2B": 0.996
+    }
+  },
+  {
+    "name": "MEMANTINE",
+    "targets": {
+      "GRIN2B": 0.154
+    }
+  },
+  {
+    "name": "IFENPRODIL",
+    "targets": {
+      "GRIN2B": 0.99
+    }
+  },
+  {
+    "name": "DEXTRORPHAN",
+    "targets": {
+      "GRIN2B": 0.803
+    }
+  },
+  {
+    "name": "DIZOCILPINE",
+    "targets": {
+      "GRIN2B": 0.991
+    }
+  },
+  {
+    "name": "CARBACRINE",
+    "targets": {
+      "GRIN2B": 0.575
+    }
+  },
+  {
+    "name": "KETAMINE",
+    "targets": {
+      "GRIN2B": 0.166
+    }
+  },
+  {
+    "name": "ELIPRODIL",
+    "targets": {
+      "GRIN2B": 0.987
+    }
+  },
+  {
+    "name": "PHENCYCLIDINE",
+    "targets": {
+      "GRIN2B": 0.443
+    }
+  }
+]

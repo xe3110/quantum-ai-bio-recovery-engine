@@ -14,9 +14,9 @@ The standing procedure this run instantiates — what a registry entry must carr
 how the k-ary scorer is defined, and the checklist for adding the next disease —
 is in the [disease campaign protocol](disease_campaign_protocol.md). **This
 document states only what is specific to Parkinson's.** The companion screen for
-multiple sclerosis is [here](ms_publication_protocol.md); the campaign that
-designs a molecule rather than ranking existing ones is
-[here](denovo_design_protocol.md).
+multiple sclerosis is [here](ms_publication_protocol.md) and the one for
+Alzheimer's [here](alzheimers_screen.md); the campaign that designs a molecule
+rather than ranking existing ones is [here](denovo_design_protocol.md).
 
 ```bash
 python -m experiments.parkinsons.run_combination_screen --top 25 --seed 7
@@ -113,6 +113,16 @@ neuroinflammation or trophic agents, none of them approved. The best-scoring
 monotherapies by *composite* score are the COMT and MAO-B inhibitors, which is
 the composite doing its job: they are approved, oral, well-tolerated, and move
 almost nothing in the signature (tolcapone: 0.0095).
+
+**As a share of what the panel could reach**
+([tools/reversal_ceiling.py](../tools/reversal_ceiling.py)): the panel targets 60
+of 90 signature genes, a full-reversal ceiling of 71.9% and a pooled-panel
+ceiling (all agents at once, therapeutic effects only, Bliss-combined) of 42.4%.
+The best monotherapy, pair and triple (5.19%, 10.00%, 14.09%) are therefore
+7.2%, 13.9% and 19.6% of the full ceiling, and 12.2%, 23.6% and 33.2% of the
+pooled-panel one. Both ceilings are generous, because the panel was curated from
+the signature's genes. It is a normalisation for comparing diseases, not a
+clinical calibration.
 
 ### Three readings that matter more than the leaderboard
 

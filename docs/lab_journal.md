@@ -8,7 +8,7 @@
 
 **Start Date:** 2026-01-16 (Foundation Phase, Days 1-9)
 
-**Last updated:** 2026-08-29 (Phase 6)
+**Last updated:** 2026-09-26 (Phase 7)
 
 ---
 
@@ -1459,3 +1459,205 @@ Test suite: **236 passing** without RDKit, **260 with it**.
 5. A non-CNS disease, to exercise the peripheral branch of the delivery
    constraint — and, now, to be the first disease that gets its reference set
    right on the first pass.
+
+---
+
+## Phase 7 — Alzheimer's disease, the third campaign (2026-09-26)
+
+### Objective
+
+Run the same two research tracks that Parkinson's got — the k = 1, 2, 3
+combination screen over existing agents, and the de novo design campaign — for
+Alzheimer's, and do it by following
+[the campaign protocol](disease_campaign_protocol.md) rather than by copying
+what Parkinson's happened to contain. Alzheimer's was chosen because it is the
+hardest test the abstraction has faced: the two proteins that *define* the
+disease are the two a small molecule reaches worst.
+
+| | MS | Parkinson's | **Alzheimer's** |
+| --- | --- | --- | --- |
+| Signature | 112 genes | 90 genes | **97 genes, 13 pathways** |
+| Panel | 74 agents | 35 agents | **36 agents, 34 mechanism classes** |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | **STRING v12, 247 nodes, 10,572 edges** |
+| Druggability | 93 targets | 90 targets | **97 targets** |
+| Known structures | 42 agents | 26 agents | **23 agents** |
+| Gene aliases needed | — | `GBA` → `GBA1` | **none** (97 of 97 present) |
+| Combination screen | pairs | k = 1, 2, 3 | **k = 1, 2, 3** |
+
+### What the disease forced into the inputs
+
+* **Amyloid-β has no transcript.** The signature is transcriptional, and amyloid
+  burden is a protein quantity. The amyloid axis is scored through `APP`, the
+  secretases, and downstream injury and glial markers (`NEFL`, `GFAP`, `C1QA`),
+  so for an antibody the `APP` row is a *proxy*, and the amyloid result is the
+  least reliable in the screen.
+* **A modality Parkinson's did not have.** The approved disease-modifying agents
+  are antibodies, dose-limited by imaging-detected brain oedema (ARIA). The risk
+  vocabulary therefore has `aria` as its highest-weighted domain, alongside
+  `bradycardia_syncope` and `cognitive_worsening`, and shares nothing with the
+  earlier two except generic organ toxicity. The antibodies are modelled at CNS
+  penetration 0.10–0.15, not zero, because they reach the brain at about one
+  per cent and still work; a test pins that band.
+* **A direction bug I made on the first pass.** I wrote the druggability file
+  from target-class precedent, so `AKT1`, `BCL2`, `CAMK2A`, `GPX4`, `SIRT1` and
+  `HMOX1` all scored as tractable — as *inhibitors*. Every one of them needs to
+  go **up**. `AKT1` was fifth in the design profile because of it. I caught it by asking, of the profile's top targets, what chemistry
+  would actually push each in the wanted direction, and rescored all six as
+  activation problems. The rule is written into the annotation file and pinned
+  by a test.
+
+### Two mistakes in my own tooling, both silent
+
+* **A `sed` wildcard.** I made the Alzheimer's runner by copying the Parkinson's
+  one and replacing `experiments.parkinsons.` — and `.` matches `/`, so
+  `experiments/parkinsons/results` became `experiments.alzheimers.results`. The
+  run succeeded and wrote 2 MB into a directory that did not belong anywhere.
+  Nothing failed.
+* **PD prose in the results file.** The runner's control report carried the
+  string "Two non-ergot D2/D3 agonists are pharmacodynamically duplicate" into
+  the Alzheimer's JSON. The campaign protocol said the runner needed only its
+  `DISEASE` constant changed; that was wrong, and step 7 of the checklist now
+  lists every place that has to change and says what the right refactor is.
+
+Both are the same shape as Phase 6: nothing failed, and the output looked like a
+result.
+
+### Combination screen
+
+Deterministic (`--seed 7`), 36 agents at k = 1, 2, 3: 36 + 630 + 6,360
+combinations, 7,026 rows including the excluded ones, about 6 minutes.
+
+* **Combination gain is smaller than in Parkinson's at order 2** (12.7% of pairs
+  beat their best member, against 26.4%) **and much more redundant** (62.0% of
+  triples sub-additive, against 36.0%).
+* **But third agents earn their place more often**: 33.0% of triples have a
+  negative gain over their best pair, against 60.3% in Parkinson's, with a
+  median gain of **+0.0238** against −0.0192.
+* Bootstrap top-25 Jaccard **0.187 / 0.085** at orders 2 / 3 — worse than
+  Parkinson's — while weight sensitivity stays excellent (Spearman 0.97). Same
+  conclusion: the unit of inference is the mechanism stratum.
+* **Donepezil + memantine**, the one approved combination in the panel, ranks 70
+  of 606 pairs (top 12%, *q* = 0.10). A sanity check rather than a control.
+
+### The strata disagree with the design campaign, for the first time
+
+In MS and Parkinson's, the screen's strongest strata paired something with the
+axis that had the least approved cover, and the design campaign's independent
+gap analysis named the same axis. I had started to treat that convergence as a
+property of the method.
+
+It did not reproduce. **Six of the top seven order-2 strata contain
+`cholinergic_symptomatic`** — the axis the design campaign scores at 0.00 unmet
+— while tau and metabolic rescue, both at 1.00, sit in the middle and bottom.
+Amyloid-only pairs are last. The inputs explain it partly (the cholinergic
+agents are approved, with the lowest target uncertainty in the panel; the
+antibodies carry the heaviest-weighted risk and move the signature only through
+a proxy) but I cannot separate "the composite correctly penalises a risky,
+poorly-exposed class" from "the composite is mis-scoring a protein-level
+mechanism with a transcript-level signature". The protocol says that, rather
+than picking the reading that matches the earlier two diseases.
+
+### A control that failed while reporting that it passed
+
+The safety-penalty control is **tacrine**, withdrawn for hepatotoxicity. By the
+runner's definition (best position in the pooled primary ranking) it sits at
+rank 62 and the control passes. Read per order it does not: tacrine is **#1 of 36
+monotherapies** by composite score, despite having the **highest safety union of
+any single agent** (0.203), and appears three times in the top-25 pairs and
+three times in the top-25 triples.
+
+The cause is in the scorer, not the panel. `evidence_tier` records approval, not
+withdrawal, so tacrine earns full evidence credit; and `safety_union` is a
+weighted mean over eight risk domains, so hepatic 0.95 × weight 0.7 is one term
+among many. I did **not** tune the scorer to make the control pass — that would
+be fitting the method to its own check — and reported it as a failure to
+represent withdrawal. Two of five negative-efficacy controls (pioglitazone,
+verubecestat) also reach the top 25, against one of five in Parkinson's.
+
+### Design campaign
+
+Run under RDKit and qiskit (a separate interpreter from the default one, which
+has neither), `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+* 14-requirement profile led by `BACE1` (0.697), `GSK3B`, `NOS2`, `MTOR`,
+  `CASP3`. Tau and APP were routed around by the tractability floor, as a test
+  now asserts.
+* The library reported **six of fourteen targets unreachable** at first (`BACE1`,
+  `PPARG`, `FYN`, `PTGS2`, `MAPK14`, `BCHE`). Seven pharmacophores were added
+  (66 fragments), taking the gap to zero and leaving MS and Parkinson's
+  unchanged.
+* Enumeration, exact eigensolver and QAOA all reach +0.0724; QAOA holds at
+  depths 2–4 and **falls to +0.0404 at depth 5** — more layers made it worse.
+* Leading design `C17H19N3O3`, MW 313.4, CNS-MPO 5.48/6, a cholinesterase
+  carbamate fused to a CSF1R amide, nearest known compound rivastigmine at
+  Tanimoto 0.38. It is novel, and it is built on the axis the gap analysis calls
+  fully served.
+* **`BACE1`, the top-priority target, never entered the optimiser.** The
+  Hamiltonian pre-filters to the ten fragments with the best solo benefit, and
+  the BACE1 amidine ranks 31 of 38 at −0.51 because its polarity and mass
+  overrun the CNS property envelope. That mirrors the real problem BACE1
+  programmes had with brain exposure, but it is also a consequence of my choice
+  of fragment; a less polar chemotype is the obvious next experiment.
+* **The stage inversion held for a third disease.** The Hamiltonian's rank-1 arm
+  set built the worst of the three molecules (fitness 0.93 against 1.48 for the
+  best), because its carboxylic acid is what the CNS gate penalises.
+* A vocabulary leak I noticed and did not fix: the design's `axes` line includes
+  `cns_innate`, an MS axis, from the shared fragment `csf1r_picolinamide`.
+  Per-fragment axis labels are stale for any disease other than the one that
+  added the fragment.
+
+### Chemistry
+
+23 of the 36 panel agents have a curated structure (nine antibodies and peptides,
+one antisense oligonucleotide, one chemotype-only entry, and two structures I
+could not transcribe with confidence are omitted). **All 23 reproduced their
+literature formula and mass on the first pass**, on both the local backend and
+RDKit. That is weaker reassurance than it looks. The Parkinson's set needed three
+corrections that only this check could find, and formula and mass cannot detect
+a positional isomer at all. I wrote these structures from memory of the
+published skeletons, and the file says so; they need confirming against a
+primary structure source. The novelty reference set was registered before the
+first design run, so this was the first disease not to repeat the Phase 6 hole.
+
+### Tests
+
+**276 passed, 24 skipped** without RDKit; **300 passed** with it (236 / 260
+before). New checks: pairwise no-shared-axis and generic-overlap-only tests
+across every registered disease, that tau and APP stay out of the profile, that
+activation-direction targets are not scored as inhibitor-tractable, and that the
+amyloid antibodies stay low-but-nonzero on CNS exposure.
+
+### Reflection
+
+> Phase 6 ended with the note that the useful question is "what would this
+> number look like if it were wrong?". Three times this phase the answer was
+> "exactly the same": a druggability file that looked fully populated while
+> scoring six targets in the wrong direction; a results directory that existed
+> and was full; a control report that said the control passed. In each case the
+> output was well-formed. What found them was looking at a specific thing
+> instead of the summary — the profile's top targets one by one, the file tree,
+> one drug's rank in each order rather than in the pooled list.
+>
+> The result I trust least is the one most people will look for first. The screen
+> cannot see amyloid, and its strata disagree with the design analysis. I would
+> rather have that written down than a fourth tidy convergence.
+
+### Next steps
+
+1. **A max-domain term in `safety_union`**, and a `withdrawn` flag the scorer
+   reads, evaluated on all three diseases at once so it is not tuned to
+   tacrine.
+2. **A less polar BACE1 chemotype** (amino-thiazine or amino-oxazine) and a
+   larger optimiser pool, to see whether `BACE1` reaches the Hamiltonian at all.
+3. **Re-annotate fragment axes per disease**, so a design's axes line never
+   carries another disease's vocabulary.
+4. **Read control names and descriptions from panel metadata** so a runner needs
+   only a `DISEASE` constant, as the protocol originally claimed.
+5. **PK/DDI model** — still the largest declared gap, and it binds hardest in a
+   frail, polypharmacic dementia population.
+6. **APOE-stratified safety.** ARIA risk is genotype-dependent and the model is
+   not.
+7. Confirm the two recent negative-trial records (semaglutide, AL002) and the
+   hand-transcribed structures against primary sources.
+8. A non-CNS disease, still, to exercise the peripheral branch of the delivery
+   constraint.

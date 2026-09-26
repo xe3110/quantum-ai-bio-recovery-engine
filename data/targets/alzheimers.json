@@ -1,0 +1,18 @@
+{
+  "disease": "alzheimers",
+  "description": "Core amyloid, tau, cholinergic and microglial network in Alzheimer's disease",
+  "targets": [
+    "APP",
+    "BACE1",
+    "PSEN1",
+    "MAPT",
+    "GSK3B",
+    "ACHE",
+    "CHRM1",
+    "GRIN2B",
+    "TREM2",
+    "APOE",
+    "SORL1",
+    "NLRP3"
+  ]
+}

@@ -12,7 +12,7 @@
       "cap": "monovalent group tuning solubility, polarity, or metabolic stability; no engagement claim"
     },
     "sources": "Chemotypes abstracted from published inhibitor and modulator classes named in each entry's parent_chemotype field.",
-    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable. unreachable_requirements() is the diagnostic that drives this file's growth.",
+    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable, and Alzheimer's when its profile reported six of fourteen (BACE1, PPARG, FYN, PTGS2, MAPK14, BCHE). unreachable_requirements() is the diagnostic that drives this file's growth.",
     "evidence_schema": {
       "evidence_tier": "strength of the published precedent that this chemotype engages its primary targets: approved_drug > clinical_candidate > published_chemotype > speculative",
       "primary_targets": "the targets the chemotype is claimed to bind directly. Every other gene in `engages` is a downstream transcriptional consequence and is a materially weaker claim.",
@@ -1021,6 +1021,173 @@
       "primary_targets": [
         "NTRK2",
         "BDNF"
+      ]
+    },
+    {
+      "id": "bace1_cyclic_sulfonylamidine",
+      "name": "Cyclic sulfonylamidine aspartyl-protease binder",
+      "role": "pharmacophore",
+      "smiles": "*C1(C)CS(=O)(=O)N(C)C(N)=N1",
+      "target_family": "BACE1_inhibitor",
+      "parent_chemotype": "Verubecestat / iminothiadiazinane dioxide BACE1 series",
+      "therapeutic_axes": [
+        "amyloid_modification"
+      ],
+      "engages": {
+        "BACE1": -0.85,
+        "APP": -0.3,
+        "ADAM10": 0.1
+      },
+      "liabilities": [],
+      "note": "The amidine engages the catalytic aspartate dyad. Four BACE1 programmes reached phase 3 and were stopped, two for worsened cognition, so the class carries a mechanism-based safety question that the fragment cannot resolve: BACE1 also processes substrates other than APP.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "BACE1"
+      ]
+    },
+    {
+      "id": "pparg_thiazolidinedione",
+      "name": "Thiazolidinedione PPAR-gamma head group",
+      "role": "pharmacophore",
+      "smiles": "*CC1SC(=O)NC1=O",
+      "target_family": "PPARG_agonist",
+      "parent_chemotype": "Pioglitazone / glitazone class",
+      "therapeutic_axes": [
+        "metabolic_vascular_rescue",
+        "microglial_immune_modulation"
+      ],
+      "engages": {
+        "PPARG": 0.8,
+        "PPARGC1A": 0.3,
+        "TNF": -0.25,
+        "IL1B": -0.2,
+        "NFKB1": -0.2,
+        "INSR": 0.15
+      },
+      "liabilities": [],
+      "note": "The acidic head group that anchors the ligand-binding domain. Pioglitazone failed phase 3 in mild cognitive impairment, so this is an approved-drug binding claim attached to a target whose benefit in this disease is unproven.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "PPARG"
+      ]
+    },
+    {
+      "id": "fyn_anilinoquinazoline",
+      "name": "4-Aminoquinazoline Src-family kinase hinge binder",
+      "role": "pharmacophore",
+      "smiles": "*Nc1ncnc2ccccc12",
+      "target_family": "FYN_inhibitor",
+      "parent_chemotype": "Saracatinib / anilinoquinazoline Src-family series",
+      "therapeutic_axes": [
+        "tau_modification",
+        "synaptic_excitotoxicity_protection"
+      ],
+      "engages": {
+        "FYN": -0.75,
+        "MAPT": -0.2,
+        "GRIN2B": -0.2
+      },
+      "liabilities": [],
+      "note": "Hinge-binding motif of the anilinoquinazoline series. Selectivity across the Src family is the recurring problem, and saracatinib did not slow decline in phase 2, so the target hypothesis is still unproven in patients.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "FYN"
+      ]
+    },
+    {
+      "id": "cox_arylpropionic_acid",
+      "name": "Arylpropionic acid cyclooxygenase head group",
+      "role": "pharmacophore",
+      "smiles": "*C(C)C(=O)O",
+      "target_family": "PTGS2_inhibitor",
+      "parent_chemotype": "Naproxen / profen NSAID class",
+      "therapeutic_axes": [
+        "microglial_immune_modulation"
+      ],
+      "engages": {
+        "PTGS2": -0.6,
+        "IL1B": -0.2,
+        "TNF": -0.2,
+        "IL6": -0.15,
+        "NFKB1": -0.15
+      },
+      "liabilities": [],
+      "note": "The carboxylate that anchors the cyclooxygenase channel. It is also what limits brain exposure through efflux and ionisation, which is one reading of why NSAIDs failed the ADAPT prevention trial.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "PTGS2"
+      ]
+    },
+    {
+      "id": "p38_pyridinylimidazole",
+      "name": "Pyridinylimidazole p38 hinge binder",
+      "role": "pharmacophore",
+      "smiles": "*c1[nH]cnc1-c1ccncc1",
+      "target_family": "p38_inhibitor",
+      "parent_chemotype": "SB203580 / pyridinylimidazole p38 alpha series",
+      "therapeutic_axes": [
+        "microglial_immune_modulation",
+        "cholinergic_symptomatic"
+      ],
+      "engages": {
+        "MAPK14": -0.85,
+        "IL1B": -0.3,
+        "TNF": -0.3,
+        "RAB5A": -0.3,
+        "NFKB1": -0.15
+      },
+      "liabilities": [],
+      "note": "The 4-pyridyl nitrogen binds the hinge. Early p38 inhibitors were repeatedly limited by hepatotoxicity and by tachyphylaxis, which is why the clinical case now rests on a brain-penetrant agent.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "MAPK14"
+      ]
+    },
+    {
+      "id": "bche_carbamate",
+      "name": "Dialkyl carbamate cholinesterase carbamylator",
+      "role": "pharmacophore",
+      "smiles": "*OC(=O)N(C)CC",
+      "target_family": "cholinesterase_inhibitor",
+      "parent_chemotype": "Rivastigmine / carbamate cholinesterase inhibitors",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "engages": {
+        "ACHE": -0.7,
+        "BCHE": -0.75,
+        "CHRM1": 0.3,
+        "CHRNA7": 0.2
+      },
+      "liabilities": [],
+      "note": "Carbamylates the catalytic serine of both cholinesterases. Butyrylcholinesterase activity rises as acetylcholinesterase falls with disease progression, which is the argument for engaging both.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "ACHE",
+        "BCHE"
+      ]
+    },
+    {
+      "id": "ache_benzylpiperidine",
+      "name": "N-Benzylpiperidine cholinesterase arm",
+      "role": "pharmacophore",
+      "smiles": "*C1CCN(Cc2ccccc2)CC1",
+      "target_family": "cholinesterase_inhibitor",
+      "parent_chemotype": "Donepezil / benzylpiperidine series",
+      "therapeutic_axes": [
+        "cholinergic_symptomatic"
+      ],
+      "engages": {
+        "ACHE": -0.85,
+        "BCHE": -0.1,
+        "SIGMAR1": 0.2,
+        "CHRM1": 0.35
+      },
+      "liabilities": [],
+      "note": "The benzylpiperidine spans the gorge of acetylcholinesterase. Donepezil also binds sigma-1, listed here as a secondary claim.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "ACHE"
       ]
     }
   ]

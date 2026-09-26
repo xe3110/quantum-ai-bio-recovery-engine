@@ -1,0 +1,157 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "disease": "alzheimers",
+    "purpose": "Structures for the small-molecule members of alzheimers_panel_v1, used as the known-chemical-matter reference set for novelty assessment in the de novo design campaign.",
+    "curation_rule": "Every entry carries the molecular formula and average mass reported in the public literature for that agent. tests/test_chemistry.py re-derives both from the SMILES and fails on any disagreement, so a mistyped structure cannot enter the reference set silently. Each structure was additionally cross-checked against RDKit (formula and average mass) before being admitted; all 23 agree with both backends.",
+    "validation_limit": "Formula and mass agreement cannot detect a positional isomer: a substituent on the wrong ring carbon has the same formula and mass. All 23 entries passed on the first transcription, which is a weaker reassurance than it sounds because the Parkinson's set needed three corrections that only this check could find. Structures were written from memory of the published skeletons, not copied from a database. Confirm each against a primary structure source before publication use.",
+    "why_this_file_exists": "Without it, novelty for an Alzheimer's design is measured only against the pharmacophore library's own parent fragments -- so a candidate could be reported as novel while closely resembling an approved Alzheimer's drug that was simply absent from the comparison. Registered on the first pass for this disease, which is the point of having learned it on Parkinson's.",
+    "omissions": "Thirteen of the 36 panel records have no entry. Nine are biologics with no small-molecule structure and are absent by construction: the five anti-amyloid antibodies (Lecanemab, Donanemab, Aducanumab, Gantenerumab, Solanezumab), the anti-tau antibody Bepranemab, the TREM2 antibody AL002, semaglutide, and intranasal insulin. The MAPT antisense oligonucleotide is an oligonucleotide. 'NLRP3 inhibitor (class exemplar)' names a chemotype rather than a settled structure and is omitted rather than guessed. Neflamapimod (VX-745) and rapamycin are omitted because their fused-heterocycle and macrocycle structures could not be transcribed with confidence. Absence weakens novelty checking against those agents and nothing else.",
+    "stereochemistry": "Stereodescriptors are retained where the marketed agent is a single enantiomer. The fingerprint used for novelty is connectivity-based and does not read them, so they document the entry rather than change any score.",
+    "n_structures": 23
+  },
+  "structures": [
+    {
+      "name": "Donepezil",
+      "smiles": "COc1cc2CC(CC3CCN(Cc4ccccc4)CC3)C(=O)c2cc1OC",
+      "formula": "C24H29NO3",
+      "mass": 379.49
+    },
+    {
+      "name": "Rivastigmine",
+      "smiles": "CCN(C)C(=O)Oc1cccc(c1)[C@H](C)N(C)C",
+      "formula": "C14H22N2O2",
+      "mass": 250.34
+    },
+    {
+      "name": "Galantamine",
+      "smiles": "COc1ccc2CN(C)CC[C@]34C=C[C@H](O)C[C@@H]3Oc1c24",
+      "formula": "C17H21NO3",
+      "mass": 287.35
+    },
+    {
+      "name": "Tacrine",
+      "smiles": "Nc1c2CCCCc2nc2ccccc12",
+      "formula": "C13H14N2",
+      "mass": 198.26
+    },
+    {
+      "name": "Xanomeline-trospium",
+      "smiles": "CCCCCCOc1nsnc1C1=CCCN(C)C1",
+      "formula": "C14H23N3OS",
+      "mass": 281.42,
+      "note": "Structure is xanomeline, the centrally acting M1/M4 agonist. Trospium, the peripherally restricted quaternary-ammonium antagonist co-formulated with it, is omitted: it is excluded from the CNS by design and is not chemical matter a CNS design would resemble."
+    },
+    {
+      "name": "Encenicline",
+      "smiles": "O=C(N[C@@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1",
+      "formula": "C16H17ClN2OS",
+      "mass": 320.84
+    },
+    {
+      "name": "Memantine",
+      "smiles": "CC12CC3CC(C)(C1)CC(N)(C3)C2",
+      "formula": "C12H21N",
+      "mass": 179.3
+    },
+    {
+      "name": "Verubecestat",
+      "smiles": "CN1C(N)=N[C@](C)(CS1(=O)=O)c1cc(NC(=O)c2ccc(F)cn2)ccc1F",
+      "formula": "C17H17F2N5O3S",
+      "mass": 409.41
+    },
+    {
+      "name": "Semagacestat",
+      "smiles": "CC(C)[C@H](O)C(=O)N[C@@H](C)C(=O)N[C@H]1Cc2ccccc2CC(=O)N1C",
+      "formula": "C19H27N3O4",
+      "mass": 361.44
+    },
+    {
+      "name": "Valiltramiprosate (ALZ-801)",
+      "smiles": "CC(C)[C@H](N)C(=O)NCCCS(=O)(=O)O",
+      "formula": "C8H18N2O4S",
+      "mass": 238.3,
+      "note": "Valine amide prodrug of tramiprosate (3-amino-1-propanesulfonic acid)."
+    },
+    {
+      "name": "Buntanetap",
+      "smiles": "CN1CC[C@@]2(C)c3cc(OC(=O)Nc4ccccc4)ccc3N(C)[C@@H]12",
+      "formula": "C20H23N3O2",
+      "mass": 337.42
+    },
+    {
+      "name": "Hydromethylthionine (LMTM)",
+      "smiles": "CN(C)c1ccc2Nc3ccc(N(C)C)cc3Sc2c1",
+      "formula": "C16H19N3S",
+      "mass": 285.41,
+      "note": "Structure is the free base (leuco-methylthioninium); the clinical material is a bis(hydromethanesulfonate) salt."
+    },
+    {
+      "name": "Tideglusib",
+      "smiles": "O=C1SN(c2cccc3ccccc23)C(=O)N1Cc1ccccc1",
+      "formula": "C19H14N2O2S",
+      "mass": 334.39
+    },
+    {
+      "name": "Saracatinib",
+      "smiles": "CN1CCN(CC1)CCOc1cc(OC2CCOCC2)c2c(c1)ncnc2Nc1c(Cl)ccc2OCOc12",
+      "formula": "C27H32ClN5O5",
+      "mass": 542.03
+    },
+    {
+      "name": "Blarcamesine (ANAVEX2-73)",
+      "smiles": "CN(C)CC1CCOC1(c1ccccc1)c1ccccc1",
+      "formula": "C19H23NO",
+      "mass": 281.39
+    },
+    {
+      "name": "Masitinib",
+      "smiles": "Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nc(cs1)-c1cccnc1",
+      "formula": "C28H30N6OS",
+      "mass": 498.64
+    },
+    {
+      "name": "Naproxen",
+      "smiles": "C[C@H](C(=O)O)c1ccc2cc(OC)ccc2c1",
+      "formula": "C14H14O3",
+      "mass": 230.26
+    },
+    {
+      "name": "Pioglitazone",
+      "smiles": "CCc1ccc(CCOc2ccc(CC3SC(=O)NC3=O)cc2)nc1",
+      "formula": "C19H20N2O3S",
+      "mass": 356.44
+    },
+    {
+      "name": "Metformin",
+      "smiles": "CN(C)C(=N)NC(=N)N",
+      "formula": "C4H11N5",
+      "mass": 129.16
+    },
+    {
+      "name": "Atorvastatin",
+      "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
+      "formula": "C33H35FN2O5",
+      "mass": 558.64
+    },
+    {
+      "name": "Nilvadipine",
+      "smiles": "COC(=O)C1=C(C)NC(C#N)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1",
+      "formula": "C19H19N3O6",
+      "mass": 385.37
+    },
+    {
+      "name": "Resveratrol",
+      "smiles": "Oc1ccc(cc1)/C=C/c1cc(O)cc(O)c1",
+      "formula": "C14H12O3",
+      "mass": 228.25
+    },
+    {
+      "name": "Vitamin E (alpha-tocopherol)",
+      "smiles": "Cc1c(C)c2O[C@](C)(CCC[C@H](C)CCC[C@H](C)CCCC(C)C)CCc2c(C)c1O",
+      "formula": "C29H50O2",
+      "mass": 430.71,
+      "note": "RRR-alpha-tocopherol."
+    }
+  ]
+}

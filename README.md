@@ -16,8 +16,8 @@ Quantum Bio Recovery Engine is a research platform for discovering optimal multi
 - Scaling benchmarks for computational hardness analysis
 - **De novo molecular design** — deriving a target product profile from a
   disease model and assembling new chemical structures against it
-- Disease-agnostic contracts, exercised end to end for **multiple sclerosis
-  and Parkinson's**
+- Disease-agnostic contracts, exercised end to end for **multiple sclerosis,
+  Parkinson's, and Alzheimer's**
 
 The system is designed for **reproducibility, extensibility, and future quantum hardware deployment**.
 
@@ -68,12 +68,13 @@ quantum-bio-recovery-engine/
 ├── experiments/
 │ ├── ms/ # Multiple sclerosis: pairwise combination screen
 │ ├── parkinsons/ # Parkinson's: monotherapy + pair + triple screen
+│ ├── alzheimers/ # Alzheimer's: monotherapy + pair + triple screen
 │ ├── design/ # De novo design campaigns (disease-agnostic)
 │ └── benchmarks/ # Scaling and hardness benchmarks
 ├── tools/ # Input curation and external-database fetchers
 ├── tests/ # Behavioural tests for the screen and the design stack
 ├── data/
-│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons)
+│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons, alzheimers)
 │ ├── chemistry/ # Fragment library and known-structure reference set
 │ └── targets/ # Per-target druggability annotations
 ├── figures/ # Generated plots and benchmark figures
@@ -196,6 +197,44 @@ results and the disease's own caveats, and [the disease campaign
 protocol](docs/disease_campaign_protocol.md) for the standing procedure every
 campaign follows.
 
+### Alzheimer's monotherapy, pair, and triple screen
+
+The third disease, run through the identical scorer at **k = 1, 2, and 3**. A
+**36-agent** panel — cholinesterase inhibitors, memantine, anti-amyloid and
+anti-tau antibodies, secretase and kinase inhibitors, and metabolic and
+anti-inflammatory candidates, weighted toward agents that failed — is scored
+against a **97-gene directional signature** and a cached STRING interactome:
+36 monotherapies, 630 pairs, 6,360 triples.
+
+```bash
+python -m experiments.alzheimers.run_combination_screen --top 25 --seed 7
+python -m experiments.alzheimers.run_combination_screen --quick      # smoke run
+```
+
+Outputs land in `experiments/alzheimers/results/`:
+`ad_combination_screen.json` and `ad_combinations_full.csv`.
+
+Three things are different from Parkinson's, and the protocol says so plainly:
+**amyloid-β has no transcript**, so the amyloid axis is scored through `APP` and
+downstream markers and is the least reliable result; the mechanism strata favour
+the already-served cholinergic axis where the design campaign's gap analysis
+points at tau and metabolic rescue, **so the two disagree** for the first time;
+and the withdrawn hepatotoxic control (tacrine) ranks first among
+monotherapies, a **failure of the scorer to represent withdrawal** that is
+reported rather than tuned away.
+
+In percentage terms (share of the signature reversed, not a clinical effect),
+the best monotherapy reverses **4.68%**, the best pair **7.48%**, and the best
+triple **10.17%** — 2.94%, 5.31% and 6.48% restricted to approved agents. Against
+what the panel could reach (`python -m tools.reversal_ceiling`), that triple
+captures **16.1% of the full-reversal ceiling and 25.7% of the pooled-panel
+ceiling**, against 19.6% and 33.2% in Parkinson's. The
+legacy Recovery / P(Success) CLI saturates at 0.955 for every drug and is not an
+efficacy estimate.
+
+See [the Alzheimer's screen protocol](docs/alzheimers_screen.md) for the
+results, the controls, and the disease's own caveats.
+
 ### De novo molecular design
 
 Where the screen above ranks **existing** agents, this campaign designs a new
@@ -239,7 +278,10 @@ Hamiltonian  : 10 binary variables, 45 couplings, choose 2 (45 feasible of 1024 
 
 That structure is a **dual BTK / CSF1R inhibitor directed at compartmentalised
 CNS inflammation**; the Parkinson's campaign produces a MAO-B inhibitor fused
-to a caspase-1 warhead. Both are walked through in full — including what their
+to a caspase-1 warhead; the Alzheimer's campaign produces a cholinesterase
+carbamate fused to a CSF1R amide — built on an axis the gap analysis calls
+already served, with the top-priority target (`BACE1`) never reaching the
+optimiser. All three are walked through in full — including what their
 efficacy is not — in
 [§8 of the design protocol](docs/denovo_design_protocol.md#8-reading-a-design--worked-examples).
 
@@ -294,26 +336,29 @@ adamantane inflating its synthetic-tractability penalty.
 
 ### Registered diseases
 
-Two, so the disease-agnostic claim is checkable rather than asserted:
+Three, so the disease-agnostic claim is checkable rather than asserted:
 
-| | multiple sclerosis | Parkinson's |
-| --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways |
-| Panel | 74 agents | 35 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes |
-| Druggability | 93 targets annotated | 90 targets annotated |
-| Known structures | 42 agents | 26 agents |
-| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) |
-| Combination screen | pairs | monotherapy + pairs + triples |
+| | multiple sclerosis | Parkinson's | Alzheimer's |
+| --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways |
+| Panel | 74 agents | 35 agents | 36 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes |
+| Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated |
+| Known structures | 42 agents | 26 agents | 23 agents |
+| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) |
+| Combination screen | pairs | monotherapy + pairs + triples | monotherapy + pairs + triples |
 
-They share **no therapeutic axis** and overlap on only two safety domains
-(cardiac, hepatic — generic organ toxicity). Nothing in Parkinson's care is
-constrained by infection risk; it is constrained by dyskinesia and psychosis.
-Tests assert that separation, and assert that no module under `core/design/`
-imports disease-specific scoring.
+No two of them share a **therapeutic axis**, and any two overlap only on generic
+organ toxicity (cardiac, hepatic, gastrointestinal). Nothing in Parkinson's care
+is constrained by infection risk; it is constrained by dyskinesia and psychosis,
+and Alzheimer's by imaging-detected brain oedema (ARIA). Tests assert that
+separation pairwise, and assert that no module under `core/design/` imports
+disease-specific scoring.
 
 ```bash
 python -m experiments.design.run_denovo_design --disease parkinsons --quantum-benchmark
+python -m experiments.design.run_denovo_design --disease alzheimers --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
 ```
 
 Each disease declares a **known-structure reference set** that the design
@@ -345,7 +390,9 @@ disease campaign protocol](docs/disease_campaign_protocol.md).
 
 ```bash
 python -m experiments.design.run_denovo_design --disease <name>
-cp experiments/parkinsons/run_combination_screen.py experiments/<name>/   # change DISEASE
+cp experiments/alzheimers/run_combination_screen.py experiments/<name>/
+# then change DISEASE, RESULTS, the result-file prefix and the control prose
+# (see step 7 of the campaign protocol; a sed with '.' as a path wildcard bites)
 ```
 
 The loader validates every referenced path on read and names what is missing,
@@ -361,8 +408,10 @@ covers, which is how the library learns what it is missing.
 | [Disease campaign protocol](docs/disease_campaign_protocol.md) | **Start here for a new disease.** What a registry entry must carry, the k-ary scoring contract, the cross-order comparison rule, the statistical treatment, and the checklist for adding the next disease |
 | [MS publication protocol](docs/ms_publication_protocol.md) | Screen inputs, all 20 scoring parameters, statistical treatment, controls, and the validation required for a manuscript |
 | [Parkinson's screen protocol](docs/parkinsons_screen.md) | The k = 1/2/3 screen: monotherapy vs combination results, mechanism strata, controls, and the caveats specific to chronic dopaminergic polypharmacy |
+| [Alzheimer's screen protocol](docs/alzheimers_screen.md) | The k = 1/2/3 screen: why amyloid cannot be scored from a transcript signature, the strata that disagree with the design analysis, the withdrawn-drug control that failed, and the antibody delivery assumption |
 | [De novo design protocol](docs/denovo_design_protocol.md) | Target profile derivation, the Hamiltonian and its two approximations, the chemistry model's validation state and blind spots, and the central transplantation assumption |
-| [Lab journal](docs/lab_journal.md) | Dated research log across all four phases, including the failures and what they changed |
+| [Efficacy calibration](docs/efficacy_calibration.md) | Whether the screen's score tracks published efficacy: a two-tier separation in MS against sourced meta-analyses, why the composite does not, and why no score-to-effect mapping is supported |
+| [Lab journal](docs/lab_journal.md) | Dated research log across every phase, including the failures and what they changed |
 | [Chemistry validation](docs/chemistry_validation.json) | Machine-readable cross-validation of the local chemistry stack against RDKit, regenerated by `tools/validate_chemistry.py` |
 
 ## Scientific Motivation
