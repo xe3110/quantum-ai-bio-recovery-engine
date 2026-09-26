@@ -1,0 +1,1606 @@
+{
+  "metadata": {
+    "panel_version": "1.0.0",
+    "generated_by": "tools/curate_epilepsy_panel.py",
+    "disease": "epilepsy",
+    "purpose": "Mechanism-curated candidate panel for research prioritisation. Not a prescribing, efficacy, or co-administration dataset.",
+    "curation_rule": "Approved antiseizure medications plus disease-modifying candidates. Unlike the neurodegenerative panels this one is dominated by approved agents (30 of 37), because epilepsy has many effective symptomatic drugs and almost no approved disease-modifying ones. It therefore carries three negative-efficacy controls, fewer than the other diseases, all of them verified failures.",
+    "controls": {
+      "positive_redundancy": [
+        "Carbamazepine",
+        "Oxcarbazepine"
+      ],
+      "negative_efficacy": [
+        "Bumetanide",
+        "Soticlestat",
+        "Talampanel"
+      ],
+      "safety_penalty": [
+        "Felbamate",
+        "Retigabine (ezogabine)",
+        "Vigabatrin"
+      ]
+    },
+    "statistics": {
+      "n_drugs": 37,
+      "n_signature_genes": 85,
+      "n_genes_targeted": 41,
+      "signature_gene_coverage": 0.482,
+      "mechanism_classes": 32,
+      "evidence_tiers": {
+        "approved": 30,
+        "phase_3": 2,
+        "phase_2": 5,
+        "preclinical": 0
+      }
+    },
+    "caveat": "Directional target effects are curated hypotheses, not measured pharmacology. Several mechanisms (SV2A, cenobamate's GABA-A action, cannabidiol) are not settled, and their target_uncertainty is set accordingly. Every record requires independent verification before publication use."
+  },
+  "drugs": [
+    {
+      "name": "Carbamazepine",
+      "mechanism_class": "sodium_channel_blocker_dibenzazepine",
+      "primary_moa": "Use-dependent sodium channel block favouring the inactivated state",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "hla_cutaneous_hypersensitivity"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SCN2A": -0.7,
+        "SCN8A": -0.7,
+        "SCN3A": -0.6
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.85,
+        "teratogenicity": 0.5,
+        "hepatic": 0.3,
+        "hematologic": 0.6,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.3,
+        "seizure_aggravation": 0.4,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_dibenzazepine",
+      "relevant_pathways": [
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Oxcarbazepine",
+      "mechanism_class": "sodium_channel_blocker_dibenzazepine",
+      "primary_moa": "Prodrug of a 10-hydroxy metabolite blocking sodium channels; fewer interactions than carbamazepine",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "hla_cutaneous_hypersensitivity"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SCN2A": -0.65,
+        "SCN8A": -0.65,
+        "SCN3A": -0.55
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.6,
+        "teratogenicity": 0.4,
+        "hepatic": 0.1,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.4,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_dibenzazepine",
+      "relevant_pathways": [
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Eslicarbazepine acetate",
+      "mechanism_class": "sodium_channel_blocker_dibenzazepine",
+      "primary_moa": "Once-daily prodrug of the S-enantiomer of the oxcarbazepine metabolite",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "SCN2A": -0.6,
+        "SCN8A": -0.6,
+        "SCN3A": -0.5,
+        "CACNA1H": -0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.4,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.3,
+        "seizure_aggravation": 0.3,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_dibenzazepine",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Phenytoin",
+      "mechanism_class": "sodium_channel_blocker_hydantoin",
+      "primary_moa": "Use-dependent sodium channel block with a narrow, saturable therapeutic window",
+      "evidence_tier": "approved",
+      "indication": "focal_and_status",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "hydantoin_chronic_toxicity"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SCN2A": -0.7,
+        "SCN8A": -0.65,
+        "SCN3A": -0.55
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.7,
+        "teratogenicity": 0.6,
+        "hepatic": 0.3,
+        "hematologic": 0.3,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.4,
+        "seizure_aggravation": 0.3,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_hydantoin",
+      "relevant_pathways": [
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Lamotrigine",
+      "mechanism_class": "sodium_channel_blocker_phenyltriazine",
+      "primary_moa": "Sodium channel block with some inhibition of high-voltage calcium channels",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation",
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "titration_cutaneous_hypersensitivity"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "SCN2A": -0.6,
+        "SCN8A": -0.55,
+        "SCN3A": -0.5,
+        "CACNA1A": -0.3
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.2,
+        "dermatologic_hypersensitivity": 0.9,
+        "teratogenicity": 0.2,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.2,
+        "seizure_aggravation": 0.3,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_phenyltriazine",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Lacosamide",
+      "mechanism_class": "sodium_channel_slow_inactivation_enhancer",
+      "primary_moa": "Enhances slow inactivation of sodium channels",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "pr_interval_prolongation"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SCN2A": -0.55,
+        "SCN8A": -0.6,
+        "SCN3A": -0.5
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.1,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.5,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_slow_inactivation_enhancer",
+      "relevant_pathways": [
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Cenobamate",
+      "mechanism_class": "dual_sodium_blocker_gabaa_modulator",
+      "primary_moa": "Inhibits persistent sodium current and positively modulates GABA-A receptors",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation",
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "gabaa_positive_modulation",
+        "dress_hypersensitivity"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "SCN2A": -0.5,
+        "SCN8A": -0.55,
+        "GABRA1": 0.3,
+        "GABRG2": 0.25,
+        "GABRB3": 0.25
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.6,
+        "teratogenicity": 0.0,
+        "hepatic": 0.2,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.4,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "dual_sodium_blocker_gabaa_modulator",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Rufinamide",
+      "mechanism_class": "sodium_channel_blocker_triazole",
+      "primary_moa": "Prolongs the inactive state of sodium channels; used in Lennox-Gastaut syndrome",
+      "evidence_tier": "approved",
+      "indication": "lennox_gastaut",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "sodium_channel_blocker",
+        "qt_shortening"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SCN2A": -0.5,
+        "SCN8A": -0.5
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.3,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sodium_channel_blocker_triazole",
+      "relevant_pathways": [
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Valproate",
+      "mechanism_class": "broad_spectrum_valproate",
+      "primary_moa": "Sodium and T-type calcium block, GABA-transaminase inhibition, and weak histone deacetylase inhibition",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation",
+        "gabaergic_potentiation",
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "valproate_class"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition",
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "SCN2A": -0.35,
+        "CACNA1H": -0.3,
+        "ABAT": -0.4,
+        "GAD1": 0.2,
+        "HDAC1": -0.4
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 1.0,
+        "hepatic": 0.8,
+        "hematologic": 0.4,
+        "behavioural_mood": 0.2,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "broad_spectrum_valproate",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition",
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Topiramate",
+      "mechanism_class": "sulfamate_multitarget",
+      "primary_moa": "Sodium block, GABA-A potentiation, AMPA/kainate antagonism and carbonic anhydrase inhibition",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation",
+        "gabaergic_potentiation",
+        "glutamate_attenuation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "carbonic_anhydrase_inhibition",
+        "cognitive_slowing"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition",
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "SCN2A": -0.3,
+        "GABRA1": 0.25,
+        "GRIA1": -0.4,
+        "GRIK2": -0.4,
+        "CA2": -0.4
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.8,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.6,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.4,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sulfamate_multitarget",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "gabaergic_inhibition",
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Zonisamide",
+      "mechanism_class": "sulfonamide_multitarget",
+      "primary_moa": "Sodium and T-type calcium channel block with weak carbonic anhydrase inhibition",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "sodium_channel_stabilisation",
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "carbonic_anhydrase_inhibition",
+        "sulfonamide_hypersensitivity"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "SCN2A": -0.4,
+        "CACNA1G": -0.5,
+        "CACNA1H": -0.45,
+        "CA2": -0.4
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.4,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.3,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "sulfonamide_multitarget",
+      "relevant_pathways": [
+        "voltage_gated_sodium",
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Phenobarbital",
+      "mechanism_class": "barbiturate_gabaa_modulator",
+      "primary_moa": "Prolongs GABA-A channel opening",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.8,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "gabaa_positive_modulation",
+        "sedative_dependence"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "gabaergic_inhibition",
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "GABRA1": 0.55,
+        "GABRG2": 0.4,
+        "GABRB3": 0.4,
+        "GRIA1": -0.15
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.9,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.5,
+        "hepatic": 0.2,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.5,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "barbiturate_gabaa_modulator",
+      "relevant_pathways": [
+        "gabaergic_inhibition",
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Clobazam",
+      "mechanism_class": "benzodiazepine_gabaa_modulator",
+      "primary_moa": "Benzodiazepine-site GABA-A positive modulation",
+      "evidence_tier": "approved",
+      "indication": "lennox_gastaut",
+      "route": "oral",
+      "cns_penetration": 0.8,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "gabaa_positive_modulation",
+        "sedative_dependence"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "GABRA1": 0.5,
+        "GABRG2": 0.55,
+        "GABRA2": 0.4,
+        "GABRA5": 0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.6,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.3,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "benzodiazepine_gabaa_modulator",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Midazolam (nasal rescue)",
+      "mechanism_class": "benzodiazepine_gabaa_modulator",
+      "primary_moa": "Fast-acting benzodiazepine for seizure clusters",
+      "evidence_tier": "approved",
+      "indication": "rescue",
+      "route": "intranasal",
+      "cns_penetration": 0.85,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "gabaa_positive_modulation",
+        "sedative_dependence"
+      ],
+      "target_uncertainty": 0.1,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "GABRA1": 0.55,
+        "GABRG2": 0.55,
+        "GABRA2": 0.4,
+        "GABRA5": 0.25
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.7,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.2,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "benzodiazepine_gabaa_modulator",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Vigabatrin",
+      "mechanism_class": "GABA_transaminase_inhibitor",
+      "primary_moa": "Irreversible GABA-transaminase inhibition, raising GABA",
+      "evidence_tier": "approved",
+      "indication": "infantile_spasms_and_refractory_focal",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "gaba_reuptake_or_catabolism_inhibition",
+        "visual_field_loss"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "ABAT": -0.9
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.4,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.4,
+        "retinal_toxicity": 0.95
+      },
+      "target_family": "GABA_transaminase_inhibitor",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Tiagabine",
+      "mechanism_class": "GAT1_inhibitor",
+      "primary_moa": "GABA transporter GAT-1 inhibition",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "gaba_reuptake_or_catabolism_inhibition"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "SLC6A1": -0.8
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.4,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "GAT1_inhibitor",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Ganaxolone",
+      "mechanism_class": "neurosteroid_gabaa_modulator",
+      "primary_moa": "Neurosteroid positive modulation of synaptic and extrasynaptic GABA-A receptors",
+      "evidence_tier": "approved",
+      "indication": "cdkl5_deficiency",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "gabaa_positive_modulation"
+      ],
+      "target_uncertainty": 0.35,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "GABRD": 0.6,
+        "GABRA1": 0.35,
+        "GABRG2": 0.3
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.6,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "neurosteroid_gabaa_modulator",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Stiripentol",
+      "mechanism_class": "aromatic_alcohol_gabaa_modulator",
+      "primary_moa": "Positive GABA-A modulation with lactate dehydrogenase and CYP inhibition; used in Dravet syndrome",
+      "evidence_tier": "approved",
+      "indication": "dravet",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "gabaa_positive_modulation",
+        "cyp_inhibition"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "gabaergic_inhibition"
+      ],
+      "target_effects": {
+        "GABRA1": 0.4,
+        "GABRB3": 0.4,
+        "GABRD": 0.3
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.1,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "aromatic_alcohol_gabaa_modulator",
+      "relevant_pathways": [
+        "gabaergic_inhibition"
+      ]
+    },
+    {
+      "name": "Fenfluramine",
+      "mechanism_class": "serotonin_releasing_agent",
+      "primary_moa": "Serotonin release with 5-HT2C agonism and sigma-1 activity; used in Dravet syndrome",
+      "evidence_tier": "approved",
+      "indication": "dravet",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "neuromodulatory_adjunct"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "serotonergic_valvulopathy"
+      ],
+      "target_uncertainty": 0.35,
+      "pathways": [
+        "neuromodulatory_signalling"
+      ],
+      "target_effects": {
+        "HTR2C": 0.6,
+        "SIGMAR1": 0.4
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.8,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "serotonin_releasing_agent",
+      "relevant_pathways": [
+        "neuromodulatory_signalling"
+      ]
+    },
+    {
+      "name": "Perampanel",
+      "mechanism_class": "ampa_antagonist",
+      "primary_moa": "Noncompetitive AMPA receptor antagonism",
+      "evidence_tier": "approved",
+      "indication": "focal_and_generalised",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "glutamate_attenuation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "ampa_antagonism",
+        "boxed_psychiatric_warning"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "GRIA1": -0.7,
+        "GRIK2": -0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.9,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "ampa_antagonist",
+      "relevant_pathways": [
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Talampanel",
+      "mechanism_class": "ampa_antagonist_early",
+      "primary_moa": "AMPA receptor antagonist; a controlled trial in refractory partial epilepsy did not demonstrate efficacy",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "glutamate_attenuation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "ampa_antagonism"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "GRIA1": -0.6,
+        "GRIK2": -0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "ampa_antagonist_early",
+      "relevant_pathways": [
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Ketamine",
+      "mechanism_class": "nmda_antagonist_dissociative",
+      "primary_moa": "NMDA channel block, used off-label in refractory status epilepticus",
+      "evidence_tier": "phase_2",
+      "indication": "refractory_status",
+      "route": "infusion",
+      "cns_penetration": 0.85,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "glutamate_attenuation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "dissociative_anaesthetic"
+      ],
+      "target_uncertainty": 0.4,
+      "pathways": [
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "GRIN1": -0.6,
+        "GRIN2B": -0.7,
+        "GRIN2A": -0.4
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.5,
+        "cardiac": 0.3,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "nmda_antagonist_dissociative",
+      "relevant_pathways": [
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Felbamate",
+      "mechanism_class": "nmda_glycine_site_antagonist",
+      "primary_moa": "NMDA glycine-site antagonism with GABA-A potentiation and sodium block; restricted for aplastic anaemia and hepatic failure",
+      "evidence_tier": "approved",
+      "indication": "restricted_refractory",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "glutamate_attenuation",
+        "sodium_channel_stabilisation"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "aplastic_anaemia_and_hepatic_failure"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "glutamatergic_excitation",
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "GRIN2B": -0.5,
+        "GRIN1": -0.4,
+        "SCN2A": -0.3,
+        "GABRA1": 0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.9,
+        "hematologic": 0.95,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "nmda_glycine_site_antagonist",
+      "relevant_pathways": [
+        "glutamatergic_excitation",
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Levetiracetam",
+      "mechanism_class": "SV2A_ligand",
+      "primary_moa": "Binds synaptic vesicle protein 2A, modulating neurotransmitter release",
+      "evidence_tier": "approved",
+      "indication": "broad_spectrum",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "vesicle_release_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "SV2A_behavioural_adverse"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "synaptic_vesicle",
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "SV2A": 0.6,
+        "CACNA1A": -0.15
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.7,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "SV2A_ligand",
+      "relevant_pathways": [
+        "synaptic_vesicle",
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Brivaracetam",
+      "mechanism_class": "SV2A_ligand",
+      "primary_moa": "High-affinity SV2A ligand",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.75,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "vesicle_release_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "SV2A_behavioural_adverse"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "synaptic_vesicle",
+        "voltage_gated_sodium"
+      ],
+      "target_effects": {
+        "SV2A": 0.75,
+        "SCN2A": -0.15
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.35,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.5,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "SV2A_ligand",
+      "relevant_pathways": [
+        "synaptic_vesicle",
+        "voltage_gated_sodium"
+      ]
+    },
+    {
+      "name": "Gabapentin",
+      "mechanism_class": "alpha2delta_ligand",
+      "primary_moa": "Binds the alpha-2-delta-1 subunit of voltage-gated calcium channels",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "alpha2delta_sedation"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "CACNA2D1": -0.7,
+        "CACNA1A": -0.15
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "alpha2delta_ligand",
+      "relevant_pathways": [
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Pregabalin",
+      "mechanism_class": "alpha2delta_ligand",
+      "primary_moa": "Higher-affinity alpha-2-delta-1 ligand",
+      "evidence_tier": "approved",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "alpha2delta_sedation"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "CACNA2D1": -0.8,
+        "CACNA1A": -0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.3,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "alpha2delta_ligand",
+      "relevant_pathways": [
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Ethosuximide",
+      "mechanism_class": "t_type_calcium_blocker",
+      "primary_moa": "T-type calcium channel block; first-line for absence seizures",
+      "evidence_tier": "approved",
+      "indication": "absence",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "calcium_channel_modulation"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "succinimide_class"
+      ],
+      "target_uncertainty": 0.15,
+      "pathways": [
+        "calcium_channels"
+      ],
+      "target_effects": {
+        "CACNA1G": -0.7,
+        "CACNA1H": -0.7
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.3,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.4,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "t_type_calcium_blocker",
+      "relevant_pathways": [
+        "calcium_channels"
+      ]
+    },
+    {
+      "name": "Retigabine (ezogabine)",
+      "mechanism_class": "kv7_opener_carbamate",
+      "primary_moa": "Kv7.2/7.3 opener; withdrawn worldwide in 2017 for retinal and skin pigmentation",
+      "evidence_tier": "approved",
+      "indication": "withdrawn",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "potassium_channel_opening"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "kv7_opening",
+        "pigmentation_toxicity"
+      ],
+      "target_uncertainty": 0.2,
+      "pathways": [
+        "potassium_channels"
+      ],
+      "target_effects": {
+        "KCNQ2": 0.85,
+        "KCNQ3": 0.85
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.4,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.85
+      },
+      "target_family": "kv7_opener_carbamate",
+      "relevant_pathways": [
+        "potassium_channels"
+      ]
+    },
+    {
+      "name": "Azetukalner (XEN1101)",
+      "mechanism_class": "kv7_opener_anilide",
+      "primary_moa": "Potent Kv7.2/7.3 opener designed to avoid the pigmentation liability; positive phase 3 in focal seizures",
+      "evidence_tier": "phase_3",
+      "indication": "focal",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "potassium_channel_opening"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "kv7_opening"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "potassium_channels"
+      ],
+      "target_effects": {
+        "KCNQ2": 0.9,
+        "KCNQ3": 0.9
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.4,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.2,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "kv7_opener_anilide",
+      "relevant_pathways": [
+        "potassium_channels"
+      ]
+    },
+    {
+      "name": "Acetazolamide",
+      "mechanism_class": "carbonic_anhydrase_inhibitor",
+      "primary_moa": "Carbonic anhydrase inhibition; adjunct including catamenial seizures",
+      "evidence_tier": "approved",
+      "indication": "adjunct",
+      "route": "oral",
+      "cns_penetration": 0.4,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "neuromodulatory_adjunct"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "carbonic_anhydrase_inhibition"
+      ],
+      "target_uncertainty": 0.3,
+      "pathways": [
+        "metabolic_oxidative"
+      ],
+      "target_effects": {
+        "CA2": -0.8
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.2,
+        "dermatologic_hypersensitivity": 0.2,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "carbonic_anhydrase_inhibitor",
+      "relevant_pathways": [
+        "metabolic_oxidative"
+      ]
+    },
+    {
+      "name": "Cannabidiol",
+      "mechanism_class": "cannabinoid_multitarget",
+      "primary_moa": "Multi-target: GPR55 antagonism, TRPV1 modulation and adenosine reuptake effects; used in Dravet and Lennox-Gastaut syndromes",
+      "evidence_tier": "approved",
+      "indication": "dravet_lennox_gastaut",
+      "route": "oral",
+      "cns_penetration": 0.7,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "neuromodulatory_adjunct",
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "cannabinoid_class"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "neuromodulatory_signalling",
+        "neuroinflammation"
+      ],
+      "target_effects": {
+        "GPR55": -0.5,
+        "TRPV1": -0.3,
+        "ADORA1": 0.2,
+        "SCN2A": -0.2,
+        "TNF": -0.15
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.5,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.5,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "cannabinoid_multitarget",
+      "relevant_pathways": [
+        "neuromodulatory_signalling",
+        "neuroinflammation"
+      ]
+    },
+    {
+      "name": "Everolimus",
+      "mechanism_class": "mtor_inhibitor",
+      "primary_moa": "mTORC1 inhibition; approved as adjunct for seizures in tuberous sclerosis",
+      "evidence_tier": "approved",
+      "indication": "tsc_associated_seizures",
+      "route": "oral",
+      "cns_penetration": 0.3,
+      "compartment": "both",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "long",
+      "safety_classes": [
+        "mtor_immunosuppression"
+      ],
+      "target_uncertainty": 0.25,
+      "pathways": [
+        "mtor_signalling"
+      ],
+      "target_effects": {
+        "MTOR": -0.8,
+        "RPS6KB1": -0.7
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.0,
+        "dermatologic_hypersensitivity": 0.2,
+        "teratogenicity": 0.0,
+        "hepatic": 0.2,
+        "hematologic": 0.4,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "mtor_inhibitor",
+      "relevant_pathways": [
+        "mtor_signalling"
+      ]
+    },
+    {
+      "name": "Bumetanide",
+      "mechanism_class": "nkcc1_inhibitor",
+      "primary_moa": "NKCC1 inhibition to restore chloride gradients; neonatal seizure trial missed its endpoint and was stopped for hearing loss",
+      "evidence_tier": "phase_2",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.1,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "loop_diuretic"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "chloride_homeostasis"
+      ],
+      "target_effects": {
+        "SLC12A2": -0.7
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.1,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.2,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "nkcc1_inhibitor",
+      "relevant_pathways": [
+        "chloride_homeostasis"
+      ]
+    },
+    {
+      "name": "Soticlestat",
+      "mechanism_class": "ch24h_inhibitor",
+      "primary_moa": "Cholesterol 24-hydroxylase inhibition reducing 24S-hydroxycholesterol; phase 3 missed its primary endpoints in Dravet and Lennox-Gastaut syndromes",
+      "evidence_tier": "phase_3",
+      "indication": "failed",
+      "route": "oral",
+      "cns_penetration": 0.65,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "cholesterol_metabolism"
+      ],
+      "target_uncertainty": 0.45,
+      "pathways": [
+        "metabolic_oxidative",
+        "glutamatergic_excitation"
+      ],
+      "target_effects": {
+        "CYP46A1": -0.85,
+        "GRIN2B": -0.25
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.2,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.0,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "ch24h_inhibitor",
+      "relevant_pathways": [
+        "metabolic_oxidative",
+        "glutamatergic_excitation"
+      ]
+    },
+    {
+      "name": "Anakinra",
+      "mechanism_class": "il1_receptor_antagonist",
+      "primary_moa": "IL-1 receptor antagonist; off-label in febrile infection-related epilepsy",
+      "evidence_tier": "phase_2",
+      "indication": "fires",
+      "route": "subcutaneous",
+      "cns_penetration": 0.1,
+      "compartment": "peripheral",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "short",
+      "safety_classes": [
+        "injection_reaction"
+      ],
+      "target_uncertainty": 0.5,
+      "pathways": [
+        "neuroinflammation"
+      ],
+      "target_effects": {
+        "IL1R1": -0.8,
+        "IL1B": -0.35
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.0,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.0,
+        "hematologic": 0.2,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "il1_receptor_antagonist",
+      "relevant_pathways": [
+        "neuroinflammation"
+      ]
+    },
+    {
+      "name": "P2X7 antagonist (class exemplar)",
+      "mechanism_class": "p2x7_antagonist",
+      "primary_moa": "Blocks the ATP-gated channel upstream of the inflammasome; evidence extrapolated from other indications",
+      "evidence_tier": "phase_2",
+      "indication": "disease_modifying",
+      "route": "oral",
+      "cns_penetration": 0.6,
+      "compartment": "cns",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "half_life_class": "intermediate",
+      "safety_classes": [
+        "innate_immune_suppression"
+      ],
+      "target_uncertainty": 0.55,
+      "pathways": [
+        "neuroinflammation"
+      ],
+      "target_effects": {
+        "P2RX7": -0.8,
+        "IL1B": -0.5,
+        "NLRP3": -0.3,
+        "IL6": -0.2
+      },
+      "safety_burden": {
+        "sedation_cognitive": 0.0,
+        "dermatologic_hypersensitivity": 0.0,
+        "teratogenicity": 0.0,
+        "hepatic": 0.1,
+        "hematologic": 0.1,
+        "behavioural_mood": 0.0,
+        "cardiac": 0.0,
+        "seizure_aggravation": 0.0,
+        "retinal_toxicity": 0.0
+      },
+      "target_family": "p2x7_antagonist",
+      "relevant_pathways": [
+        "neuroinflammation"
+      ]
+    }
+  ]
+}

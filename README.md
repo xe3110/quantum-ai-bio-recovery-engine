@@ -17,7 +17,7 @@ Quantum Bio Recovery Engine is a research platform for discovering optimal multi
 - **De novo molecular design** — deriving a target product profile from a
   disease model and assembling new chemical structures against it
 - Disease-agnostic contracts, exercised end to end for **multiple sclerosis,
-  Parkinson's, and Alzheimer's**
+  Parkinson's, Alzheimer's, and epilepsy**
 
 The system is designed for **reproducibility, extensibility, and future quantum hardware deployment**.
 
@@ -69,12 +69,13 @@ quantum-bio-recovery-engine/
 │ ├── ms/ # Multiple sclerosis: pairwise screen and k = 1/2/3 screen
 │ ├── parkinsons/ # Parkinson's: monotherapy + pair + triple screen
 │ ├── alzheimers/ # Alzheimer's: monotherapy + pair + triple screen
+│ ├── epilepsy/ # Epilepsy: monotherapy + pair + triple screen
 │ ├── design/ # De novo design campaigns (disease-agnostic)
 │ └── benchmarks/ # Scaling and hardness benchmarks
 ├── tools/ # Input curation and external-database fetchers
 ├── tests/ # Behavioural tests for the screen and the design stack
 ├── data/
-│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons, alzheimers)
+│ ├── diseases/ # Disease registry entries (multiple_sclerosis, parkinsons, alzheimers, epilepsy)
 │ ├── chemistry/ # Fragment library and known-structure reference set
 │ └── targets/ # Per-target druggability annotations
 ├── figures/ # Generated plots and benchmark figures
@@ -252,6 +253,40 @@ efficacy estimate.
 See [the Alzheimer's screen protocol](docs/alzheimers_screen.md) for the
 results, the controls, and the disease's own caveats.
 
+### Epilepsy monotherapy, pair, and triple screen
+
+The fourth disease, run through the identical scorer at **k = 1, 2, and 3**. A
+**37-agent** panel — sodium-channel blockers, GABAergic and glutamatergic agents,
+SV2A, calcium and Kv7 channel drugs, and epileptogenesis candidates — is scored
+against an **85-gene directional signature** and a cached STRING interactome:
+37 monotherapies, 666 pairs, 6,174 triples.
+
+```bash
+python -u -m experiments.epilepsy.run_combination_screen --top 25 --seed 7
+python -u -m experiments.epilepsy.run_combination_screen --quick      # smoke run
+```
+
+Epilepsy inverts the Alzheimer's problem: its disease-defining targets are ion
+channels and receptors, the most tractable class there is, and **30 of the 37
+panel agents are already approved**. The redundancy rule excludes pairs of
+sodium-channel blockers, which matches clinical practice and also removes those
+pairs from exploration.
+
+The best triple reverses **7.41%** of the signature (best pair 5.27%, best single
+3.08%), 16.9% of the full-reversal ceiling and 24.1% of the pooled-panel ceiling —
+the lowest ceiling of the four diseases. **83.4% of triples have a negative gain
+over their best pair**, so a third agent almost never earns its place here. The
+strata favour the potassium-channel-opening axis, which the design campaign's gap
+analysis also rates most unmet, but that axis has two agents, one withdrawn in 2017.
+
+**Two of three safety-penalty controls fail outright**: vigabatrin and retigabine
+are first and second in the pooled ranking. The cause is the composite score, which
+rewards an agent with one well-aligned target regardless of how little it moves
+(vigabatrin's signature reversal is under half of carbamazepine's), so it is
+reported as a failure of the scorer and not tuned away. See [the epilepsy
+protocol](docs/epilepsy_screen.md) for the inputs, the controls (each checked
+against a source) and the design results.
+
 ### De novo molecular design
 
 Where the screen above ranks **existing** agents, this campaign designs a new
@@ -298,7 +333,8 @@ CNS inflammation**; the Parkinson's campaign produces a MAO-B inhibitor fused
 to a caspase-1 warhead; the Alzheimer's campaign produces a cholinesterase
 carbamate fused to a CSF1R amide — built on an axis the gap analysis calls
 already served, with the top-priority target (`BACE1`) never reaching the
-optimiser. All three are walked through in full — including what their
+optimiser; the epilepsy campaign produces an S6 kinase arm fused to an SV2A ligand,
+on two axes that are mostly unserved. All four are walked through in full — including what their
 efficacy is not — in
 [§8 of the design protocol](docs/denovo_design_protocol.md#8-reading-a-design--worked-examples).
 
@@ -353,22 +389,24 @@ adamantane inflating its synthetic-tractability penalty.
 
 ### Registered diseases
 
-Three, so the disease-agnostic claim is checkable rather than asserted:
+Four, so the disease-agnostic claim is checkable rather than asserted:
 
-| | multiple sclerosis | Parkinson's | Alzheimer's |
-| --- | --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways |
-| Panel | 74 agents | 35 agents | 36 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes |
-| Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated |
-| Known structures | 42 agents | 26 agents | 23 agents |
-| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) |
-| Combination screen | pairs (v3), plus monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples |
+| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy |
+| --- | --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways |
+| Panel | 74 agents | 35 agents | 36 agents | 37 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes |
+| Druggability | 93 targets annotated | 90 targets annotated | 97 targets annotated | 85 targets annotated |
+| Known structures | 42 agents | 26 agents | 23 agents | 31 agents |
+| Unserved axis | remyelination (1.00) | synuclein proteostasis, trophic support (1.00) | tau modification, metabolic rescue (1.00) | none at 1.00; potassium channel opening (0.92) |
+| Combination screen | pairs (v3), plus monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples | monotherapy + pairs + triples |
 
 No two of them share a **therapeutic axis**, and any two overlap only on generic
-organ toxicity (cardiac, hepatic, gastrointestinal). Nothing in Parkinson's care
-is constrained by infection risk; it is constrained by dyskinesia and psychosis,
-and Alzheimer's by imaging-detected brain oedema (ARIA). Tests assert that
+toxicity (cardiac, hepatic, gastrointestinal, and teratogenicity, which MS and
+epilepsy both weigh). Nothing in Parkinson's care is constrained by infection
+risk; it is constrained by dyskinesia and psychosis, Alzheimer's by
+imaging-detected brain oedema (ARIA), and epilepsy by teratogenicity, severe skin
+reactions and seizure aggravation. Tests assert that
 separation pairwise, and assert that no module under `core/design/` imports
 disease-specific scoring.
 
@@ -376,6 +414,8 @@ disease-specific scoring.
 python -m experiments.design.run_denovo_design --disease parkinsons --quantum-benchmark
 python -m experiments.design.run_denovo_design --disease alzheimers --quantum-benchmark \
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
+python -m experiments.design.run_denovo_design --disease epilepsy --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/epilepsy
 ```
 
 Each disease declares a **known-structure reference set** that the design
@@ -425,6 +465,7 @@ covers, which is how the library learns what it is missing.
 | [Disease campaign protocol](docs/disease_campaign_protocol.md) | **Start here for a new disease.** What a registry entry must carry, the k-ary scoring contract, the cross-order comparison rule, the statistical treatment, and the checklist for adding the next disease |
 | [MS publication protocol](docs/ms_publication_protocol.md) | Screen inputs, all 20 scoring parameters, statistical treatment, controls, and the validation required for a manuscript |
 | [Parkinson's screen protocol](docs/parkinsons_screen.md) | The k = 1/2/3 screen: monotherapy vs combination results, mechanism strata, controls, and the caveats specific to chronic dopaminergic polypharmacy |
+| [Epilepsy screen protocol](docs/epilepsy_screen.md) | The k = 1/2/3 screen for a disease with tractable channel targets and an approved-heavy panel: what a redundancy rule that matches clinical polytherapy costs, why epilepsy has no axis at 1.00, and the source-checked controls |
 | [Alzheimer's screen protocol](docs/alzheimers_screen.md) | The k = 1/2/3 screen: why amyloid cannot be scored from a transcript signature, the strata that disagree with the design analysis, the withdrawn-drug control that failed, and the antibody delivery assumption |
 | [De novo design protocol](docs/denovo_design_protocol.md) | Target profile derivation, the Hamiltonian and its two approximations, the chemistry model's validation state and blind spots, and the central transplantation assumption |
 | [Efficacy calibration](docs/efficacy_calibration.md) | Whether the screen's score tracks published efficacy: a two-tier separation in MS against sourced meta-analyses, why the composite does not, and why no score-to-effect mapping is supported |

@@ -12,7 +12,7 @@
       "cap": "monovalent group tuning solubility, polarity, or metabolic stability; no engagement claim"
     },
     "sources": "Chemotypes abstracted from published inhibitor and modulator classes named in each entry's parent_chemotype field.",
-    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable, and Alzheimer's when its profile reported six of fourteen (BACE1, PPARG, FYN, PTGS2, MAPK14, BCHE). unreachable_requirements() is the diagnostic that drives this file's growth.",
+    "scope": "Fragments are disease-agnostic chemical matter and are shared across every campaign. The library began MS-oriented; Parkinson's pharmacophores were added when the PD profile reported ten of its fourteen targets as unreachable, and Alzheimer's when its profile reported six of fourteen (BACE1, PPARG, FYN, PTGS2, MAPK14, BCHE), and epilepsy when its profile reported ten of fourteen (SLC12A2, GABRA1, KCNQ2, SV2A, ADK, CACNA2D1, RPS6KB1, KCNQ3, P2RX7, CACNA1H). unreachable_requirements() is the diagnostic that drives this file's growth.",
     "evidence_schema": {
       "evidence_tier": "strength of the published precedent that this chemotype engages its primary targets: approved_drug > clinical_candidate > published_chemotype > speculative",
       "primary_targets": "the targets the chemotype is claimed to bind directly. Every other gene in `engages` is a downstream transcriptional consequence and is a materially weaker claim.",
@@ -1188,6 +1188,226 @@
       "evidence_tier": "approved_drug",
       "primary_targets": [
         "ACHE"
+      ]
+    },
+    {
+      "id": "nkcc1_sulfamoylbenzoic_acid",
+      "name": "Sulfamoylbenzoic acid loop-diuretic head group",
+      "role": "pharmacophore",
+      "smiles": "*c1cc(cc(c1)S(N)(=O)=O)C(=O)O",
+      "target_family": "NKCC1_inhibitor",
+      "parent_chemotype": "Bumetanide / loop diuretics",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "engages": {
+        "SLC12A2": -0.7
+      },
+      "liabilities": [],
+      "note": "The carboxylate and sulfonamide anchor the chloride-binding site. Both are ionised at physiological pH, which is why bumetanide barely enters the brain and why the neonatal trial did not answer whether NKCC1 inhibition in the brain helps.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "SLC12A2"
+      ]
+    },
+    {
+      "id": "gabaa_benzodiazepinone",
+      "name": "1,4-Benzodiazepin-2-one GABA-A positive modulator",
+      "role": "pharmacophore",
+      "smiles": "*C1=NCC(=O)N(C)c2ccc(Cl)cc21",
+      "target_family": "GABAA_positive_modulator",
+      "parent_chemotype": "Diazepam / clobazam / benzodiazepine class",
+      "therapeutic_axes": [
+        "gabaergic_potentiation"
+      ],
+      "engages": {
+        "GABRA1": 0.75,
+        "GABRG2": 0.7,
+        "GABRA2": 0.5,
+        "GABRA5": 0.3
+      },
+      "liabilities": [],
+      "note": "Binds the interface between the alpha and gamma-2 subunits. Efficacy is limited by tolerance and by sedation, and alpha-subtype selectivity (alpha-1 for sedation, alpha-2 and 3 for anxiolysis) is the long-standing design problem.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "GABRA1",
+        "GABRG2"
+      ]
+    },
+    {
+      "id": "kv7_aryl_carbamate",
+      "name": "Aryl carbamate Kv7 opener head group",
+      "role": "pharmacophore",
+      "smiles": "*NC(=O)OCC",
+      "target_family": "Kv7_opener",
+      "parent_chemotype": "Retigabine / ezogabine and the azetukalner series",
+      "therapeutic_axes": [
+        "potassium_channel_opening"
+      ],
+      "engages": {
+        "KCNQ2": 0.8,
+        "KCNQ3": 0.8
+      },
+      "liabilities": [
+        "aniline_dimerisation"
+      ],
+      "note": "The carbamate carbonyl H-bonds to the Kv7 pore tryptophan. Retigabine was withdrawn in 2017 because its secondary aniline dimerises into pigmented species in skin and retina, so a design that reproduces the free aniline reproduces the liability.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "KCNQ2",
+        "KCNQ3"
+      ]
+    },
+    {
+      "id": "sv2a_pyrrolidone_acetamide",
+      "name": "2-Oxopyrrolidin-1-yl butanamide SV2A ligand",
+      "role": "pharmacophore",
+      "smiles": "*C(=O)C(CC)N1CCCC1=O",
+      "target_family": "SV2A_ligand",
+      "parent_chemotype": "Levetiracetam / brivaracetam",
+      "therapeutic_axes": [
+        "vesicle_release_modulation"
+      ],
+      "engages": {
+        "SV2A": 0.7,
+        "CACNA1A": -0.15
+      },
+      "liabilities": [],
+      "note": "The pyrrolidone acetamide is the whole pharmacophore of the SV2A ligand class. Whether the ligand potentiates or inhibits SV2A function is not settled, so the sign of this engagement is a hypothesis.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "SV2A"
+      ]
+    },
+    {
+      "id": "adk_deazapurine",
+      "name": "7-Deazapurine adenosine kinase inhibitor scaffold",
+      "role": "pharmacophore",
+      "smiles": "*c1c[nH]c2ncnc(N)c12",
+      "target_family": "ADK_inhibitor",
+      "parent_chemotype": "Tubercidin analogues / 5-iodotubercidin series",
+      "therapeutic_axes": [
+        "neuromodulatory_adjunct",
+        "epileptogenesis_modification"
+      ],
+      "engages": {
+        "ADK": -0.8,
+        "ADORA1": 0.3
+      },
+      "liabilities": [
+        "nucleoside_mimic"
+      ],
+      "note": "An adenosine mimic. Adenosine kinase is the main sink for adenosine, so inhibiting it raises tone at the A1 receptor. The nucleoside-like series has poor drug-likeness and systemic toxicity, which is why no adenosine kinase inhibitor has been approved.",
+      "evidence_tier": "published_chemotype",
+      "primary_targets": [
+        "ADK"
+      ]
+    },
+    {
+      "id": "alpha2delta_gabapentinoid",
+      "name": "Gabapentinoid amino acid arm",
+      "role": "pharmacophore",
+      "smiles": "*NCC1(CC(=O)O)CCCCC1",
+      "target_family": "alpha2delta_ligand",
+      "parent_chemotype": "Gabapentin / pregabalin",
+      "therapeutic_axes": [
+        "calcium_channel_modulation"
+      ],
+      "engages": {
+        "CACNA2D1": -0.75,
+        "CACNA1A": -0.15
+      },
+      "liabilities": [],
+      "note": "A zwitterionic amino acid transported across the barrier by the L-type amino acid transporter, not by diffusion. That is unusual, and a designed molecule that lacks the transporter recognition motif may lose brain exposure even if it keeps affinity.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "CACNA2D1"
+      ]
+    },
+    {
+      "id": "s6k_piperazinyl_pyrimidine",
+      "name": "Piperazinyl pyrimidine S6 kinase hinge binder",
+      "role": "pharmacophore",
+      "smiles": "*c1cc(N2CCNCC2)ncn1",
+      "target_family": "S6K_inhibitor",
+      "parent_chemotype": "PF-4708671 / piperazinyl-pyrimidine S6K1 series",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "engages": {
+        "RPS6KB1": -0.7,
+        "MTOR": -0.2
+      },
+      "liabilities": [],
+      "note": "Represents the piperazinyl-pyrimidine S6K1 series, described from the published chemotype rather than a specific compound. Selectivity over the AGC kinases is the recurring problem.",
+      "evidence_tier": "published_chemotype",
+      "primary_targets": [
+        "RPS6KB1"
+      ]
+    },
+    {
+      "id": "p2x7_adamantyl_amide",
+      "name": "Adamantylmethyl amide P2X7 antagonist arm",
+      "role": "pharmacophore",
+      "smiles": "*C(=O)NCC12CC3CC(CC(C3)C1)C2",
+      "target_family": "P2X7_antagonist",
+      "parent_chemotype": "AstraZeneca adamantyl-amide P2X7 series",
+      "therapeutic_axes": [
+        "epileptogenesis_modification"
+      ],
+      "engages": {
+        "P2RX7": -0.75,
+        "IL1B": -0.4,
+        "NLRP3": -0.25
+      },
+      "liabilities": [],
+      "note": "The adamantane sits in a lipophilic allosteric pocket. The series is very lipophilic, so a design has to spend its property budget carefully. Brain-penetrant P2X7 antagonists have been tested in other indications, and none has shown efficacy in epilepsy.",
+      "evidence_tier": "clinical_candidate",
+      "primary_targets": [
+        "P2RX7"
+      ]
+    },
+    {
+      "id": "t_type_succinimide",
+      "name": "Succinimide T-type calcium channel blocker",
+      "role": "pharmacophore",
+      "smiles": "*C1(C)CC(=O)NC1=O",
+      "target_family": "T_type_calcium_blocker",
+      "parent_chemotype": "Ethosuximide / succinimide class",
+      "therapeutic_axes": [
+        "calcium_channel_modulation"
+      ],
+      "engages": {
+        "CACNA1G": -0.7,
+        "CACNA1H": -0.7
+      },
+      "liabilities": [],
+      "note": "A small polar ring that blocks thalamic T-type channels and is first-line only for absence seizures. It has little activity against other seizure types, which makes it a narrow arm in a broad-spectrum design.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "CACNA1G",
+        "CACNA1H"
+      ]
+    },
+    {
+      "id": "ampa_pyridone_nitrile",
+      "name": "Aryl pyridone AMPA receptor antagonist arm",
+      "role": "pharmacophore",
+      "smiles": "*c1cc(cn(c1=O)-c1ccccc1)-c1ccccn1",
+      "target_family": "AMPA_antagonist",
+      "parent_chemotype": "Perampanel / pyridone AMPA antagonists",
+      "therapeutic_axes": [
+        "glutamate_attenuation"
+      ],
+      "engages": {
+        "GRIA1": -0.7,
+        "GRIK2": -0.15
+      },
+      "liabilities": [],
+      "note": "Binds an allosteric site on the transmembrane linkers and blocks channel gating. The class carries a boxed warning for psychiatric and behavioural effects, which the fragment cannot remove.",
+      "evidence_tier": "approved_drug",
+      "primary_targets": [
+        "GRIA1"
       ]
     }
   ]

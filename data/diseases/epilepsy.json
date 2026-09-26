@@ -1,0 +1,56 @@
+{
+  "identifier": "epilepsy",
+  "name": "Epilepsy",
+  "description": "A group of disorders defined by recurrent unprovoked seizures arising from hypersynchronous neuronal firing, with an imbalance between GABAergic inhibition and glutamatergic excitation, channelopathies, chloride dysregulation, astroglial buffering failure, mTOR pathway hyperactivation and chronic neuroinflammation. Roughly two thirds of patients are controlled by antiseizure medication, which suppresses seizures without preventing epileptogenesis; the remainder are drug-resistant, and no approved drug modifies the disease.",
+  "vocabulary": {
+    "pathways": [
+      "gabaergic_inhibition", "glutamatergic_excitation", "voltage_gated_sodium",
+      "potassium_channels", "calcium_channels", "chloride_homeostasis",
+      "synaptic_vesicle", "astroglial_buffering", "neuromodulatory_signalling",
+      "mtor_signalling", "neuroinflammation", "neurotrophic_plasticity",
+      "metabolic_oxidative", "neuronal_injury"
+    ],
+    "therapeutic_axes": [
+      "sodium_channel_stabilisation", "gabaergic_potentiation", "glutamate_attenuation",
+      "vesicle_release_modulation", "calcium_channel_modulation",
+      "potassium_channel_opening", "epileptogenesis_modification", "neuromodulatory_adjunct"
+    ],
+    "risk_domains": [
+      "sedation_cognitive", "dermatologic_hypersensitivity", "teratogenicity",
+      "hepatic", "hematologic", "behavioural_mood", "cardiac",
+      "seizure_aggravation", "retinal_toxicity"
+    ],
+    "risk_weights": {
+      "sedation_cognitive": 0.7,
+      "dermatologic_hypersensitivity": 0.9,
+      "teratogenicity": 1.0,
+      "hepatic": 0.8,
+      "hematologic": 0.8,
+      "behavioural_mood": 0.6,
+      "cardiac": 0.6,
+      "seizure_aggravation": 0.8,
+      "retinal_toxicity": 0.9
+    },
+    "risk_weights_rationale": "Weighted by how strongly each domain constrains use in a population that is treated for decades, includes many women of childbearing age, and in which stopping a drug can itself cause seizures. Teratogenicity is weighted highest because valproate's fetal risk has reshaped prescribing for that group. Severe cutaneous hypersensitivity (carbamazepine with HLA-B*1502, lamotrigine on rapid titration) and permanent retinal toxicity (vigabatrin; retigabine, withdrawn in 2017) are weighted next because they are severe and not reliably reversible. Seizure aggravation is unusual to the disease: a drug of the right mechanism can worsen a particular syndrome, as sodium-channel blockers can in Dravet syndrome. This vocabulary shares no therapeutic axis with any other registered disease. It shares only generic organ toxicity (cardiac, hepatic) and teratogenicity, which applies to any chronic therapy in women of childbearing age."
+  },
+  "delivery": {
+    "requires_cns_exposure": true,
+    "cns_mpo_floor": 4.0,
+    "preferred_routes": ["oral"],
+    "sanctuary_rationale": "Seizures are generated inside the brain and every approved antiseizure drug must cross the blood-brain barrier, so CNS exposure is a gate on the design rather than a preference. Efflux by P-glycoprotein and related transporters at the barrier is one of the leading hypotheses for drug-resistant epilepsy, which makes exposure at the target site a live scientific question here and not only a delivery detail. The evidence-status block on every design lists efflux as unassessed."
+  },
+  "gene_aliases": {},
+  "data": {
+    "signature": "data/ep_expression.csv",
+    "network": "data/networks/string_ep_network.tsv",
+    "panel": "data/drugs/epilepsy_panel_v1.json",
+    "druggability": "data/targets/druggability_epilepsy.json",
+    "structures": "data/chemistry/ep_known_structures.json"
+  },
+  "provenance": {
+    "signature_version": "v1, 85 directional genes",
+    "network_source": "STRING v12, cached 2026-09-27",
+    "panel_version": "1.0.0",
+    "note": "Illustrative discovery-stage context built to exercise the disease-agnostic contracts. The signature is curated from literature knowledge rather than derived from a specific cohort, mixes findings from acquired temporal lobe epilepsy and monogenic channelopathies that would be analysed separately in a real study, and is weaker evidence than the MS entry's. AQP4 has no interactions at the 0.4 cutoff in the cached network and contributes to signature reversal but not to network proximity. Nothing derived from it is a clinical recommendation."
+  }
+}

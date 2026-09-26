@@ -1,10 +1,11 @@
 # Disease campaign protocol — adding a disease, and what the engine does with it
 
-This is the standing procedure. Three diseases are registered — multiple
-sclerosis, Parkinson's, and Alzheimer's — and the point of writing this down is
-that the fourth, fifth, and sixth should not require reading any scoring code.
-Alzheimer's was the first built from this document rather than alongside it, and
-the checklist below was corrected where it turned out to be wrong.
+This is the standing procedure. Four diseases are registered — multiple
+sclerosis, Parkinson's, Alzheimer's, and epilepsy — and the point of writing this
+down is that the fifth, sixth, and seventh should not require reading any scoring
+code. Alzheimer's was the first built from this document rather than alongside it,
+and the checklist below was corrected where it turned out to be wrong. Epilepsy is
+the first built from the corrected version.
 
 A **campaign** is everything the engine does for one disease: rank the agents
 that already exist ([combination screen](#3-the-combination-screen)), and
@@ -16,6 +17,7 @@ read the same registry entry. Neither names a disease anywhere in its logic.
 | Multiple sclerosis | `data/diseases/multiple_sclerosis.json` | [protocol](ms_publication_protocol.md) — pairs (`ms_scoring`) and, since 2026-09-26, k = 1, 2, 3 (`combination_scoring`, [§12](ms_publication_protocol.md#12-ms-at-k--1-2-3-on-the-registry-scorer)) | [protocol](denovo_design_protocol.md) |
 | Parkinson's disease | `data/diseases/parkinsons.json` | [protocol](parkinsons_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md) |
 | Alzheimer's disease | `data/diseases/alzheimers.json` | [protocol](alzheimers_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#alzheimers-disease) |
+| Epilepsy | `data/diseases/epilepsy.json` | [protocol](epilepsy_screen.md) — k = 1, 2, 3, `combination_scoring` | [protocol](denovo_design_protocol.md#epilepsy) |
 
 Everything below is **discovery-stage hypothesis generation**. No output of any
 campaign is a clinical recommendation, and every campaign inherits every
@@ -237,7 +239,8 @@ A ranked list is not a result on its own.
 
 In every campaign run so far, **individual combination ranks are not stable**
 under the curated target-effect uncertainty (top-K Jaccard 0.2 in Parkinson's;
-0.19 at order 2 and 0.09 at order 3 in Alzheimer's; 0.23 and 0.13 in MS), while **stratum medians are
+0.19 at order 2 and 0.09 at order 3 in Alzheimer's; 0.23 and 0.13 in MS; 0.36 and
+0.24 in epilepsy, the highest and still far below 0.5), while **stratum medians are
 far steadier**. The runner prints an explicit warning whenever that
 Jaccard falls below 0.5.
 
@@ -314,7 +317,11 @@ No scoring code should need editing. If it does, that is the bug.
    is the right refactor. If you copy with `sed`, do not use `.` as a wildcard in
    a path pattern: `experiments.parkinsons.` also matches
    `experiments/parkinsons/`, and the first Alzheimer's run wrote its results to
-   a directory literally named `experiments.alzheimers.results`.
+   a directory literally named `experiments.alzheimers.results`. The epilepsy
+   runner is the first to read its control names and the prose describing them
+   from the panel's declared controls, so it needed only the constants changed;
+   the other runners still carry disease-specific wording, and retrofitting them
+   would change their output text without changing any number.
 8. **Tests** → add the identifier to `DISEASES` in
    [tests/test_multi_disease.py](../tests/test_multi_disease.py) and
    [tests/test_combination_scoring.py](../tests/test_combination_scoring.py).
@@ -342,8 +349,10 @@ No scoring code should need editing. If it does, that is the bug.
   registry contains.
 - Registered diseases must have genuinely different vocabularies, checked
   pairwise across every registered disease. No two share a therapeutic axis, and
-  any two overlap only on generic organ toxicity (`cardiac`, `hepatic`,
-  `gastrointestinal`) among risk domains. Two diseases with the same vocabulary
+  any two overlap only on generic toxicity (`cardiac`, `hepatic`,
+  `gastrointestinal`, and, since epilepsy, `teratogenicity`, which MS shares)
+  among risk domains. Widening that set was a deliberate decision made because
+  the fourth disease genuinely shares the domain, not a rename to pass the test. Two diseases with the same vocabulary
   would not test the abstraction at all.
 - Every registered disease must declare a novelty reference set that overlaps
   its own panel and adds chemical matter beyond the fragment library. An
@@ -369,13 +378,29 @@ These apply to every disease and do not need restating in a per-disease doc.
   cost is represented only by route burden and half-life spread in
   `regimen_burden`. This is the largest open gap, it binds hardest on diseases
   treated with chronic oral polypharmacy, and it is the next model to build.
+- **The composite rewards narrow, well-aligned agents.** `reversal_efficiency`
+  divides therapeutic movement by the signal an agent engages, so an agent with one
+  well-aligned target scores near 1.0 however little of the signature it moves. In
+  epilepsy, vigabatrin (one target, signature reversal 0.0075) ranked first at every
+  order and retigabine second in the pooled ranking, so two of three declared safety-penalty controls sat
+  at the top of the pooled ranking. The guard against broad low-efficacy agents
+  winning on bonus terms has an inverse failure for narrow ones. Read the efficacy
+  block, not `priority_score`, for anything resembling efficacy, and evaluate any
+  fix on every registered disease at once.
+- **Panel composition sets what a screen can say.** Epilepsy's panel is 30
+  approved agents of 37, so its ranking is mostly antiseizure drugs against each
+  other, and the axis-gap analysis has no axis at 1.00 (a test that assumed one
+  had to be relaxed to 0.8, and the change is recorded in the test). State the
+  approved share of a panel before interpreting its strata.
 - **Withdrawal and averaged safety.** `evidence_tier` records approval, not
   withdrawal, and `safety_union` is a weighted mean over risk domains, so a
-  single catastrophic domain is diluted. In Alzheimer's, tacrine — withdrawn for
+  single catastrophic domain is diluted. In epilepsy, retigabine (withdrawn worldwide
+  in 2017) ranked second in the pooled ranking and also counts as approved cover in the
+  axis-gap analysis. In Alzheimer's, tacrine — withdrawn for
   hepatotoxicity, with the highest safety union of any single agent — ranked
   **first of 36 monotherapies** by composite score and reached the diversity-capped
   top 25 six times, while the safety-penalty control's own result line read
-  "passes". A max-domain term is the follow-up, to be evaluated on all three
+  "passes". A max-domain term is the follow-up, to be evaluated on all four
   diseases together rather than tuned to one.
 - **Transcript-blind to protein-level mechanisms.** A transcript signature cannot
   represent an agent whose action is on a protein that has no transcript

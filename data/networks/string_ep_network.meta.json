@@ -1,0 +1,16 @@
+{
+  "source": "STRING v12 REST API",
+  "signature": "data/ep_expression.csv",
+  "url": "https://string-db.org/api/json/network",
+  "species": 9606,
+  "required_score": 400,
+  "add_nodes": 150,
+  "query_genes": 85,
+  "nodes": 234,
+  "edges": 7001,
+  "signature_genes_in_network": 84,
+  "signature_genes_absent": [
+    "AQP4"
+  ],
+  "note": "Absent genes are excluded from network-proximity metrics but still contribute to signature-reversal metrics."
+}

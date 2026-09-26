@@ -169,6 +169,7 @@ bound.
 | Parkinson's k = 3 | 14.09% | 19.6% | 33.2% |
 | MS k = 2 | 10.54% | 12.3% | 15.1% |
 | MS k = 3 | 14.95% | 17.5% | 21.4% |
+| Epilepsy k = 3 | 7.41% | 16.9% | 24.1% |
 
 Read this way, the best Alzheimer's triple captures **about a quarter of what
 its panel could reach** rather than "10%", and Alzheimer's sits below Parkinson's

@@ -1,0 +1,206 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "disease": "epilepsy",
+    "purpose": "Structures for the small-molecule members of epilepsy_panel_v1, used as the known-chemical-matter reference set for novelty assessment in the de novo design campaign.",
+    "curation_rule": "Every entry carries the molecular formula and average mass reported in the public literature for that agent. tests/test_chemistry.py re-derives both from the SMILES and fails on any disagreement, so a mistyped structure cannot enter the reference set silently. Each structure was additionally cross-checked against RDKit (formula and average mass) before being admitted; all 31 agree with both backends.",
+    "what_the_check_caught": "One transcription error: brivaracetam was first written with a four-membered ring where the drug has a five-membered pyrrolidinone, and the formula check rejected it (C10H18N2O2 against C11H20N2O2). The other 30 passed on the first transcription. That is a weaker reassurance than it sounds, because formula and mass cannot detect a positional isomer.",
+    "validation_limit": "Structures were written from memory of the published skeletons, not copied from a database. A substituent on the wrong ring carbon has the same formula and mass and would pass. Confirm each against a primary structure source before publication use.",
+    "why_this_file_exists": "Without it, novelty for an epilepsy design is measured only against the pharmacophore library's own parent fragments, so a candidate could be reported as novel while closely resembling an approved antiseizure drug that was simply absent from the comparison. Registered before the first design run, as for Alzheimer's.",
+    "omissions": "Six of the 37 panel records have no entry. Anakinra is a protein. 'P2X7 antagonist (class exemplar)' names a chemotype rather than a settled structure and is omitted rather than guessed. Everolimus (a macrolide) and azetukalner and soticlestat and talampanel could not be transcribed with confidence and are omitted rather than guessed. Absence weakens novelty checking against those agents and nothing else.",
+    "stereochemistry": "Stereodescriptors are retained where the marketed agent is a single enantiomer. The fingerprint used for novelty is connectivity-based and does not read them, so they document the entry rather than change any score.",
+    "n_structures": 31
+  },
+  "structures": [
+    {
+      "name": "Carbamazepine",
+      "smiles": "NC(=O)N1c2ccccc2C=Cc2ccccc12",
+      "formula": "C15H12N2O",
+      "mass": 236.27
+    },
+    {
+      "name": "Oxcarbazepine",
+      "smiles": "NC(=O)N1c2ccccc2CC(=O)c2ccccc12",
+      "formula": "C15H12N2O2",
+      "mass": 252.27
+    },
+    {
+      "name": "Eslicarbazepine acetate",
+      "smiles": "CC(=O)O[C@H]1Cc2ccccc2N(C(N)=O)c2ccccc12",
+      "formula": "C17H16N2O3",
+      "mass": 296.32,
+      "note": "The acetate prodrug, as marketed."
+    },
+    {
+      "name": "Phenytoin",
+      "smiles": "O=C1NC(=O)C(N1)(c1ccccc1)c1ccccc1",
+      "formula": "C15H12N2O2",
+      "mass": 252.27
+    },
+    {
+      "name": "Lamotrigine",
+      "smiles": "Nc1nnc(c(N)n1)-c1cccc(Cl)c1Cl",
+      "formula": "C9H7Cl2N5",
+      "mass": 256.09
+    },
+    {
+      "name": "Lacosamide",
+      "smiles": "COC[C@@H](NC(C)=O)C(=O)NCc1ccccc1",
+      "formula": "C13H18N2O3",
+      "mass": 250.29
+    },
+    {
+      "name": "Cenobamate",
+      "smiles": "NC(=O)O[C@H](Cn1ncnn1)c1ccccc1Cl",
+      "formula": "C10H10ClN5O2",
+      "mass": 267.67
+    },
+    {
+      "name": "Rufinamide",
+      "smiles": "NC(=O)c1cn(Cc2c(F)cccc2F)nn1",
+      "formula": "C10H8F2N4O",
+      "mass": 238.19
+    },
+    {
+      "name": "Valproate",
+      "smiles": "CCCC(CCC)C(=O)O",
+      "formula": "C8H16O2",
+      "mass": 144.21,
+      "note": "Structure is valproic acid, the free acid; the marketed forms are sodium salts and divalproex."
+    },
+    {
+      "name": "Topiramate",
+      "smiles": "CC1(C)OC2COC3(COS(N)(=O)=O)OC(C)(C)OC3C2O1",
+      "formula": "C12H21NO8S",
+      "mass": 339.36
+    },
+    {
+      "name": "Zonisamide",
+      "smiles": "NS(=O)(=O)Cc1noc2ccccc12",
+      "formula": "C8H8N2O3S",
+      "mass": 212.23
+    },
+    {
+      "name": "Phenobarbital",
+      "smiles": "CCC1(C(=O)NC(=O)NC1=O)c1ccccc1",
+      "formula": "C12H12N2O3",
+      "mass": 232.24
+    },
+    {
+      "name": "Clobazam",
+      "smiles": "CN1C(=O)CC(=O)N(c2ccccc2)c2cc(Cl)ccc12",
+      "formula": "C16H13ClN2O2",
+      "mass": 300.74
+    },
+    {
+      "name": "Midazolam (nasal rescue)",
+      "smiles": "Cc1ncc2CN=C(c3ccccc3F)c3cc(Cl)ccc3-n12",
+      "formula": "C18H13ClFN3",
+      "mass": 325.77,
+      "note": "Structure is midazolam; the nasal formulation does not change it."
+    },
+    {
+      "name": "Vigabatrin",
+      "smiles": "C=CC(N)CCC(=O)O",
+      "formula": "C6H11NO2",
+      "mass": 129.16
+    },
+    {
+      "name": "Tiagabine",
+      "smiles": "Cc1ccsc1C(=CCCN1CCCC(C1)C(=O)O)c1sccc1C",
+      "formula": "C20H25NO2S2",
+      "mass": 375.55
+    },
+    {
+      "name": "Ganaxolone",
+      "smiles": "CC(=O)C1CCC2C3CCC4CC(C)(O)CCC4(C)C3CCC12C",
+      "formula": "C22H36O2",
+      "mass": 332.52
+    },
+    {
+      "name": "Stiripentol",
+      "smiles": "CC(C)(C)C(O)C=Cc1ccc2OCOc2c1",
+      "formula": "C14H18O3",
+      "mass": 234.29
+    },
+    {
+      "name": "Fenfluramine",
+      "smiles": "CCNC(C)Cc1cccc(c1)C(F)(F)F",
+      "formula": "C12H16F3N",
+      "mass": 231.26
+    },
+    {
+      "name": "Perampanel",
+      "smiles": "O=c1c(-c2ccccc2C#N)cc(-c2ccccn2)cn1-c1ccccc1",
+      "formula": "C23H15N3O",
+      "mass": 349.38
+    },
+    {
+      "name": "Ketamine",
+      "smiles": "CNC1(CCCCC1=O)c1ccccc1Cl",
+      "formula": "C13H16ClNO",
+      "mass": 237.73
+    },
+    {
+      "name": "Felbamate",
+      "smiles": "NC(=O)OCC(COC(N)=O)c1ccccc1",
+      "formula": "C11H14N2O4",
+      "mass": 238.24
+    },
+    {
+      "name": "Levetiracetam",
+      "smiles": "CC[C@H](N1CCCC1=O)C(N)=O",
+      "formula": "C8H14N2O2",
+      "mass": 170.21
+    },
+    {
+      "name": "Brivaracetam",
+      "smiles": "CCC[C@H]1CC(=O)N(C1)[C@@H](CC)C(N)=O",
+      "formula": "C11H20N2O2",
+      "mass": 212.29
+    },
+    {
+      "name": "Gabapentin",
+      "smiles": "NCC1(CC(=O)O)CCCCC1",
+      "formula": "C9H17NO2",
+      "mass": 171.24
+    },
+    {
+      "name": "Pregabalin",
+      "smiles": "CC(C)C[C@H](CN)CC(=O)O",
+      "formula": "C8H17NO2",
+      "mass": 159.23
+    },
+    {
+      "name": "Ethosuximide",
+      "smiles": "CCC1(C)CC(=O)NC1=O",
+      "formula": "C7H11NO2",
+      "mass": 141.17
+    },
+    {
+      "name": "Retigabine (ezogabine)",
+      "smiles": "CCOC(=O)Nc1ccc(NCc2ccc(F)cc2)cc1N",
+      "formula": "C16H18FN3O2",
+      "mass": 303.33,
+      "note": "Withdrawn from all markets in 2017, retained because it is chemical matter a design should not accidentally reproduce."
+    },
+    {
+      "name": "Acetazolamide",
+      "smiles": "CC(=O)Nc1nnc(s1)S(N)(=O)=O",
+      "formula": "C4H6N4O3S2",
+      "mass": 222.25
+    },
+    {
+      "name": "Cannabidiol",
+      "smiles": "CCCCCc1cc(O)c(c(O)c1)C1C=C(C)CCC1C(C)=C",
+      "formula": "C21H30O2",
+      "mass": 314.46
+    },
+    {
+      "name": "Bumetanide",
+      "smiles": "CCCCNc1cc(C(=O)O)cc(c1Oc1ccccc1)S(N)(=O)=O",
+      "formula": "C17H20N2O5S",
+      "mass": 364.42
+    }
+  ]
+}

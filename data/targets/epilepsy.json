@@ -1,0 +1,18 @@
+{
+  "disease": "epilepsy",
+  "description": "Core sodium channel, GABAergic, glutamatergic and mTOR network in epilepsy",
+  "targets": [
+    "SCN1A",
+    "SCN2A",
+    "GABRA1",
+    "GABRG2",
+    "SV2A",
+    "KCNQ2",
+    "CACNA1G",
+    "GRIA1",
+    "MTOR",
+    "SLC12A5",
+    "ADK",
+    "IL1B"
+  ]
+}

@@ -8,7 +8,7 @@
 
 **Start Date:** 2026-01-16 (Foundation Phase, Days 1-9)
 
-**Last updated:** 2026-09-26 (Phase 7, addendum)
+**Last updated:** 2026-09-27 (Phase 8)
 
 ---
 
@@ -1498,21 +1498,21 @@ disease are the two a small molecule reaches worst.
   earlier two except generic organ toxicity. The antibodies are modelled at CNS
   penetration 0.10–0.15, not zero, because they reach the brain at about one
   per cent and still work; a test pins that band.
-* **A direction bug I made on the first pass.** I wrote the druggability file
-  from target-class precedent, so `AKT1`, `BCL2`, `CAMK2A`, `GPX4`, `SIRT1` and
-  `HMOX1` all scored as tractable — as *inhibitors*. Every one of them needs to
-  go **up**. `AKT1` was fifth in the design profile because of it. I caught it by asking, of the profile's top targets, what chemistry
-  would actually push each in the wanted direction, and rescored all six as
-  activation problems. The rule is written into the annotation file and pinned
-  by a test.
+* **Tractability direction.** The first draft of the druggability file scored
+  targets from class precedent, so `AKT1`, `BCL2`, `CAMK2A`, `GPX4`, `SIRT1` and
+  `HMOX1` all came out tractable, as *inhibitors*, although every one of them needs
+  to go **up**. `AKT1` was fifth in the design profile as a result. Checking, for
+  each of the profile's top targets, what chemistry could push it in the wanted
+  direction exposed the error, and all six were rescored as activation problems. The
+  rule is written into the annotation file and pinned by a test.
 
-### Two mistakes in my own tooling, both silent
+### Tooling problems, both silent
 
-* **A `sed` wildcard.** I made the Alzheimer's runner by copying the Parkinson's
-  one and replacing `experiments.parkinsons.` — and `.` matches `/`, so
-  `experiments/parkinsons/results` became `experiments.alzheimers.results`. The
-  run succeeded and wrote 2 MB into a directory that did not belong anywhere.
-  Nothing failed.
+* **A `sed` wildcard.** The Alzheimer's runner was made by copying the Parkinson's
+  one and replacing `experiments.parkinsons.`; `.` matches `/`, so
+  `experiments/parkinsons/results` became `experiments.alzheimers.results`. The run
+  succeeded and wrote 2 MB into a directory that did not belong anywhere. Nothing
+  failed.
 * **PD prose in the results file.** The runner's control report carried the
   string "Two non-ergot D2/D3 agonists are pharmacodynamically duplicate" into
   the Alzheimer's JSON. The campaign protocol said the runner needed only its
@@ -1683,8 +1683,9 @@ are generous, because each panel was curated from its own signature's genes.
 The best triple is methylprednisolone + ocrelizumab + opicinumab at **14.95%**
 reversal (best pair 10.54%, best single 5.58%). The full run took about two
 hours of wall-clock time, and its output was empty the whole time because Python
-buffers stdout when redirected; I misread that silence as "prints once per stage"
-and gave a wrong estimate before I checked CPU time against elapsed time.
+buffers stdout when redirected. The silence was first read as per-stage printing,
+which produced a wrong time estimate; comparing CPU time with elapsed time showed
+the process had been mostly idle.
 
 Results: 45.0% of pairs and 93.4% of triples beat the best monotherapy (higher than
 either other disease, partly because the best single is a broad steroid and the
@@ -1707,9 +1708,8 @@ negative controls reach the top 25 (high-dose biotin 6th, evobrutinib 22nd),
 opicinumab is 28th, and opicinumab also appears in both the best-reversal pair and
 triple. Full detail in [the MS protocol, §12](ms_publication_protocol.md).
 
-I made the same class of mistake building the MS runner that I made for
-Alzheimer's: I copied the Alzheimer's runner rather than the Parkinson's one and
-had to strip its prose (ARIA monitoring, "elderly patient", cholinesterase
+The same class of problem recurred in the MS runner: it was copied from the
+Alzheimer's runner rather than the Parkinson's one, and its prose (ARIA monitoring, "elderly patient", cholinesterase
 inhibitors) from the MS caveats. The refactor named in step 7 of the campaign
 protocol, reading controls from the panel metadata, would remove the copy step.
 
@@ -1744,3 +1744,194 @@ efficacy predictor and that the one positive result may be circular.
 15–20 agents per disease. Re-derive `target_effects` blind to efficacy so the
 calibration test can be independent. Add a bounded, held-out-validated link between
 reversal and effect before any percentage is attached to a combination.
+
+---
+
+## Phase 8 — Epilepsy, the fourth campaign (2026-09-27)
+
+### Objective
+
+Run the same two tracks for epilepsy that the other three diseases got — the
+k = 1, 2, 3 combination screen and the de novo design campaign — following the
+campaign protocol as corrected during Alzheimer's. Epilepsy was chosen because it
+inverts the Alzheimer's problem: its disease-defining targets are ion channels and
+receptors, the most tractable class there is, so the question stops being "can a
+small molecule reach the target" and becomes "what is left once the crowded
+channel targets are covered".
+
+| | MS | Parkinson's | Alzheimer's | **Epilepsy** |
+| --- | --- | --- | --- | --- |
+| Signature | 112 genes | 90 genes | 97 genes | **85 genes, 14 pathways** |
+| Panel | 74 agents | 35 agents | 36 agents | **37 agents, 32 mechanism classes** |
+| Approved share of panel | 24 of 74 | 16 of 35 | 8 of 36 | **30 of 37** |
+| Interactome | 261 nodes | 240 nodes | 247 nodes | **234 nodes, 7,001 edges** |
+| Genes absent from network | — | `GBA1` (aliased) | none | **`AQP4` (no edges at 0.4; not an alias)** |
+| Known structures | 42 | 26 | 23 | **31** |
+
+### What the disease forced
+
+* **The redundancy rule matches clinical practice, and that costs something.**
+  Eight panel agents carry the `sodium_channel_blocker` class, so 28
+  sodium-channel pairs are excluded by construction, which is what rational
+  polytherapy does anyway. It also means a useful dual-sodium combination would be
+  invisible to the screen.
+* **An approved-heavy panel breaks a test I had assumed universal.** The
+  unserved-axis test asserted an axis with gap exactly 1.00. Epilepsy has none:
+  everolimus (approved for TSC-associated seizures) and retigabine (approved, then
+  withdrawn in 2017) give every axis some approved cover. I relaxed it to 0.8 and
+  wrote the reason into the test, because relaxing a test to pass is only honest if
+  the reason is stated. It also exposes the withdrawal blind spot a second time:
+  a drug withdrawn from every market still counts as cover.
+* **Teratogenicity is shared with MS, and I widened the test rather than rename the
+  domain.** The pairwise vocabulary check failed because MS and epilepsy both weigh
+  it (teriflunomide; valproate). It genuinely applies to both. Renaming it to
+  `fetal_malformation` would have passed and would have been the check being gamed,
+  so I added it to the generic set and said so in the docstring.
+* **Tractability has a direction, applied from the start this time.** GAD1/2, KCC2,
+  EAAT2, Kir4.1 and Nav1.1 all have to go *up*, and the precedent for each is
+  inhibitors or nothing, so they are scored low. That is the Alzheimer's lesson
+  applied on the first pass, and a test pins it.
+
+### Verifying the controls instead of recalling them
+
+The negative-efficacy and safety controls are the part of a panel most likely to be
+written from a half-remembered headline, so I checked each against a source before
+declaring it: soticlestat's phase 3 missed its primary endpoints in Dravet and
+Lennox-Gastaut syndromes; the bumetanide neonatal trial missed its endpoint and was
+stopped after hearing loss; retigabine was withdrawn in 2017 for pigmentation;
+azetukalner's phase 3 was positive (53.2% against 10.4% seizure reduction). One
+of my candidates did not survive: ganaxolone failed in adult focal seizures but is
+approved for CDKL5 deficiency, so it is not a clean negative control and I left
+it out. That leaves **three** negative controls, fewer than the other diseases,
+which the panel metadata says plainly. Talampanel is the weakest of the three: one
+source described a 300-patient trial failing to show efficacy while an earlier
+crossover had suggested some, so I recorded both.
+
+### Problems found during the build
+
+* **Invalid JSON, silently.** A `\\n` typed in the curation script's source left the
+  panel file ending in a literal backslash-n, so it was not valid JSON. The script
+  printed "Wrote ..." and exited normally; parsing the file exposed it. Same shape as
+  the earlier silent failures.
+* **Brivaracetam ring size.** The SMILES had a four-membered lactam where the drug
+  has a pyrrolidinone. The formula check rejected it (C10H18N2O2 against
+  C11H20N2O2). The other 30 structures passed first time, which is weaker
+  reassurance than it sounds: formula and mass cannot detect a positional isomer.
+* **Unbuffered output.** The full screen was launched with `python -u` from the
+  start, having learned from the MS run that redirected output is otherwise buffered
+  until exit. Progress was visible throughout.
+
+### Design campaign
+
+Run under RDKit and qiskit, `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+* 14-requirement profile led by `SLC12A2` (0.756), `MTOR`, `GABRA1`, `PTGS2`,
+  `KCNQ2`. **Ten of fourteen targets were unreachable**, the same as Parkinson's had
+  at the outset; ten pharmacophores were added (76 fragments) and the gap went to
+  zero, with the other three diseases' lists unchanged.
+* Enumeration, exact eigensolver and QAOA all reach +0.0868. The depth sweep is
+  d1 +0.0868, **d2 −0.0573**, then +0.0868 at depths 3 to 5: it dips at depth 2 and
+  recovers.
+* Leading design `C22H27N5O2`, MW 393.5, CNS-MPO 5.09/6: an S6 kinase arm fused to
+  an SV2A ligand, on two axes that are mostly unserved (gaps 0.83). Nearest real
+  drug levetiracetam at Tanimoto 0.39. **Its reversal is 2.44%, the lowest of the
+  four campaigns' leading designs.**
+* Every arm set carried forward contains the SV2A arm, because it has the best solo
+  benefit in the library, so the campaign explored a narrow region, and the SV2A
+  engagement sign is the least settled thing in the panel.
+* **Only one of four designs fits the property window.** The other three, all built
+  on a benzodiazepinone arm, are 445 to 472 Da against a 420 Da ceiling.
+* **The stage inversion held for a fourth disease**: the Hamiltonian's rank-1 arm
+  set built the worst molecule (fitness 0.87 against 1.36 for the best).
+
+### Combination screen
+
+37 + 666 + 6,174 combinations, `--seed 7`, about 14 minutes.
+
+* Best reversal: the P2X7 antagonist exemplar alone (3.08%), everolimus + P2X7
+  (5.27%), midazolam + everolimus + P2X7 (**7.41%**). Against the panel's ceiling
+  (41 of 85 genes targeted; full-reversal 43.9%, pooled-panel 30.8%, the lowest of
+  the four diseases) the best triple captures 16.9% and 24.1%.
+* **Third agents almost never earn their place: 83.4% of triples have a negative
+  gain over their best pair** (median −0.0706), against 60.3% in Parkinson's and
+  about a third in MS and Alzheimer's. Consistent with the clinical advice to be
+  slow to add a third drug, but part of it is risk arithmetic, so I do not read it
+  as validation.
+* Redundancy is low (14.5% of pairs and 33.4% of triples sub-additive), partly
+  because the redundancy rule removes 51 pairs before scoring, 28 of them among the
+  eight sodium-channel blockers.
+* Bootstrap top-25 Jaccard **0.358 / 0.235** (highest of the four, still unstable);
+  weight sensitivity Spearman 0.951 / 0.942, the lowest of the four, so this is the
+  first disease whose ranking is somewhat sensitive to the weights as well.
+* **Five of the top seven order-2 strata contain `potassium_channel_opening`**, the
+  axis the gap analysis rates most unmet (0.92), so screen and gap analysis agree,
+  as in MS and Parkinson's. But that axis has two agents, one of them withdrawn.
+
+**The safety-penalty control failed, this time by the runner's own test.**
+Vigabatrin is first and retigabine second in the pooled ranking, and vigabatrin is
+#1 of 37 monotherapies, of 615 pairs and of 6,174 triples. The top pair is
+vigabatrin + acetazolamide and the top triple is vigabatrin + retigabine +
+acetazolamide. Tacrine in Alzheimer's slipped through only when read per order;
+this is the whole ranking. I looked for why before writing anything, and it is
+in the composite rather than the panel: `reversal_efficiency` divides movement by
+the signal an agent engages, so an agent with one well-aligned target scores near
+1.0 however little it moves. Vigabatrin has one target (ABAT), efficiency 0.90, and
+a signature reversal of 0.0075, less than half of carbamazepine's, and still wins.
+The panel has many narrow agents, so they fill the leaderboard. Its safety union
+(0.229) is below carbamazepine's (0.389) because one severe domain is averaged
+across nine. I did not tune the scorer to pass the controls. Bumetanide (a
+negative-efficacy control) also reaches the top 25, on the same narrow-and-aligned
+advantage; soticlestat and talampanel do not. The top composite pair reverses 1.17%
+of the signature, the best reversal pair 5.27%, which is why `priority_score` must
+not be read as an efficacy ranking.
+
+The `reversal_efficiency` mechanism was designed to stop low-efficacy, low-risk
+agents winning on bonus terms, and here it does the opposite for a different kind
+of agent. I built that guard and did not anticipate the inverse.
+
+### Tests
+
+**322 passed, 24 skipped** without RDKit; **346 passed** with it (276 / 300 before).
+New checks: tractability scored in the wanted direction, sodium-channel pairs
+excluded while carbamazepine with levetiracetam is not, and teratogenicity named as
+the heaviest risk. Two existing tests were changed deliberately, as described above.
+
+### Reflection
+
+> The result that surprised me most was in the scorer. I had a guard against
+> low-efficacy agents winning on bonus terms, and it lets a one-target agent win on
+> efficiency alone. I found it only because a control I had declared in advance
+> failed, and I had checked its provenance carefully enough to trust the failure.
+>
+> The other results were procedural, not biological. Four diseases in,
+> the failures that cost the most time were all the same one: a step that reports
+> success while producing something subtly wrong. A script that printed "Wrote"
+> and produced invalid JSON; a run whose empty log I read as progress; a test that
+> assumed an axis at exactly 1.00. What has worked each time is reading the output
+> as data, by parsing the file, checking CPU time against the clock, and asking
+> what a test was actually written to protect before deciding whether to change it.
+>
+> I also want a rule for when relaxing a test is honest. Two were relaxed this
+> phase. I only trust them because each change is written where the next person
+> will see it, with the reason that made the old assertion wrong for this disease,
+> and because neither weakens what the test is for.
+
+### Next steps
+
+1. **Fix the composite's narrow-agent advantage and the missing withdrawal signal
+   together**: cap or reweight `reversal_efficiency`, add a max-domain safety term
+   and a `withdrawn` flag the scorer and the gap analysis both read, and evaluate all
+   of it on all four diseases at once, not tuned to vigabatrin and tacrine.
+2. **A `withdrawn` flag the scorer and the gap analysis both read**, evaluated on
+   all four diseases together (tacrine, retigabine).
+3. **Syndrome-stratified signatures.** A pooled epilepsy signature averages over
+   mechanisms that need opposite treatment, and sodium-channel blockers can worsen
+   Dravet syndrome.
+4. **Enzyme-induction and interaction model.** Carbamazepine, phenytoin and
+   phenobarbital lower the levels of most co-prescribed drugs, so the regimen-level
+   constraints are pharmacokinetic and entirely unmodelled here.
+5. Retrofit the older runners to read control names and prose from the panel
+   metadata, as the epilepsy runner does.
+6. Gather verified per-drug effects to extend the efficacy calibration beyond MS;
+   epilepsy has an unusually large number of approved agents with published
+   seizure-reduction figures, which makes it the best candidate.

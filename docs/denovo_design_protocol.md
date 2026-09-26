@@ -3,8 +3,8 @@
 A disease-agnostic pipeline that derives a **Target Product Profile** from a
 disease model, formulates **pharmacophore selection as a QUBO**, solves it
 exactly and on QAOA, and **assembles novel molecular structures** against the
-resulting specification. Registered and exercised end to end for three diseases:
-multiple sclerosis, Parkinson's, and Alzheimer's.
+resulting specification. Registered and exercised end to end for four diseases:
+multiple sclerosis, Parkinson's, Alzheimer's, and epilepsy.
 
 It is **not** a drug-discovery result. There is no binding-affinity model
 anywhere in this pipeline. Nothing has been docked, simulated, synthesised, or
@@ -49,22 +49,23 @@ plateaus in progressive disease, so a molecule designed for progressive MS has
 to reach CNS parenchyma. The flag turns the CNS multi-parameter score from a
 preference into a gate.
 
-### Three diseases, and why the second and third matter
+### Four diseases, and why each one after the first matters
 
 An abstraction exercised by one instance is a claim, not a design. The
-registry holds three:
+registry holds four:
 
-| | multiple sclerosis | Parkinson's | Alzheimer's |
-| --- | --- | --- | --- |
-| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways |
-| Panel | 74 agents | 35 agents | 36 agents |
-| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes |
-| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support | cholinergic_symptomatic, amyloid_modification, tau_modification, synaptic_excitotoxicity_protection, microglial_immune_modulation, metabolic_vascular_rescue |
-| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic | aria, bradycardia_syncope, cognitive_worsening, falls_sedation, infusion_hypersensitivity, cardiac, hepatic, gastrointestinal |
+| | multiple sclerosis | Parkinson's | Alzheimer's | epilepsy |
+| --- | --- | --- | --- | --- |
+| Signature | 112 genes, 10 pathways | 90 genes, 13 pathways | 97 genes, 13 pathways | 85 genes, 14 pathways |
+| Panel | 74 agents | 35 agents | 36 agents | 37 agents |
+| Interactome | STRING v12, 261 nodes | STRING v12, 240 nodes | STRING v12, 247 nodes | STRING v12, 234 nodes |
+| Therapeutic axes | immunomodulation, cns_innate, remyelination, neuroprotection, metabolic_repair | symptomatic_dopaminergic, synuclein_proteostasis, mitochondrial_rescue, neuroinflammation_control, trophic_support | cholinergic_symptomatic, amyloid_modification, tau_modification, synaptic_excitotoxicity_protection, microglial_immune_modulation, metabolic_vascular_rescue | sodium_channel_stabilisation, gabaergic_potentiation, glutamate_attenuation, vesicle_release_modulation, calcium_channel_modulation, potassium_channel_opening, epileptogenesis_modification, neuromodulatory_adjunct |
+| Safety domains | infection, malignancy, autoimmunity, teratogenicity, ocular, cardiac, hepatic | dyskinesia, impulse_control, psychiatric, orthostatic_hypotension, somnolence, gastrointestinal, cardiac, hepatic | aria, bradycardia_syncope, cognitive_worsening, falls_sedation, infusion_hypersensitivity, cardiac, hepatic, gastrointestinal | sedation_cognitive, dermatologic_hypersensitivity, teratogenicity, hepatic, hematologic, behavioural_mood, cardiac, seizure_aggravation, retinal_toxicity |
 
 No two of them share a **therapeutic axis**, and any two overlap only on
-generic organ toxicity -- cardiac, hepatic, and (for Parkinson's and
-Alzheimer's) gastrointestinal, which genuinely apply to every disease. Nothing
+generic toxicity -- cardiac, hepatic, gastrointestinal, and teratogenicity (which
+MS and epilepsy both weigh), each of which genuinely applies to more than one
+disease. Nothing
 in Parkinson's care is constrained by infection risk; it is constrained by
 dyskinesia and psychosis; Alzheimer's is constrained by imaging-detected brain
 oedema (ARIA) and by drugs that worsen the cognition they are meant to protect. Those vocabularies, and the weighting
@@ -514,6 +515,69 @@ metadata, not registry vocabulary. The same happens in the other direction
 the per-fragment labels are stale for any disease other than the one that added
 the fragment, and re-annotating them per disease is open work.
 
+### Epilepsy
+
+```
+c1(ccc(cc1)C(=O)C(CC)N2CCCC2=O)-c4cc(N3CCNCC3)ncn4
+C22H27N5O2   MW 393.5   cLogP 2.14   TPSA 78.4   CNS-MPO 5.09/6
+arms: s6k_piperazinyl_pyrimidine (published_chemotype) + sv2a_pyrrolidone_acetamide (approved_drug)
+axes: epileptogenesis_modification + vesicle_release_modulation
+mean engagement confidence 0.56, weakest claim MTOR
+nearest known compound: Levetiracetam, Tanimoto 0.39
+```
+
+An **S6 kinase inhibitor arm fused to an SV2A ligand arm**: mTOR-pathway
+correction on one arm, vesicle-release modulation on the other. Predicted effects:
+SV2A +0.70, RPS6KB1 −0.70, MTOR −0.20, CACNA1A −0.15. Signature reversal is 2.44%
+(reversal efficiency 0.48), the lowest of the four campaigns' leading designs (MS 5.73%, Parkinson's 5.50%, Alzheimer's 5.12%).
+
+Run under RDKit and qiskit, `--k 2 --arms 3 --top 4 --quantum-benchmark`:
+
+- 14-requirement profile led by `SLC12A2` (0.756), `MTOR`, `GABRA1`, `PTGS2`,
+  `KCNQ2`. **Ten of the fourteen targets were unreachable** before this campaign
+  (`SLC12A2`, `GABRA1`, `KCNQ2`, `KCNQ3`, `SV2A`, `ADK`, `CACNA2D1`, `RPS6KB1`,
+  `P2RX7`, `CACNA1H`), the same as Parkinson's had at the outset. Ten pharmacophores
+  were added, taking the library to 76 fragments (48 pharmacophores) and the gap to
+  zero, and leaving MS and Alzheimer's at zero and Parkinson's at its two.
+- 10-variable QUBO, 45 couplings, 45 feasible states of 1,024. Enumeration, the
+  exact eigensolver and QAOA all reach +0.0868. The QAOA depth sweep is
+  d1 +0.0868, **d2 −0.0573**, then +0.0868 at depths 3 to 5: it *dips* at depth 2
+  and recovers, a different failure from Alzheimer's (where depth 5 regressed) and
+  more evidence that the depth sweep is the honest report and a default depth is
+  luck.
+- Axis gaps range from 0.00 (`sodium_channel_stabilisation`) to 0.92
+  (`potassium_channel_opening`); no axis is at 1.00 (see
+  [the epilepsy screen doc](epilepsy_screen.md#4-where-this-screen-ends-and-design-begins)).
+
+**Four things worth reading past the headline.**
+
+1. **Unlike Alzheimer's, the best design lands on axes that are mostly unserved.**
+   Its two axes have gaps of 0.83 each. But I would not oversell that: its profile
+   coverage is 0.079, its reversal is modest, and its weakest claim (`MTOR`) is a
+   secondary effect of an S6K arm that I described from a published chemotype
+   rather than a specific compound.
+2. **Every arm set carried forward contains the SV2A arm.** All three top arm sets
+   pair with it, because it has the best solo benefit in the library, so the
+   campaign explored a narrow region. The sign of SV2A engagement is also
+   unsettled in the literature (whether the ligand potentiates or inhibits SV2A
+   function), so the arm the whole campaign leans on is the one whose direction is
+   least certain.
+3. **Only one of the four designs fits the property window.** The leading design
+   (MW 393.5, TPSA 78.4) is inside it. The other three, all built on a
+   benzodiazepinone GABA-A arm, exceed the 420 Da ceiling (445–472 Da), and two
+   also exceed the TPSA ceiling. They pass the CNS gate and violate the window; and
+   a molecule that fuses a benzodiazepine motif inherits sedation and dependence
+   liability that the design cannot see.
+4. **The stage inversion held for a fourth disease.** The Hamiltonian's rank-1 arm
+   set (arylpropionic acid + SV2A, +0.0868) built the *worst* of the three
+   molecules (best fitness 0.87, against 1.31 and 1.36), because the carboxylic acid
+   is what the CNS gate penalises. The best came from rank 3 (S6K + SV2A).
+
+The novelty comparison ran against a registered 31-structure reference set from the
+first run. The nearest real drug is levetiracetam at Tanimoto 0.39; the nearest
+*entry* is the library's own SV2A fragment at 0.40, which is what the design was
+assembled from.
+
 ### What their efficacy is
 
 **Unknown, and untested even in silico for binding.** No docking score, no
@@ -541,13 +605,14 @@ document still receives the caveat with the data.
 
 ### The arm set that wins is not the arm set that builds the best molecule
 
-This held for all three diseases, and it is easy to quote the wrong number:
+This held for all four diseases, and it is easy to quote the wrong number:
 
 | disease | Hamiltonian rank 1 | best assembled fitness came from |
 | --- | --- | --- |
 | multiple sclerosis | BTK + RORgt (+0.0443) | BTK + CSF1R, **rank 3** (+0.0355) |
 | Parkinson's | GLUT + MAO-B (+0.0830) | caspase-1 + MAO-B, **rank 2** (+0.0732) |
 | Alzheimer's | cholinesterase carbamate + arylpropionic acid (+0.0724) | cholinesterase carbamate + CSF1R amide, **rank 3** (+0.0542) |
+| Epilepsy | arylpropionic acid + SV2A ligand (+0.0868) | S6K arm + SV2A ligand, **rank 3** (+0.0553) |
 
 The two stages optimise different things. The QUBO scores confidence-weighted
 coverage under a linearised property envelope; design fitness adds
@@ -618,6 +683,8 @@ python -m experiments.design.run_denovo_design --disease multiple_sclerosis
 python -m experiments.design.run_denovo_design --disease parkinsons --quantum-benchmark
 python -m experiments.design.run_denovo_design --disease alzheimers --quantum-benchmark \
     --k 2 --arms 3 --top 4 --outdir experiments/design/results/alzheimers
+python -m experiments.design.run_denovo_design --disease epilepsy --quantum-benchmark \
+    --k 2 --arms 3 --top 4 --outdir experiments/design/results/epilepsy
 pytest -q tests/
 ```
 

@@ -1,0 +1,444 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "disease": "epilepsy",
+    "direction_rule": "Tractability is scored in the direction the signature wants, not in the direction the target class is usually drugged. Where a receptor or channel must be potentiated (GABA-A subunits, Kv7, SV2A) the precedent is high. Where an enzyme, transporter or channel must be RAISED (GAD1/2, KCC2, EAAT2, Kir4.1, Nav1.1) the precedent is inhibitors or nothing, so it is scored as the harder activation problem.",
+    "purpose": "Per-target modality annotation for epilepsy. Tells the design layer which proteins a small molecule can realistically engage.",
+    "schema": {
+      "target_class": "broad protein family",
+      "small_molecule_tractability": "0-1 ordinal prior that a drug-like small molecule can productively engage this protein; 0 marks a transcriptional readout rather than a target",
+      "note": "the reason for the value, so it can be argued with"
+    },
+    "curation_rule": "Ordinal priors reflecting precedent in the public literature, on the same scale as the MS, Parkinson's and Alzheimer's annotations. Judgements, not measurements.",
+    "readout_convention": "A target scoring below 0.2 is treated by the design engine as a readout: the profile may require its expression to move, but no arm of a designed molecule will be assigned to bind it.",
+    "the_defining_problem": "Epilepsy is the opposite case to Alzheimer's. The disease-defining targets are ion channels and receptors, which are the most tractable protein class there is: most of the approved drugs already act on them. The unmet need is therefore not in tractability but in what those targets do not reach. About a third of patients are drug-resistant, no approved drug prevents epileptogenesis, and the axes with the least chemical matter (astroglial buffering, adenosine, mTOR pathway correction) sit on targets that are enzymes, suppressors or structural proteins. The profile tests whether the engine can look past the crowded channel targets.",
+    "n_targets": 85
+  },
+  "targets": {
+    "ABAT": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.85,
+      "note": "GABA transaminase; vigabatrin is an irreversible inhibitor"
+    },
+    "ADK": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.8,
+      "note": "Adenosine kinase; inhibitors are well-characterised, and inhibition is the wanted direction"
+    },
+    "ADORA1": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.6,
+      "note": "A1 receptor; agonists have precedent but a heavy sedative and cardiac cost"
+    },
+    "ADORA2A": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.9,
+      "note": "A2A receptor antagonists, with istradefylline as approved precedent"
+    },
+    "AIF1": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Iba1, a microglial activation marker"
+    },
+    "AKT1": {
+      "target_class": "kinase",
+      "small_molecule_tractability": 0.85,
+      "note": "Inhibition is the wanted direction here, and inhibitors are clinical-stage"
+    },
+    "AQP4": {
+      "target_class": "channel",
+      "small_molecule_tractability": 0.2,
+      "note": "Water channel with mislocalisation in hippocampal sclerosis; modulators are early-stage"
+    },
+    "BCL2": {
+      "target_class": "apoptosis",
+      "small_molecule_tractability": 0.25,
+      "note": "Raising the anti-apoptotic protein is wanted, and the small-molecule precedent is inhibition"
+    },
+    "BDNF": {
+      "target_class": "growth_factor",
+      "small_molecule_tractability": 0.1,
+      "note": "Pro-epileptogenic here, so lowering it is wanted, and it is reached through TrkB rather than bound"
+    },
+    "CA2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.95,
+      "note": "Carbonic anhydrase II; acetazolamide, topiramate and zonisamide"
+    },
+    "CACNA1A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.5,
+      "note": "P/Q-type Cav2.1; partly inhibited by lamotrigine and levetiracetam"
+    },
+    "CACNA1G": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Cav3.1 T-type; ethosuximide and zonisamide"
+    },
+    "CACNA1H": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Cav3.2 T-type; ethosuximide"
+    },
+    "CACNA2D1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.95,
+      "note": "Alpha-2-delta-1; gabapentin and pregabalin bind it"
+    },
+    "CASP3": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.7,
+      "note": "Executioner caspase; inhibitors known"
+    },
+    "CHRNA4": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.5,
+      "note": "Nicotinic alpha-4; the target of a gain-of-function familial epilepsy"
+    },
+    "CYP46A1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.7,
+      "note": "Cholesterol 24-hydroxylase; soticlestat inhibits it"
+    },
+    "DEPDC5": {
+      "target_class": "suppressor",
+      "small_molecule_tractability": 0.05,
+      "note": "GATOR1 component, a loss-of-function epilepsy gene; restoration is not a small-molecule goal"
+    },
+    "FOS": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.05,
+      "note": "An immediate-early-gene readout of neuronal activity"
+    },
+    "GABRA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.9,
+      "note": "GABA-A alpha-1; benzodiazepine and barbiturate potentiation is the best-precedented mechanism in the disease"
+    },
+    "GABRA2": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.75,
+      "note": "GABA-A alpha-2; benzodiazepine-site subtype"
+    },
+    "GABRA5": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.55,
+      "note": "GABA-A alpha-5, extrasynaptic tonic inhibition; subtype-selective positive modulators exist"
+    },
+    "GABRB3": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.7,
+      "note": "GABA-A beta-3; barbiturate and loreclezole-type sites"
+    },
+    "GABRD": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.6,
+      "note": "GABA-A delta, extrasynaptic; neurosteroids (ganaxolone) potentiate it"
+    },
+    "GABRG2": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.8,
+      "note": "GABA-A gamma-2, required for the benzodiazepine site"
+    },
+    "GAD1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.2,
+      "note": "GABA synthesis; enzyme induction rather than activation is wanted, and there is no small-molecule precedent"
+    },
+    "GAD2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.2,
+      "note": "GABA synthesis; as GAD1"
+    },
+    "GFAP": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Astrocyte activation marker, a readout"
+    },
+    "GJA1": {
+      "target_class": "gap_junction",
+      "small_molecule_tractability": 0.35,
+      "note": "Connexin 43; gap-junction blockers such as tonabersat exist"
+    },
+    "GLUL": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.15,
+      "note": "Glutamine synthetase; loss in hippocampal sclerosis, activation is not a realistic small-molecule goal"
+    },
+    "GPR55": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.5,
+      "note": "Cannabidiol antagonises it; few selective ligands"
+    },
+    "GRIA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "AMPA subunit; perampanel is the approved noncompetitive antagonist"
+    },
+    "GRIK2": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.6,
+      "note": "Kainate subunit; topiramate acts at it, selective agents are scarce"
+    },
+    "GRIN1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Obligatory NMDA subunit; ketamine and memantine-type blockers"
+    },
+    "GRIN2A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.65,
+      "note": "NMDA subunit; selective negative modulators exist"
+    },
+    "GRIN2B": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.7,
+      "note": "GluN2B-selective negative modulators exist"
+    },
+    "GRM5": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.8,
+      "note": "mGluR5, with negative allosteric modulators in clinical development"
+    },
+    "HDAC1": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.85,
+      "note": "Histone deacetylase; valproate is a weak inhibitor"
+    },
+    "HMGB1": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "Alarmin; antibodies and glycyrrhizin-type binders only"
+    },
+    "HTR2C": {
+      "target_class": "gpcr",
+      "small_molecule_tractability": 0.65,
+      "note": "5-HT2C agonism, the fenfluramine route"
+    },
+    "IL1B": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "A cytokine, reached through the inflammasome or receptor antagonism"
+    },
+    "IL1R1": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.3,
+      "note": "Anakinra blocks it; small-molecule antagonists are rare"
+    },
+    "IL6": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.15,
+      "note": "A cytokine, a readout of glial activation"
+    },
+    "KCNA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.3,
+      "note": "Kv1.1; opening is wanted, and openers are rare"
+    },
+    "KCNJ10": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.3,
+      "note": "Kir4.1, whose astroglial loss is the wanted direction to reverse; openers are rare"
+    },
+    "KCNMA1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.4,
+      "note": "BK channel; openers exist but a mixed effect on excitability"
+    },
+    "KCNQ2": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.9,
+      "note": "Kv7.2; retigabine and azetukalner open it, and opening is the wanted direction"
+    },
+    "KCNQ3": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.9,
+      "note": "Kv7.3; as Kv7.2"
+    },
+    "KCNT1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.6,
+      "note": "Gain-of-function epilepsy target; inhibitors such as quinidine are nonselective"
+    },
+    "MTOR": {
+      "target_class": "kinase",
+      "small_molecule_tractability": 0.9,
+      "note": "Rapamycin and everolimus"
+    },
+    "NEFL": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Neurofilament light, an injury biomarker and a readout"
+    },
+    "NFE2L2": {
+      "target_class": "transcription_factor",
+      "small_molecule_tractability": 0.55,
+      "note": "Nrf2, activated through KEAP1 electrophiles"
+    },
+    "NLRP3": {
+      "target_class": "inflammasome",
+      "small_molecule_tractability": 0.65,
+      "note": "Several clinical-stage inhibitors"
+    },
+    "NPY": {
+      "target_class": "neuropeptide",
+      "small_molecule_tractability": 0.15,
+      "note": "A peptide, delivered or induced rather than bound; raising it is the wanted direction"
+    },
+    "NTRK2": {
+      "target_class": "receptor_kinase",
+      "small_molecule_tractability": 0.6,
+      "note": "TrkB; inhibitors exist"
+    },
+    "P2RX7": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.75,
+      "note": "ATP-gated channel upstream of the inflammasome, with brain-penetrant antagonists in clinical development"
+    },
+    "PIK3CA": {
+      "target_class": "kinase",
+      "small_molecule_tractability": 0.9,
+      "note": "Inhibitors are approved in oncology"
+    },
+    "PPARA": {
+      "target_class": "nuclear_receptor",
+      "small_molecule_tractability": 0.85,
+      "note": "Fibrate target; agonism is the wanted direction"
+    },
+    "PTEN": {
+      "target_class": "phosphatase",
+      "small_molecule_tractability": 0.15,
+      "note": "Restoring a lost phosphatase is not a small-molecule goal"
+    },
+    "PTGS2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.9,
+      "note": "COX-2; NSAIDs and coxibs"
+    },
+    "PVALB": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Parvalbumin, an interneuron-loss readout"
+    },
+    "RPS6KB1": {
+      "target_class": "kinase",
+      "small_molecule_tractability": 0.8,
+      "note": "S6 kinase; ATP-competitive inhibitors exist"
+    },
+    "SCN1A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.35,
+      "note": "Nav1.1; activation is wanted (Dravet), and activators are peptide toxins and early tool compounds. Sodium blockers can worsen Dravet"
+    },
+    "SCN1B": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.05,
+      "note": "Sodium-channel beta-1 subunit, a structural readout"
+    },
+    "SCN2A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.9,
+      "note": "Nav1.2; blocked by the classic sodium-channel antiseizure drugs"
+    },
+    "SCN3A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.85,
+      "note": "Nav1.3; blocked by the same class"
+    },
+    "SCN8A": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.9,
+      "note": "Nav1.6; the target of the newer isoform-selective inhibitors"
+    },
+    "SIGMAR1": {
+      "target_class": "chaperone",
+      "small_molecule_tractability": 0.7,
+      "note": "Sigma-1 ligands include fenfluramine"
+    },
+    "SLC12A2": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.9,
+      "note": "NKCC1; bumetanide inhibits it, and inhibition is the wanted direction"
+    },
+    "SLC12A5": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.3,
+      "note": "KCC2; raising chloride extrusion is wanted and enhancers are disputed tool compounds"
+    },
+    "SLC1A2": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.3,
+      "note": "EAAT2; raising uptake is wanted and activators are early-stage"
+    },
+    "SLC1A3": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.25,
+      "note": "EAAT1; as EAAT2, activation is the wanted direction"
+    },
+    "SLC2A1": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.2,
+      "note": "GLUT1; raising glucose transport is wanted and the ketogenic route bypasses it"
+    },
+    "SLC6A1": {
+      "target_class": "transporter",
+      "small_molecule_tractability": 0.85,
+      "note": "GAT-1; tiagabine is the approved inhibitor, and inhibition is the wanted direction"
+    },
+    "SNAP25": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "SNARE protein, a synaptic-integrity readout"
+    },
+    "SOD2": {
+      "target_class": "enzyme",
+      "small_molecule_tractability": 0.2,
+      "note": "Mitochondrial antioxidant enzyme, induced rather than bound"
+    },
+    "SST": {
+      "target_class": "marker",
+      "small_molecule_tractability": 0.05,
+      "note": "Somatostatin, an interneuron-loss readout"
+    },
+    "STXBP1": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Munc18-1; haploinsufficiency, and no route to raising it by small molecule"
+    },
+    "SV2A": {
+      "target_class": "synaptic_protein",
+      "small_molecule_tractability": 0.85,
+      "note": "The levetiracetam and brivaracetam binding site, with a well-characterised ligand series"
+    },
+    "SYN1": {
+      "target_class": "structural",
+      "small_molecule_tractability": 0.05,
+      "note": "Synapsin, a vesicle-pool readout"
+    },
+    "TLR4": {
+      "target_class": "receptor",
+      "small_molecule_tractability": 0.6,
+      "note": "Small-molecule antagonists are clinical-stage"
+    },
+    "TNF": {
+      "target_class": "cytokine",
+      "small_molecule_tractability": 0.2,
+      "note": "Biologics dominate"
+    },
+    "TRPV1": {
+      "target_class": "ion_channel",
+      "small_molecule_tractability": 0.8,
+      "note": "Antagonists and desensitising agonists are well-precedented"
+    },
+    "TSC1": {
+      "target_class": "suppressor",
+      "small_molecule_tractability": 0.1,
+      "note": "Tumour suppressor whose loss drives mTOR; restoring it is not a small-molecule goal"
+    },
+    "TSC2": {
+      "target_class": "suppressor",
+      "small_molecule_tractability": 0.1,
+      "note": "As TSC1"
+    }
+  }
+}
